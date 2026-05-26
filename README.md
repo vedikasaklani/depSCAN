@@ -14,9 +14,9 @@ depSCAN is an open-source dependency scanner that generates SBOMs that comply wi
 **Standards:** CycloneDX 1.6, SPDX 2.3, NTIA minimum elements
 
 # Team
-Anwita Padhi
-Chirag Diwarkar
-Pakhi Mittal
-Sneha Chetana
-Ritik Jindal
-Vedika Saklani
+- Anwita Padhi
+- Chirag Diwarkar
+- Pakhi Mittal
+- Sneha Chetana
+- Ritik Jindal
+- Vedika Saklani
