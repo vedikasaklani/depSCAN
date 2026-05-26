@@ -1,7 +1,7 @@
 # depSCAN
 depSCAN is an open-source dependency scanner that generates SBOMs that comply with NTIA guidelines, tracks CVE vulnerabilities across scans, and visualizes risk through severity heatmaps and dependency graphs.
 
-##Features
+## Features
 - SBOM generation in CycloneDX 1.6 format
 - NTIA compliance validation
 - CVE enrichment via OSV.dev and NVD APIs
