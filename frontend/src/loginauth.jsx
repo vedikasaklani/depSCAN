@@ -18,9 +18,9 @@ function LoginPage(){
             }}>
         <div><h1>Login</h1></div>
         <img src="/public/logo.png"></img>
-        <button>Continue with Github</button>
-        <button>Continue with Google</button>
-        <button onClick= {() =>navigate("/projects")}>Dev skip login</button>
+        <button className="loginbutton">Continue with Github</button>
+        <button  className="loginbutton">Continue with Google</button>
+        <button  className="loginbutton" onClick= {() =>navigate("/projects")}>Dev skip login</button>
         </div></div>
     )
 }
