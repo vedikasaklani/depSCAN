@@ -35,17 +35,26 @@
     border-top-right-radius: 10px;
     border-bottom-right-radius: 10px;
 }
-.project-container> ul{
-    background-color: aqua;
-    height:90vh;
-    background-color: var(--grey);
+.project-container > ul {
+    height: 90vh;
     display: flex;
     flex-direction: column;
+    gap: 0.35rem;
+    padding: 1rem 0rem;
+    margin: 0;
     list-style: none;
-    position:relative;
-    padding:none;
-    margin:none;
-    border-right: 1px solid rgba(255,255,255,0.06);
+    position: relative;
+    background: linear-gradient(
+        180deg,
+        #202638 0%,
+        #171d2c 100%
+    );
+    border-right: 1px solid rgba(255, 255, 255, 0.06);
+    box-shadow:
+        inset -1px 0 0 rgba(255,255,255,0.02),
+        4px 0 20px rgba(0,0,0,0.25);
+    backdrop-filter: blur(10px);
+    overflow-y: auto;
 }
 .project-container> ul li{
     color: var(--textlight);
@@ -58,10 +67,16 @@
     display: flex;
     align-items: center;
     font-family: "Anta";
+    cursor:pointer;
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+    transition:background 0.2 ease,
+    transform 0.2s ease
 }
 
-.project-container> ul li:hover{
-    background-color: rgba(144, 137, 164, 0.801);
+.project-container > ul li:hover {
+    background: rgba(255,255,255,0.05);
+    transform: translateX(2px);
 }
 .project-container> ul li:active{
     background-color: var(--black);
@@ -70,6 +85,7 @@
     background-color: var(--black) !important;
     border-left: 3px solid var(--teal) !important;
     color: var(--teal) !important;
+    box-shadow: 0 0 12px rgba(73, 222, 255, 0.12);
 }
 #content{
     display:grid;
@@ -117,7 +133,7 @@
 #project-name{
     grid-area:box2;    
     color:var(--textlight);
-    font-size: 2em ;
+    font-size: 2.5em ;
     font-weight: 700;
     align-self:center;
     padding-left:1em;
@@ -159,13 +175,13 @@
     text-align: left;
     font-weight: 500;
     color: rgba(255,255,255,0.5);
-    border-bottom: 1px solid rgba(255,255,255,0.08);
+    border-bottom: 1px solid rgba(255,255,255,0.04);
     font-size: 0.85em;
     text-transform: uppercase;
     letter-spacing: 0.05em;
 }
 #vuln-table td {
-    padding: 0.75em 1em;
+    padding: 0.6em 1em;
     color: var(--textlight);
     font-size:0.85em;
     border-bottom: 1px solid rgba(255,255,255,0.04);
@@ -176,7 +192,7 @@
 
 .view-btn {
     background: none;
-    border: 1px solid rgba(255,255,255,0.2);
+    border: 1px solid rgba(255, 255, 255, 0.126);
     color: var(--textlight);
     padding: 0.3em 0.8em;
     border-radius: 6px;
