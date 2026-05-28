@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import './index.css'
 import LoginPage from './loginauth.jsx'
-import Projectpage from './projectlist.jsx'
+import Projectpage from './project-page/projectlist.jsx'
 createRoot(document.getElementById('root')).render(
   <StrictMode>
   <BrowserRouter>
