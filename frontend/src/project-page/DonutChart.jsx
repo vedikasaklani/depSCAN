@@ -44,9 +44,9 @@ export function DonutChart({ scans }) {
             contentStyle={{
                 backgroundColor: "var(--blackgrey)",
                 border: "1px solid rgba(255,255,255,0.1)",
-                borderRadius: "8px",
                 color: "var(--textlight)",
-                fontSize: "0.8em"
+                fontSize: "0.8em",
+                padding: "0.2em 0.5em"
             }}
         />
     </PieChart>
