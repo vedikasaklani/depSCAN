@@ -34,6 +34,7 @@ export function DonutChart({ scans }) {
             dataKey="value"
             strokeWidth={0}
             paddingAngle={2}
+            activeShape={false}
         >
             {donutData.map((entry, index) => (
                 <Cell key={`cell-${index}`} fill={COLORS[index]} />

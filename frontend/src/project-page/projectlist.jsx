@@ -91,6 +91,30 @@ function Projectpage(){
                                 ))}
                             </tbody>
                         </table>
+                        <div id="stats-bar">
+                        <div className="stat-card">
+                            <p className="stat-label">Total Scans</p>
+                            <p className="stat-value">{projectScans.length}</p>
+                        </div>
+                        <div className="stat-card">
+                            <p className="stat-label">Latest Critical</p>
+                            <p className="stat-value" style={{color:"var(--critical)"}}>
+                                {latestScan ? latestScan.critical : 0}
+                            </p>
+                        </div>
+                        <div className="stat-card">
+                            <p className="stat-label">Total Components</p>
+                            <p className="stat-value">
+                                {latestScan ? latestScan.components : 0}
+                            </p>
+                        </div>
+                        <div className="stat-card">
+                            <p className="stat-label">Last Scanned</p>
+                            <p className="stat-value">
+                                {latestScan ? latestScan.date.substring(0, 6) : "Never"}
+                            </p>
+                        </div>
+                    </div>
                     </div>
             </div>
         </div>
