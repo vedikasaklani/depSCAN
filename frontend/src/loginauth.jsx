@@ -16,7 +16,7 @@ function LoginPage(){
             textAlign:"center",
             alignItems:"center"
             }}>
-        <div><h1>Login</h1></div>
+        <div><h1 style={{fontFamily: "Anta"}}>Login</h1></div>
         <img src="/public/logo.png"></img>
         <button className="loginbutton">Continue with Github</button>
         <button  className="loginbutton">Continue with Google</button>
