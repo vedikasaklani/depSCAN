@@ -1,4 +1,6 @@
-#parent-container{
+*{
+    font-family:"Roboto Flex"
+}#parent-container{
     background-color: var(--blackgrey);
     justify-content:start;
     flex-direction: column;
