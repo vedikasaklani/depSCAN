@@ -145,10 +145,14 @@
 }
 #donut{
     grid-area:box5;
+    align-self: center;
+    justify-self: center;
 }
 #vuln-table{
     grid-area:table;
-    color:var(--textlight)
+    color:var(--textlight);
+    margin-top:1em;
+    border-collapse:collapse;
 }
 #vuln-table th {
     padding: 0.75em 1em;
@@ -159,4 +163,29 @@
     font-size: 0.85em;
     text-transform: uppercase;
     letter-spacing: 0.05em;
+}
+#vuln-table td {
+    padding: 0.75em 1em;
+    color: var(--textlight);
+    font-size:0.85em;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+#vuln-table tr:hover {
+    background-color: rgba(255,255,255,0.03);
+}
+
+.view-btn {
+    background: none;
+    border: 1px solid rgba(255,255,255,0.2);
+    color: var(--textlight);
+    padding: 0.3em 0.8em;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.85em;
+    transition: 0.2s ease;
+}
+
+.view-btn:hover {
+    border-color: var(--teal);
+    color: var(--teal);
 }

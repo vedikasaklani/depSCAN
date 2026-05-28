@@ -15,7 +15,7 @@ export const mockScans = [
         high: 7,
         medium: 12,
         low: 5,
-        progress: "complete"
+        progress: "Complete"
     },
     {
         id: 2,
@@ -26,7 +26,7 @@ export const mockScans = [
         high: 7,
         medium: 11,
         low: 5,
-        progress: "complete"
+        progress: "Complete"
     },
     {
         id: 3,
@@ -37,7 +37,7 @@ export const mockScans = [
         high: 5,
         medium: 10,
         low: 4,
-        progress: "complete"
+        progress: "Complete"
     },
     {
         id: 4,
@@ -48,7 +48,7 @@ export const mockScans = [
         high: 4,
         medium: 8,
         low: 3,
-        progress: "error"
+        progress: "Error"
     },
     {
         id: 5,
@@ -59,6 +59,6 @@ export const mockScans = [
         high: 9,
         medium: 14,
         low: 6,
-        progress: "in progress"
+        progress: "In progress"
     },
 ]
