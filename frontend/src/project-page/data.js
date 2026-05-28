@@ -1,13 +1,14 @@
 export const mockProjects = [
-    { id: 1, name: "Project Alpha" },
-    { id: 2, name: "Project Beta" },
-    { id: 3, name: "Project Gamma" },
-    { id: 4, name: "Project Delta" },
+    { id: 1, name: "Alpha" },
+    { id: 2, name: "Beta" },
+    { id: 3, name: "Gamma" },
+    { id: 4, name: "Delta" },
 ]
 
 export const mockScans = [
     {
         id: 1,
+        projectId:1,
         date: "May 24, 2026 10:30",
         components: 142,
         critical: 3,
@@ -18,6 +19,7 @@ export const mockScans = [
     },
     {
         id: 2,
+        projectId:1,
         date: "May 21, 2026 09:00",
         components: 140,
         critical: 2,
@@ -28,6 +30,7 @@ export const mockScans = [
     },
     {
         id: 3,
+        projectId:2,
         date: "May 19, 2026 14:22",
         components: 138,
         critical: 1,
@@ -38,6 +41,7 @@ export const mockScans = [
     },
     {
         id: 4,
+        projectId:2,
         date: "May 17, 2026 11:15",
         components: 135,
         critical: 0,
@@ -48,6 +52,7 @@ export const mockScans = [
     },
     {
         id: 5,
+        projectId:3,
         date: "May 27, 2026 08:00",
         components: 145,
         critical: 4,
