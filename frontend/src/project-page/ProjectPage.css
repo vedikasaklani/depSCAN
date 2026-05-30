@@ -116,10 +116,10 @@ grid-template-areas: "box1 box1 box1"
     padding:0.5em;
     align-self: center;
     justify-self: center;
-    background: linear-gradient(180deg, var(--card) 0%, rgba(0,0,0,0.3) 100%);
+    background: linear-gradient(180deg, var(--card) 0%, rgba(14, 13, 13, 0.3) 100%);
 }
 #header-content{
-    display:flex;;
+    display:flex;
     flex:1;
     justify-content: space-between;
     grid-area:box1;
@@ -298,8 +298,15 @@ svg:focus {
     margin: 0.25em 0 0 0;
     font-family:"Anta";
 }
+.change-stat-container{
+    display:flex;
+    justify-content: space-between;
+    align-items:end;
+}
 #vuln-overview{
     grid-area:box2;
     height:100%;
+    width:90%;
+    text-wrap: wrap;
     color:var(--textlight);
 }
