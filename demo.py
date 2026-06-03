@@ -19,10 +19,20 @@ components = [
     }
 ]
 
+# Generate CycloneDX
 build_and_output_sbom(
     project_name="my-demo-project",
     components_data=components,
     format="cyclonedx",
     mode="file",
     output_path="sbom.cdx.json"
+)
+
+# Generate SPDX
+build_and_output_sbom(
+    project_name="my-demo-project",
+    components_data=components,
+    format="spdx",
+    mode="file",
+    output_path="sbom.spdx.json"
 )
