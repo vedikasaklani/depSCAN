@@ -4,7 +4,9 @@ import { useState } from "react";
 import {Plus} from "lucide-react";
 import {Dot} from "lucide-react";
 import InventoryChart from "./BarChart.jsx"
+import { useNavigate } from "react-router-dom";
 function Projectpage(){
+        const navigate = useNavigate()  
         const [selectedProject, setSelectedProject]= useState(mockProjects[0])
         const projectScans = mockScans.filter(scan => scan.projectId === selectedProject.id)
         const sortedScans = [...projectScans].sort((a, b) => new Date(b.date) - new Date(a.date))
@@ -15,7 +17,7 @@ function Projectpage(){
             if (!latestScan || !previousScan) return null
             return latestScan[field] - previousScan[field]
         }
-        console.log("latestScan ecosystems:", latestScan?.ecosystems)
+    
         const Delta = ({ value }) => {
             if (value === null) return null
             if (value === 0) return <span style={{ color: "rgba(255,255,255,0.3)", fontSize: "0.75em" }}>— no change</span>
@@ -44,7 +46,7 @@ function Projectpage(){
             </div>
             </header>
             <div className="project-container">
-                <div>.</div>
+
                 <ul id="project-list"> {mockProjects.map(project =>
                     (
                         <li key={project.id} onClick={()=>{
@@ -111,7 +113,7 @@ function Projectpage(){
                                         }}>
                                             {scan.progress}
                                         </td>
-                                        <td><button className="view-btn">View →</button></td>
+                                        <td><button className="view-btn" onClick={() => navigate(`/projects/${selectedProject.id}/scans/${scan.id}`)}>View →</button></td>
                                     </tr>
                                 ))}
                             </tbody>
@@ -148,7 +150,7 @@ function Projectpage(){
                             </p>
                         </div>
                     </div>
-                    <div className="card" id="vul-overview">Vuln. hello i am vedika. Vuln. hello i am vedikaVuln. hello i am vedikaVuln. hello i am vedikaVuln. hello i am vedikaVuln. hello i am vedikaVuln. hello i am vedikaVuln. hello i am vedika</div>
+                    <div className="card" id="ntia-score">NTIA Score</div>
                     </div>
             </div>
         </div>

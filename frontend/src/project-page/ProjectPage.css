@@ -1,7 +1,7 @@
 *{
-    font-family:"Roboto Flex"
+    font-family:"Inter"
 }#parent-container{
-    background-color: var(--blackgrey);
+    background-color: var(--black);
     justify-content:start;
     flex-direction: column;
 }
@@ -28,7 +28,13 @@
 }
 .project-container{
     display:flex;
-    background-color: var(--black);
+    background: radial-gradient(
+    circle at top left,
+    rgba(0,255,255,0.35) 0%,
+    rgba(0,255,255,0.15) 15%,
+    rgba(0,255,255,0.05) 30%,
+    transparent 80%
+) ;
     width:95vw;
     height:90vh;
     border-top-right-radius: 10px;
@@ -49,8 +55,8 @@
     left:0;
     flex-shrink:0;
     background: linear-gradient(
-        180deg,
-        #202638 0%,
+        0deg,
+        #0a0a0b 0%,
         #171d2c 100%
     );
     border-right: 1px solid rgba(255, 255, 255, 0.06);
@@ -93,13 +99,12 @@
     width:calc(100% - 150px);
     display:grid;
     grid-template-columns: 1fr 1fr 1fr;
-    grid-template-rows:50px 220px auto;
+    grid-template-rows:60px 220px auto;
 grid-template-areas: "box1 box1 box1"
                      "chart box2 box4"
                      "table table table";
 
     align-items: flex-start;
-    gap: 1rem;
     overflow-y:scroll;
     padding:1em;
 }
@@ -109,22 +114,19 @@ grid-template-areas: "box1 box1 box1"
 
 
 .card{
-    background-color: var(--card);
     border:1px solid var(--border);
-    border-radius:20px;
+    border-radius:2px;
     width:90%;
+    height:200px;
     padding:0.5em;
-    align-self: center;
-    justify-self: center;
-    background: linear-gradient(180deg, var(--card) 0%, rgba(14, 13, 13, 0.3) 100%);
+    background: linear-gradient(180deg, rgba(17, 17, 23, 0.909) 0%, rgba(58, 55, 55, 0.3) 100%);
 }
 #header-content{
     display:flex;
     flex:1;
     justify-content: space-between;
     grid-area:box1;
-    padding-left:1.5em;
-    padding-right:1.5em;
+    padding:0 0 0 1em;
     align-items: center;
 }
 #add-btn{
@@ -200,11 +202,16 @@ svg:focus {
     display:flex;
     grid-area:box4;
     flex-direction: column;
+    margin-right: auto;
 }
 #vuln-table{
     grid-area:table;
+    width:90%;
+    justify-self: center;
+    align-self: flex-start;
     color:var(--textlight);
-    margin-top:1em;
+    margin-top:2em;
+
     border-collapse:collapse;
 }
 #vuln-table th {
@@ -232,7 +239,7 @@ svg:focus {
     border: 1px solid rgba(255, 255, 255, 0.126);
     color: var(--textlight);
     padding: 0.3em 0.8em;
-    border-radius: 6px;
+    border-radius: 2px;
     cursor: pointer;
     font-size: 0.85em;
     transition: 0.2s ease;
@@ -258,8 +265,9 @@ svg:focus {
     flex-wrap: wrap;
     align-items: center;
     justify-content:center;
-    gap: 0.5em;
-    height:218px;
+    margin-left:auto;
+    column-gap: 0.5em;
+    height:200px;
     grid-area: chart;  
 }
 .stat-card::before{
@@ -303,10 +311,8 @@ svg:focus {
     justify-content: space-between;
     align-items:end;
 }
-#vuln-overview{
+
+#ntia-score{
+    justify-self:center;
     grid-area:box2;
-    height:100%;
-    width:90%;
-    text-wrap: wrap;
-    color:var(--textlight);
 }
