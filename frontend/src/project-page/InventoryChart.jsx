@@ -15,7 +15,7 @@ function InventoryChart({ data }) {
 
     return (
         <ResponsiveContainer width="100%" height={150}>
-            <BarChart data={data} layout="vertical" margin={{top: 0, right: 5, left: 0, bottom: 0}}>
+            <BarChart data={data} layout="vertical" margin={{ top: 0, right: 5, left: 0, bottom: 0 }}>
                 <XAxis type="number" hide />
                 <YAxis
                     type="category"
@@ -36,10 +36,10 @@ function InventoryChart({ data }) {
                     }}
                     formatter={(value, name) => [value, name.charAt(0).toUpperCase() + name.slice(1)]}
                 />
-                <Bar dataKey="critical" stackId="a" fill="#FC3407" activeBar={false} isAnimationActive={false}/>
-                <Bar dataKey="high" stackId="a" fill="#E76736" activeBar={false} isAnimationActive={false}/>
-                <Bar dataKey="medium" stackId="a" fill="#FFD339" activeBar={false} isAnimationActive={false}/>
-                <Bar dataKey="clean" stackId="a" fill="rgba(207, 254, 239, 0.81)" radius={[0, 4, 4, 0]} activeBar={false} isAnimationActive={false}/>
+                <Bar dataKey="critical" stackId="a" fill="#FC3407" activeBar={false} isAnimationActive={false} />
+                <Bar dataKey="high" stackId="a" fill="#E76736" activeBar={false} isAnimationActive={false} />
+                <Bar dataKey="medium" stackId="a" fill="#FFD339" activeBar={false} isAnimationActive={false} />
+                <Bar dataKey="clean" stackId="a" fill="rgba(207, 254, 239, 0.81)" radius={[0, 4, 4, 0]} activeBar={false} isAnimationActive={false} />
             </BarChart>
         </ResponsiveContainer>
     )
