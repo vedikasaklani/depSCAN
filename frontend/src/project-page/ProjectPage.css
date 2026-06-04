@@ -129,6 +129,33 @@ grid-template-areas: "box1 box1 box1"
     padding:0 0 0 1em;
     align-items: center;
 }
+.project-tabs {
+    display: flex;
+    gap: 0.8rem;
+    flex-wrap: wrap;
+    margin: 1rem 0;
+}
+.project-tab {
+    border: 1px solid rgba(255,255,255,0.08);
+    background: rgba(255,255,255,0.03);
+    color: var(--textlight);
+    border-radius: 14px;
+    padding: 0.75rem 1.1rem;
+    cursor: pointer;
+    transition: background 0.15s ease, border-color 0.15s ease;
+}
+.project-tab:hover,
+.project-tab.active-tab {
+    border-color: var(--teal);
+    background: rgba(56, 211, 175, 0.12);
+    color: #e9feff;
+}
+.tab-panel {
+    grid-column: 1 / -1;
+    width: 92%;
+    justify-self: center;
+    padding: 1rem;
+}
 #add-btn{
     background:linear-gradient(90deg, var(--blackgrey) 70%, var(--black) 100%);
     color:var(--textlight);
