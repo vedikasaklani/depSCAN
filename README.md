@@ -15,7 +15,7 @@ depSCAN is an open-source dependency scanner that generates SBOMs that comply wi
 
 # Team
 - Anwita Padhi
-- Chirag Diwarkar
+- Akarsh Diwakar
 - Pakhi Mittal
 - Sneha Chetana
 - Ritik Jindal
