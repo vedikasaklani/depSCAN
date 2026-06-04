@@ -131,24 +131,35 @@ grid-template-areas: "box1 box1 box1"
 }
 .project-tabs {
     display: flex;
-    gap: 0.8rem;
+    gap: 0;
     flex-wrap: wrap;
-    margin: 1rem 0;
+    margin: 0;
+    border-bottom: 1px solid var(--border);
 }
 .project-tab {
-    border: 1px solid rgba(255,255,255,0.08);
-    background: rgba(255,255,255,0.03);
-    color: var(--textlight);
-    border-radius: 14px;
-    padding: 0.75rem 1.1rem;
+    padding: 0.6em 1.5em;
+    border: none;
+    border-bottom: 2px solid transparent;
+    background: transparent;
+    color: rgba(255,255,255,0.45);
+    border-radius: 0;
     cursor: pointer;
-    transition: background 0.15s ease, border-color 0.15s ease;
+    font-family: "Inter";
+    font-size: 0.85em;
+    letter-spacing: 0.05em;
+    transition: color 0.15s ease, border-color 0.15s ease;
+    position: relative;
+    bottom: -1px;
 }
-.project-tab:hover,
+.project-tab:hover {
+    color: rgba(255,255,255,0.75);
+    background: transparent;
+    border-color: transparent;
+}
 .project-tab.active-tab {
-    border-color: var(--teal);
-    background: rgba(56, 211, 175, 0.12);
-    color: #e9feff;
+    color: var(--teal);
+    border-bottom: 2px solid var(--teal);
+    background: transparent;
 }
 .tab-panel {
     grid-column: 1 / -1;
@@ -163,7 +174,7 @@ grid-template-areas: "box1 box1 box1"
     width: fit-content;
     cursor: pointer;
     transition: 0.2s ease;
-    height:30px;
+    height:36px;
     border:none;
     align-items: center;
     border-radius: 2px;
@@ -172,18 +183,21 @@ grid-template-areas: "box1 box1 box1"
     margin-left:2em;
     align-self: center;
     font-family: "Anta";
-    padding:1em 1em;
+    font-size: 0.8em;
+    letter-spacing: 0.04em;
+    padding:0 1em;
 }
 #add-btn:hover {
-    opacity: 0.85;
-    scale: 1.02;
+    filter: brightness(1.2);
 }
 
 
 #project-name{
     color:var(--textlight);
     font-family:"Anta";
-    font-size:30px;
+    font-size: 1.2rem;
+    font-weight: 400;
+    letter-spacing: 0.05em;
 }
 #legend{
     font-size:0.8em;
@@ -242,34 +256,35 @@ svg:focus {
     border-collapse:collapse;
 }
 #vuln-table th {
-    padding: 0.75em 1em;
+    padding: 0.65em 1em;
     text-align: left;
     font-weight: 500;
-    color: rgba(255,255,255,0.5);
-    border-bottom: 1px solid rgba(255,255,255,0.04);
-    font-size: 0.85em;
+    color: rgba(255,255,255,0.4);
+    border-bottom: 1px solid var(--border);
+    font-size: 0.82em;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
+    letter-spacing: 0.06em;
 }
 #vuln-table td {
     padding: 0.6em 1em;
     color: var(--textlight);
-    font-size:0.85em;
+    font-size: 0.88em;
     border-bottom: 1px solid rgba(255,255,255,0.04);
 }
 #vuln-table tr:hover {
-    background-color: rgba(255,255,255,0.03);
+    background: rgba(255,255,255,0.03);
 }
 
 .view-btn {
     background: none;
-    border: 1px solid rgba(255, 255, 255, 0.126);
-    color: var(--textlight);
-    padding: 0.3em 0.8em;
+    border: 1px solid var(--border);
+    color: rgba(255,255,255,0.55);
+    padding: 0.25em 0.85em;
     border-radius: 2px;
     cursor: pointer;
-    font-size: 0.85em;
-    transition: 0.2s ease;
+    font-size: 0.82em;
+    letter-spacing: 0.04em;
+    transition: border-color 0.15s ease, color 0.15s ease;
 }
 
 .view-btn:hover {
@@ -320,9 +335,9 @@ svg:focus {
 }
 .stat-label {
     color: rgba(255,255,255,0.4);
-    font-size: 0.75em;
+    font-size: 0.72em;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
+    letter-spacing: 0.06em;
     margin: 0;
     height:30px;
 }
@@ -332,6 +347,7 @@ svg:focus {
     font-weight: 700;
     margin: 0.25em 0 0 0;
     font-family:"Anta";
+    letter-spacing: 0.04em;
 }
 .change-stat-container{
     display:flex;

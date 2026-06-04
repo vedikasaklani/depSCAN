@@ -1,5 +1,3 @@
-import { useEffect, useState } from 'react';
-import { fetchReportSummary } from './api';
 import './ExportReport.css';
 
 function downloadBlob(blob, filename) {
@@ -12,29 +10,22 @@ function downloadBlob(blob, filename) {
   URL.revokeObjectURL(link.href);
 }
 
-export default function ExportReport() {
-  const [report, setReport] = useState(null);
-
-  useEffect(() => {
-    fetchReportSummary().then(setReport);
-  }, []);
-
+export default function ExportReport({ report }) {
   if (!report) {
     return <div className="export-report-shell">Loading export panel...</div>;
   }
 
+  // JSON export payloads — use the array fields, never rendered directly in JSX
   const cyclonePayload = {
     bomFormat: 'CycloneDX',
     specVersion: '1.4',
     metadata: {
       timestamp: report.scanDate,
-      component: {
-        name: report.projectName,
-      },
+      component: { name: report.projectName },
     },
-    components: report.components,
-    dependencies: report.dependencies,
-    vulnerabilities: report.vulnerabilities,
+    components: report.componentsPayload,
+    dependencies: report.dependenciesPayload,
+    vulnerabilities: report.vulnerabilitiesPayload,
   };
 
   const spdxPayload = {
@@ -45,8 +36,8 @@ export default function ExportReport() {
       created: report.timestamp,
       creators: [],
     },
-    packages: report.components,
-    relationships: report.dependencies,
+    packages: report.componentsPayload,
+    relationships: report.dependenciesPayload,
   };
 
   const exportPdf = () => {
@@ -56,9 +47,9 @@ Project: ${report.projectName}
 Scan date: ${report.scanDate}
 
 Compliance Score: ${report.complianceScore}%
-Total Components: ${report.components}
-Total Dependencies: ${report.dependencies}
-Total Vulnerabilities: ${report.vulnerabilities}
+Total Components: ${report.componentCount}
+Total Dependencies: ${report.dependencyCount}
+Total Vulnerabilities: ${report.vulnerabilityCount}
 
 Summary:
 ${report.summary}`;
@@ -118,17 +109,17 @@ ${report.summary}`;
         <div className="preview-row">
           <div>
             <span>Components</span>
-            <strong>{report.components}</strong>
+            <strong>{report.componentCount}</strong>
           </div>
           <div>
             <span>Dependencies</span>
-            <strong>{report.dependencies}</strong>
+            <strong>{report.dependencyCount}</strong>
           </div>
         </div>
         <div className="preview-row">
           <div>
             <span>Vulnerabilities</span>
-            <strong>{report.vulnerabilities}</strong>
+            <strong>{report.vulnerabilityCount}</strong>
           </div>
           <div>
             <span>Compliance</span>
