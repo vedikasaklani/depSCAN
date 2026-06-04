@@ -57,13 +57,9 @@ sbom-cli-scanner/
 │   ├── purl_utils.py        # PURL (Package URL) generation
 │   ├── hash_utils.py        # SHA-256 hash generation
 │   └── stack_detector.py    # Frontend/backend/database stack detection
-├── sample-project/
-│   ├── package.json         # Node.js / React + Express sample
-│   ├── requirements.txt     # Python / FastAPI sample
-│   ├── Dockerfile           # Multi-stage build sample
-│   └── docker-compose.yml   # PostgreSQL + Redis services
+
 ├── pyproject.toml           # Package config + dependencies
-└── README.md                # This file
+  # This file
 ```
 
 ---
