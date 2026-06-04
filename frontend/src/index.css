@@ -1,0 +1,18 @@
+*{
+    padding:0;
+    margin:0;
+    box-sizing: border-box;
+}
+:root{
+    --blackgrey:#171a27;
+    --grey:#171a27;
+    --black:#0c0d14;
+    --teal:#44e5e7;
+    --textlight:#defffc;
+    --medium:#ffd339;
+    --high:#ed8237;
+    --critical:#fc3407;
+    --low:#65e2ae;
+    --card:#1b24327d;
+    --border:rgba(203, 219, 219, 0.212);
+}

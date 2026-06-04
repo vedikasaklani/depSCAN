@@ -1,0 +1,91 @@
+.export-report-shell {
+  padding: 28px;
+  color: #e7f1ff;
+  background: #07131f;
+  min-height: 100vh;
+}
+
+.export-header p {
+  color: #6fd1ff;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  font-size: 0.82rem;
+  margin-bottom: 10px;
+}
+
+.export-header h2 {
+  margin: 0 0 10px;
+  font-size: clamp(1.9rem, 2.2vw, 2.4rem);
+}
+
+.export-header p + p {
+  color: #9db6d8;
+  max-width: 700px;
+}
+
+.export-actions {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  margin: 24px 0;
+}
+
+.export-actions button {
+  border: none;
+  border-radius: 18px;
+  padding: 16px 20px;
+  background: linear-gradient(135deg, rgba(79, 122, 255, 0.95), rgba(58, 222, 188, 0.95));
+  color: #07101d;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.export-actions button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 18px 40px rgba(40, 203, 214, 0.18);
+}
+
+.preview-card {
+  border-radius: 24px;
+  background: rgba(10, 22, 39, 0.94);
+  border: 1px solid rgba(255,255,255,0.08);
+  padding: 28px;
+  max-width: 920px;
+}
+
+.preview-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+  margin-bottom: 18px;
+}
+
+.preview-row div span {
+  display: block;
+  color: #88b9d9;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.82rem;
+  margin-bottom: 8px;
+}
+
+.preview-row div strong {
+  display: block;
+  font-size: 1.55rem;
+  color: #f6fbff;
+}
+
+.preview-summary {
+  padding: 18px 20px;
+  background: rgba(255,255,255,0.04);
+  border-radius: 18px;
+  color: #cfdcee;
+  line-height: 1.8;
+}
+
+@media (max-width: 860px) {
+  .preview-row {
+    grid-template-columns: 1fr;
+  }
+}

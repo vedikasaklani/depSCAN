@@ -1,0 +1,361 @@
+*{
+    font-family:"Inter"
+}#parent-container{
+    background-color: var(--black);
+    justify-content:start;
+    flex-direction: column;
+}
+.project-header{
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    width:100%;
+    height:50px;
+    padding:0.5em;
+
+}
+
+.profile-circle{
+    border-radius: 50%;
+    padding:0.5em;
+    height:30px;
+    width:30px;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    margin:0.5em;
+    background-color: var(--black);
+}
+.project-container{
+    display:flex;
+    background: radial-gradient(
+    circle at top left,
+    rgba(0,255,255,0.35) 0%,
+    rgba(0,255,255,0.15) 15%,
+    rgba(0,255,255,0.05) 30%,
+    transparent 80%
+) ;
+    width:95vw;
+    height:90vh;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+.project-container > ul {
+    overflow: hidden;
+    height: 90vh;
+    width:150px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    padding: 1rem 0rem;
+    margin: 0;
+    list-style: none;
+    position: sticky;
+    top:0;
+    left:0;
+    flex-shrink:0;
+    background: linear-gradient(
+        0deg,
+        #0a0a0b 0%,
+        #171d2c 100%
+    );
+    border-right: 1px solid rgba(255, 255, 255, 0.06);
+    box-shadow:
+        inset -1px 0 0 rgba(255,255,255,0.02),
+        4px 0 20px rgba(0,0,0,0.25);
+    backdrop-filter: blur(10px);
+    overflow-y: auto;
+}
+.project-container> ul li{
+    color: var(--textlight);
+    background:none;
+    height:2em;
+    width:100%;
+    text-align: start;
+    display:block;
+    padding:0em 0.5em;
+    display: flex;
+    align-items: center;
+    font-family: "Anta";
+    cursor:pointer;
+    transition:background 0.2 ease,
+    transform 0.2s ease
+}
+
+.project-container > ul li:hover {
+    background: rgba(255,255,255,0.05);
+    transform: translateX(2px);
+}
+.project-container> ul li:active{
+    background-color: var(--black);
+}
+.active-project{
+    background-color: var(--black) !important;
+    border-left: 3px solid var(--teal) !important;
+    color: var(--teal) !important;
+    box-shadow: 0 0 12px rgba(73, 222, 255, 0.12);
+}
+#content{
+    width:calc(100% - 150px);
+    display:grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows:60px 220px auto;
+grid-template-areas: "box1 box1 box1"
+                     "chart box2 box4"
+                     "table table table";
+
+    align-items: flex-start;
+    overflow-y:scroll;
+    padding:1em;
+}
+#content::-webkit-scrollbar{
+    display:none;
+}
+
+
+.card{
+    border:1px solid var(--border);
+    border-radius:2px;
+    width:90%;
+    height:200px;
+    padding:0.5em;
+    background: linear-gradient(180deg, rgba(17, 17, 23, 0.909) 0%, rgba(58, 55, 55, 0.3) 100%);
+}
+#header-content{
+    display:flex;
+    flex:1;
+    justify-content: space-between;
+    grid-area:box1;
+    padding:0 0 0 1em;
+    align-items: center;
+}
+.project-tabs {
+    display: flex;
+    gap: 0;
+    flex-wrap: wrap;
+    margin: 0;
+    border-bottom: 1px solid var(--border);
+}
+.project-tab {
+    padding: 0.6em 1.5em;
+    border: none;
+    border-bottom: 2px solid transparent;
+    background: transparent;
+    color: rgba(255,255,255,0.45);
+    border-radius: 0;
+    cursor: pointer;
+    font-family: "Inter";
+    font-size: 0.85em;
+    letter-spacing: 0.05em;
+    transition: color 0.15s ease, border-color 0.15s ease;
+    position: relative;
+    bottom: -1px;
+}
+.project-tab:hover {
+    color: rgba(255,255,255,0.75);
+    background: transparent;
+    border-color: transparent;
+}
+.project-tab.active-tab {
+    color: var(--teal);
+    border-bottom: 2px solid var(--teal);
+    background: transparent;
+}
+.tab-panel {
+    grid-column: 1 / -1;
+    width: 92%;
+    justify-self: center;
+    padding: 1rem;
+}
+#add-btn{
+    background:linear-gradient(90deg, var(--blackgrey) 70%, var(--black) 100%);
+    color:var(--textlight);
+    display:flex;
+    width: fit-content;
+    cursor: pointer;
+    transition: 0.2s ease;
+    height:36px;
+    border:none;
+    align-items: center;
+    border-radius: 2px;
+    gap:0.5em;
+    border:1px solid var(--teal);
+    margin-left:2em;
+    align-self: center;
+    font-family: "Anta";
+    font-size: 0.8em;
+    letter-spacing: 0.04em;
+    padding:0 1em;
+}
+#add-btn:hover {
+    filter: brightness(1.2);
+}
+
+
+#project-name{
+    color:var(--textlight);
+    font-family:"Anta";
+    font-size: 1.2rem;
+    font-weight: 400;
+    letter-spacing: 0.05em;
+}
+#legend{
+    font-size:0.8em;
+    align-self:center;
+    align-self:center;
+}
+#legend> ul{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem 1.5rem;
+    list-style:none;
+    gap:0em;
+    color:var(--textlight);
+}
+#legend> ul > li{
+    display:flex;
+    align-items: center;
+    font-size: 0.85em;
+    color: rgba(255,255,255,0.7);
+    gap: 0.4em;
+}
+#legend Dot{
+    height:30px;
+}
+#donut {
+    width: 100%;
+    height: 170px;
+    align-self: center;
+    display:flex;
+    align-items: center;
+    justify-content: center;
+}
+.recharts-bar-rectangle:focus,
+.recharts-rectangle:focus,
+.recharts-layer:focus {
+    outline: none !important;
+}
+
+svg:focus {
+    outline: none !important;
+}
+#chart-container{
+    display:flex;
+    grid-area:box4;
+    flex-direction: column;
+    margin-right: auto;
+}
+#vuln-table{
+    grid-area:table;
+    width:90%;
+    justify-self: center;
+    align-self: flex-start;
+    color:var(--textlight);
+    margin-top:2em;
+
+    border-collapse:collapse;
+}
+#vuln-table th {
+    padding: 0.65em 1em;
+    text-align: left;
+    font-weight: 500;
+    color: rgba(255,255,255,0.4);
+    border-bottom: 1px solid var(--border);
+    font-size: 0.82em;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+#vuln-table td {
+    padding: 0.6em 1em;
+    color: var(--textlight);
+    font-size: 0.88em;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+#vuln-table tr:hover {
+    background: rgba(255,255,255,0.03);
+}
+
+.view-btn {
+    background: none;
+    border: 1px solid var(--border);
+    color: rgba(255,255,255,0.55);
+    padding: 0.25em 0.85em;
+    border-radius: 2px;
+    cursor: pointer;
+    font-size: 0.82em;
+    letter-spacing: 0.04em;
+    transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+.view-btn:hover {
+    border-color: var(--teal);
+    color: var(--teal);
+}
+.recharts-bar-rectangle:focus,
+.recharts-bar-rectangle:hover,
+.recharts-rectangle:focus {
+    outline: none;
+    filter: none;
+}
+
+.recharts-layer {
+    outline: none;
+}
+#stats-bar {
+    justify-self: center;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content:center;
+    margin-left:auto;
+    column-gap: 0.5em;
+    height:200px;
+    grid-area: chart;  
+}
+.stat-card::before{
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: var(--border);
+}
+.stat-card{
+    background: linear-gradient(
+        180deg,
+        rgba(255,255,255,0.03) 0%,
+        rgba(255,255,255,0.015) 100%
+    );
+    border: 1px solid rgba(255,255,255,0.06);
+    padding: 0.5rem 0.5rem;
+    position: relative;
+    overflow: hidden;
+    flex: 0 0 120px;
+}
+.stat-label {
+    color: rgba(255,255,255,0.4);
+    font-size: 0.72em;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin: 0;
+    height:30px;
+}
+.stat-value {
+    color: var(--textlight);
+    font-size: 1.4em;
+    font-weight: 700;
+    margin: 0.25em 0 0 0;
+    font-family:"Anta";
+    letter-spacing: 0.04em;
+}
+.change-stat-container{
+    display:flex;
+    justify-content: space-between;
+    align-items:end;
+}
+
+#ntia-score{
+    justify-self:center;
+    grid-area:box2;
+}

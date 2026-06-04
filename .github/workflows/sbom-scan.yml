@@ -1,0 +1,19 @@
+name: SBOM Scan
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+jobs:
+  sbom-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install sbomgen
+        run: pip install sbomgen
+      - name: Generate and upload SBOM
+        run: |
+          sbomgen scan . --upload \
+            --api-key ${{ secrets.SBOM_API_KEY }} \
+            --project ${{ github.repository }} \
+            --fail-on CRITICAL
