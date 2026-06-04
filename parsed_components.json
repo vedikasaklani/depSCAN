@@ -1,0 +1,246 @@
+{
+  "project_name": "sample-project",
+  "detected_ecosystems": [
+    "node",
+    "python",
+    "docker"
+  ],
+  "frontend": "React",
+  "backend": "Express.js",
+  "database": "MongoDB",
+  "component_count": 29,
+  "components": [
+    {
+      "name": "express",
+      "version": "4.18.2",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/express@4.18.2",
+      "license": "NOASSERTION",
+      "hash": "sha256:6a8f65878b3ac34fcd9207d98e3401577dfa8a8f05385f26237468ca21cbff06"
+    },
+    {
+      "name": "react",
+      "version": "18.2.0",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/react@18.2.0",
+      "license": "NOASSERTION",
+      "hash": "sha256:9a31ec0bc7c9cbc15cecda48ce1e93e5ae90d988b3f456c1f8ee11ade0ec8b8d"
+    },
+    {
+      "name": "react-dom",
+      "version": "18.2.0",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/react-dom@18.2.0",
+      "license": "NOASSERTION",
+      "hash": "sha256:e5292bf3cb06f6b2379495fef23c3562ee7f91006e0e506570f6f6b97418705d"
+    },
+    {
+      "name": "mongoose",
+      "version": "7.5.0",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/mongoose@7.5.0",
+      "license": "NOASSERTION",
+      "hash": "sha256:93bcf1a4175bdf2cf2a808f21fc7c85371b954e2d57a017e1aeab0a3b7ebb571"
+    },
+    {
+      "name": "cors",
+      "version": "2.8.5",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/cors@2.8.5",
+      "license": "NOASSERTION",
+      "hash": "sha256:db8fc7f2ab840d445ad1230da0c7bc9e3ea1f91c3d839b668797a857db5210ac"
+    },
+    {
+      "name": "dotenv",
+      "version": "16.3.1",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/dotenv@16.3.1",
+      "license": "NOASSERTION",
+      "hash": "sha256:2ea46bc7a667b8fe7472327c5e541a7e390015f9df79a59340fa85e6b85c52e7"
+    },
+    {
+      "name": "bcryptjs",
+      "version": "2.4.3",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/bcryptjs@2.4.3",
+      "license": "NOASSERTION",
+      "hash": "sha256:7157e4154393d582f5f6bdfacd35e8d83011cc3d34ae14681d5112ded70067a3"
+    },
+    {
+      "name": "jsonwebtoken",
+      "version": "9.0.2",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/jsonwebtoken@9.0.2",
+      "license": "NOASSERTION",
+      "hash": "sha256:3628d88675a08bd7e25621112d3d95e3f1df00e6c0ea14605b5f4df1480845f8"
+    },
+    {
+      "name": "axios",
+      "version": "1.5.0",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/axios@1.5.0",
+      "license": "NOASSERTION",
+      "hash": "sha256:7fd56d03654053a61d939f3afbf8ddd03ba203a69a020fcb0da837fc9ba01a2c"
+    },
+    {
+      "name": "lodash",
+      "version": "4.17.21",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/lodash@4.17.21",
+      "license": "NOASSERTION",
+      "hash": "sha256:adaac4144887ebc2c1b682380ff385210f681fc58b4bc1ef3986148cf8dcd28a"
+    },
+    {
+      "name": "nodemon",
+      "version": "3.0.1",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/nodemon@3.0.1",
+      "license": "NOASSERTION",
+      "hash": "sha256:788d93bd43e8917261b9f82429abcffefa177948b8f69bb64d118afed0e9f287"
+    },
+    {
+      "name": "jest",
+      "version": "29.6.4",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/jest@29.6.4",
+      "license": "NOASSERTION",
+      "hash": "sha256:3ede533e592a2efc6dddeb0dbd72bb38078a6dafdb662c86f6975c58572dafb8"
+    },
+    {
+      "name": "eslint",
+      "version": "8.49.0",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/eslint@8.49.0",
+      "license": "NOASSERTION",
+      "hash": "sha256:389bd515b58f94ed68e11eb11dba8ce8f9b325dc548f6f412746a06448546619"
+    },
+    {
+      "name": "fastapi",
+      "version": "0.103.1",
+      "ecosystem": "pypi",
+      "purl": "pkg:pypi/fastapi@0.103.1",
+      "license": "NOASSERTION",
+      "hash": "sha256:29abddb84bc1c6bef732f176b15e881ddf7d83ed75b6fa7c2b58b1addb90d968"
+    },
+    {
+      "name": "uvicorn",
+      "version": "0.23.2",
+      "ecosystem": "pypi",
+      "purl": "pkg:pypi/uvicorn@0.23.2",
+      "license": "NOASSERTION",
+      "hash": "sha256:1e8f62b1f36dca1bba54af24f7b49cf534313030f108d416be0e2c8b049be6c5"
+    },
+    {
+      "name": "sqlalchemy",
+      "version": "2.0.20",
+      "ecosystem": "pypi",
+      "purl": "pkg:pypi/sqlalchemy@2.0.20",
+      "license": "NOASSERTION",
+      "hash": "sha256:451ee16a8570891e68b77492aefc544f11e526acff647dbd8c43104a21e4dde8"
+    },
+    {
+      "name": "psycopg2-binary",
+      "version": "2.9.7",
+      "ecosystem": "pypi",
+      "purl": "pkg:pypi/psycopg2-binary@2.9.7",
+      "license": "NOASSERTION",
+      "hash": "sha256:e17fccc4f207613c6b3729ce685a4bd9abf067319398c3cb7aaba4d9057cc48d"
+    },
+    {
+      "name": "pydantic",
+      "version": "2.3.0",
+      "ecosystem": "pypi",
+      "purl": "pkg:pypi/pydantic@2.3.0",
+      "license": "NOASSERTION",
+      "hash": "sha256:5c79dcc8252cf9565db3bc1b23d83c5d11972cb3242bc011e02b135a7dffeaf4"
+    },
+    {
+      "name": "python-dotenv",
+      "version": "1.0.0",
+      "ecosystem": "pypi",
+      "purl": "pkg:pypi/python-dotenv@1.0.0",
+      "license": "NOASSERTION",
+      "hash": "sha256:64c22186d2d7b4b8acc2f57577a11aee15eb51d95068ac146c162bfcfa0e31e7"
+    },
+    {
+      "name": "httpx",
+      "version": "0.25.0",
+      "ecosystem": "pypi",
+      "purl": "pkg:pypi/httpx@0.25.0",
+      "license": "NOASSERTION",
+      "hash": "sha256:9da869d4c8a16904b43e6ed0621e07c6aa2bdaaccd07fc355b041a96f34f4e32"
+    },
+    {
+      "name": "celery",
+      "version": "5.3.4",
+      "ecosystem": "pypi",
+      "purl": "pkg:pypi/celery@5.3.4",
+      "license": "NOASSERTION",
+      "hash": "sha256:72d350f287e8a0c347e5e3ef62703bffb721ff144d188915b6fcd610724a247e"
+    },
+    {
+      "name": "redis",
+      "version": "5.0.0",
+      "ecosystem": "pypi",
+      "purl": "pkg:pypi/redis@5.0.0",
+      "license": "NOASSERTION",
+      "hash": "sha256:256a73d51e5545fd050fb0760913c859fff80b3f6277343dc93344a424bd9ed3"
+    },
+    {
+      "name": "alembic",
+      "version": "1.12.0",
+      "ecosystem": "pypi",
+      "purl": "pkg:pypi/alembic@1.12.0",
+      "license": "NOASSERTION",
+      "hash": "sha256:cb145395869bb50342f0625517b52833578201c6384bf94ce0d3f9f74208c1c2"
+    },
+    {
+      "name": "passlib",
+      "version": "1.7.4",
+      "ecosystem": "pypi",
+      "purl": "pkg:pypi/passlib@1.7.4",
+      "license": "NOASSERTION",
+      "hash": "sha256:fe2413dcada7d37edc462f785e702930daf64cb382f01d6250d63012e45bc78b"
+    },
+    {
+      "name": "python-jose",
+      "version": "3.3.0",
+      "ecosystem": "pypi",
+      "purl": "pkg:pypi/python-jose@3.3.0",
+      "license": "NOASSERTION",
+      "hash": "sha256:aa30e0df951ca71cf4bb8c40ec92114af5904acbbbd0e704bb274b72eb05ba04"
+    },
+    {
+      "name": "node",
+      "version": "18-alpine",
+      "ecosystem": "docker",
+      "purl": "pkg:docker/node@18-alpine",
+      "license": "NOASSERTION",
+      "hash": "sha256:9626e72b9816d59d12c9535f51c025d98681c974b83b2297e23c7426b15f05a8"
+    },
+    {
+      "name": "python",
+      "version": "3.11-slim",
+      "ecosystem": "docker",
+      "purl": "pkg:docker/python@3.11-slim",
+      "license": "NOASSERTION",
+      "hash": "sha256:513c683c6f543d8a8a352f6652d0ec4a4d2f84f09587adb905ef336edb72cd5e"
+    },
+    {
+      "name": "postgres",
+      "version": "15-alpine",
+      "ecosystem": "docker",
+      "purl": "pkg:docker/postgres@15-alpine",
+      "license": "NOASSERTION",
+      "hash": "sha256:2ea1c343371ea51bfa79e9414ab9a06b2feb65f4bef203feb155c83b728b9253"
+    },
+    {
+      "name": "redis",
+      "version": "7-alpine",
+      "ecosystem": "docker",
+      "purl": "pkg:docker/redis@7-alpine",
+      "license": "NOASSERTION",
+      "hash": "sha256:e9ce76a4b39b9bf0a5d8fdbc3b208429c14067a908d15a26f0b2e8fd7ccd4ab6"
+    }
+  ]
+}
