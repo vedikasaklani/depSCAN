@@ -1,0 +1,325 @@
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.72);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    backdrop-filter: blur(3px);
+    animation: overlay-in 0.15s ease;
+}
+
+@keyframes overlay-in {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+.modal {
+    background: var(--blackgrey);
+    border: 1px solid var(--border);
+    border-top: 2px solid var(--teal);
+    border-radius: 4px;
+    width: 520px;
+    max-width: 95vw;
+    max-height: 90vh;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    animation: modal-in 0.18s ease;
+}
+
+@keyframes modal-in {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.modal{
+    overflow-y: hidden;
+}
+
+/* ── header ─────────────────────────────────────────────── */
+.modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.1em 1.4em 1em;
+    border-bottom: 1px solid var(--border);
+}
+
+.modal-title {
+    font-family: "Anta";
+    font-size: 0.95rem;
+    font-weight: 400;
+    letter-spacing: 0.06em;
+    color: var(--textlight);
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: rgba(255, 255, 255, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.25em;
+    border-radius: 3px;
+    transition: color 0.15s ease, background 0.15s ease;
+}
+.modal-close:hover {
+    color: var(--textlight);
+    background: rgba(255, 255, 255, 0.06);
+}
+
+/* ── source tabs ─────────────────────────────────────────── */
+.modal-tabs {
+    display: flex;
+    border-bottom: 1px solid var(--border);
+    padding: 0 1.4em;
+}
+
+.modal-tab {
+    padding: 0.65em 1.2em;
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid transparent;
+    color: rgba(255, 255, 255, 0.4);
+    cursor: pointer;
+    font-family: "Inter";
+    font-size: 0.82em;
+    letter-spacing: 0.05em;
+    transition: color 0.15s ease, border-color 0.15s ease;
+    position: relative;
+    bottom: -1px;
+}
+.modal-tab:hover {
+    color: rgba(255, 255, 255, 0.75);
+}
+.modal-tab.active {
+    color: var(--teal);
+    border-bottom: 2px solid var(--teal);
+}
+
+/* ── body ────────────────────────────────────────────────── */
+.modal-body {
+    padding: 1.4em;
+    display: flex;
+    flex-direction: column;
+    gap: 1.1em;
+}
+
+/* ── field group ─────────────────────────────────────────── */
+.field-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4em;
+}
+
+.field-label {
+    font-size: 0.75em;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: rgba(255, 255, 255, 0.4);
+    font-family: "Inter";
+}
+
+.field-input,
+.field-select {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    color: var(--textlight);
+    font-family: "Inter";
+    font-size: 0.88em;
+    padding: 0.6em 0.85em;
+    outline: none;
+    transition: border-color 0.15s ease;
+    width: 100%;
+}
+
+.field-input::placeholder {
+    color: rgba(255, 255, 255, 0.2);
+}
+
+.field-input:focus,
+.field-select:focus {
+    border-color: var(--teal);
+}
+
+.field-select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='rgba(255,255,255,0.3)' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.8em center;
+    padding-right: 2.2em;
+    cursor: pointer;
+}
+
+.field-select option {
+    background: #1a1a22;
+    color: var(--textlight);
+}
+
+/* ── repo picker ─────────────────────────────────────────── */
+.repo-list {
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    max-height: 180px;
+    overflow-y: auto;
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.repo-list::-webkit-scrollbar { width: 4px; }
+.repo-list::-webkit-scrollbar-track { background: transparent; }
+.repo-list::-webkit-scrollbar-thumb {
+    background: rgba(0, 255, 255, 0.2);
+    border-radius: 20px;
+}
+
+.repo-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75em;
+    padding: 0.6em 0.9em;
+    cursor: pointer;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    transition: background 0.15s ease;
+}
+
+.repo-item:last-child {
+    border-bottom: none;
+}
+
+.repo-item:hover {
+    background: rgba(255, 255, 255, 0.04);
+}
+
+.repo-item.selected {
+    background: rgba(0, 255, 255, 0.06);
+    border-left: 2px solid var(--teal);
+    padding-left: calc(0.9em - 2px);
+}
+
+.repo-icon {
+    color: rgba(255, 255, 255, 0.35);
+    flex-shrink: 0;
+    display: flex;
+}
+
+.repo-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.repo-name {
+    font-size: 0.88em;
+    color: var(--textlight);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.repo-meta {
+    font-size: 0.75em;
+    color: rgba(255, 255, 255, 0.3);
+    margin-top: 0.1em;
+}
+
+.repo-lang {
+    font-size: 0.72em;
+    padding: 0.1em 0.5em;
+    border-radius: 3px;
+    border: 1px solid var(--border);
+    color: rgba(255, 255, 255, 0.35);
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.repo-search {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+    padding: 0.5em 0.9em;
+    border-bottom: 1px solid var(--border);
+}
+
+.repo-search svg {
+    color: rgba(255, 255, 255, 0.25);
+    flex-shrink: 0;
+}
+
+.repo-search-input {
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--textlight);
+    font-family: "Inter";
+    font-size: 0.84em;
+    width: 100%;
+}
+
+.repo-search-input::placeholder {
+    color: rgba(255, 255, 255, 0.2);
+}
+
+
+/* ── divider ─────────────────────────────────────────────── */
+.modal-divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 0.2em 0;
+}
+
+/* ── footer ──────────────────────────────────────────────── */
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 0.75em;
+    padding: 1em 1.4em 1.3em;
+    border-top: 1px solid var(--border);
+}
+
+.btn-cancel {
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    color: rgba(255, 255, 255, 0.45);
+    font-family: "Inter";
+    font-size: 0.82em;
+    letter-spacing: 0.04em;
+    padding: 0 1em;
+    height: 34px;
+    cursor: pointer;
+    transition: border-color 0.15s ease, color 0.15s ease;
+}
+.btn-cancel:hover {
+    border-color: rgba(255, 255, 255, 0.3);
+    color: var(--textlight);
+}
+
+.btn-submit {
+    background: linear-gradient(90deg, var(--blackgrey) 70%, var(--black) 100%);
+    border: 1px solid var(--teal);
+    border-radius: 2px;
+    color: var(--textlight);
+    font-family: "Anta";
+    font-size: 0.8em;
+    letter-spacing: 0.05em;
+    padding: 0 1.2em;
+    height: 34px;
+    cursor: pointer;
+    transition: filter 0.15s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+}
+.btn-submit:hover {
+    filter: brightness(1.2);
+}
+.btn-submit:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+    filter: none;
+}

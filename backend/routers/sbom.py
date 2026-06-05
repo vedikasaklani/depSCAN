@@ -4,7 +4,6 @@ from datetime import datetime
 
 router = APIRouter(prefix="/sbom", tags=["SBOM"])
 
-
 @router.post("/upload")
 def upload_sbom(data: dict):
 
@@ -22,7 +21,6 @@ def upload_sbom(data: dict):
     result = db.sboms.insert_one(data)
 
     scan_id = str(result.inserted_id)
-
 
     components = data.get("components", [])
 
@@ -120,7 +118,6 @@ def get_vulns(sbom_id: str):
             {"_id": 0}
         )
     )
-
 
 
 

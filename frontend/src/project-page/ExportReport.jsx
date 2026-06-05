@@ -15,7 +15,6 @@ export default function ExportReport({ report }) {
     return <div className="export-report-shell">Loading export panel...</div>;
   }
 
-  // JSON export payloads — use the array fields, never rendered directly in JSX
   const cyclonePayload = {
     bomFormat: 'CycloneDX',
     specVersion: '1.4',
