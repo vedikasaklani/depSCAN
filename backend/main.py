@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from routers.sbom import router as sbom_router
+from backend.routers.sbom import router as sbom_router
 from fastapi.middleware.cors import CORSMiddleware
 
 

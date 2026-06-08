@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import {X, GitCommit, Link2, Search, GitBranch, Shield, FileCode2, Package} from "lucide-react";
+import { X, GitCommit, Link2, Search, GitBranch, Shield, FileCode2, Package } from "lucide-react";
 import "./NewScanModal.css";
 
 const MOCK_REPOS = [
@@ -12,7 +12,7 @@ const MOCK_REPOS = [
 ];
 
 export default function NewScanModal({ onClose, onSubmit }) {
-    const [tab, setTab] = useState("github");   
+    const [tab, setTab] = useState("github");
     const [repoQuery, setRepoQuery] = useState("");
     const [selectedRepo, setSelectedRepo] = useState(null);
     const [publicUrl, setPublicUrl] = useState("");

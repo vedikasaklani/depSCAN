@@ -1,5 +1,4 @@
 import "./ProjectPage.css";
-import { mockProjects } from "./data.js";   
 import { useState, useEffect } from "react";
 import { Plus } from "lucide-react";
 import ChartContainer from "./ChartContainer.jsx";
@@ -7,43 +6,99 @@ import { useNavigate } from "react-router-dom";
 import VulnTable from "./VulnTable.jsx";
 import StatsBar from "./StatsBar.jsx";
 import NewScanModal from "./NewScanModal.jsx";
-import { fetchProjectHistory, uploadSBOM } from "../api/api.js";
+import { fetchAllScans, fetchComponents, fetchVulns, fetchProjectHistory, uploadSBOM } from "../api/api.js";
+async function normalizeScans(history, projectId) {
+    return Promise.all(
+        history.map(async (scan) => {
+            const [components, vulns] = await Promise.all([
+                fetchComponents(scan.sbom_id),
+                fetchVulns(scan.sbom_id),
+            ]);
 
-function normalizeScans(history, projectId) {
-    return history.map((scan) => ({
-        id: scan.sbom_id,
-        projectId,
-        date: scan.uploaded_at
-            ? new Date(scan.uploaded_at).toLocaleString()
-            : '—',
+            const severityCounts = {
+                critical: 0,
+                high: 0,
+                medium: 0,
+                low: 0,
+            };
 
-        components: scan.components_stored ?? 0,
-        critical: 0,
-        high: 0,
-        medium: 0,
-        low: 0,
-        progress: "Complete",
-        ecosystems: [],
-    }));
+            vulns.forEach(v => {
+                switch ((v.severity || "").toUpperCase()) {
+                    case "CRITICAL":
+                        severityCounts.critical++;
+                        break;
+                    case "HIGH":
+                        severityCounts.high++;
+                        break;
+                    case "MEDIUM":
+                        severityCounts.medium++;
+                        break;
+                    case "LOW":
+                        severityCounts.low++;
+                        break;
+                }
+            });
+
+            return {
+                id: scan.sbom_id,
+                projectId,
+
+                date: scan.uploaded_at
+                    ? new Date(scan.uploaded_at).toLocaleString()
+                    : "—",
+
+                components: components.length,
+
+                critical: severityCounts.critical,
+                high: severityCounts.high,
+                medium: severityCounts.medium,
+                low: severityCounts.low,
+
+                progress: "Complete",
+
+                ecosystems: []
+            };
+        })
+    );
 }
 
 function Projectpage() {
     const navigate = useNavigate();
-    const [selectedProject, setSelectedProject] = useState(mockProjects[0]);
+    const [projects, setProjects] = useState([]);
+    const [selectedProject, setSelectedProject] = useState(null);
     const [showNewScan, setShowNewScan] = useState(false);
     const [projectScans, setProjectScans] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     useEffect(() => {
+        fetchAllScans()
+            .then((scans) => {
+                const projects = scans.map((scan) => ({
+                    id: scan.sbom_id,
+                    name: scan.project,
+                }));
+
+                setProjects(projects);
+
+                if (projects.length > 0) {
+                    setSelectedProject(projects[0]);
+                }
+            })
+            .catch((err) => setError(err.message));
+    }, []);
+    useEffect(() => {
         setLoading(true);
         setError(null);
-
+        if (!selectedProject) return;
         fetchProjectHistory(selectedProject.name)
-            .then((history) => {
-                setProjectScans(normalizeScans(history, selectedProject.id));
+            .then(async (history) => {
+                const scans = await normalizeScans(
+                    history,
+                    selectedProject.id
+                );
+
+                setProjectScans(scans);
             })
-            .catch((err) => setError(err.message))
-            .finally(() => setLoading(false));
     }, [selectedProject]);
 
     const sortedScans = [...projectScans].sort((a, b) => new Date(b.date) - new Date(a.date));
@@ -69,8 +124,15 @@ function Projectpage() {
             await uploadSBOM(sbomPayload);
 
             // Use fetchProjectHistory instead of fetchAllScans + filter
-            const history = await fetchProjectHistory(selectedProject.name);
-            setProjectScans(normalizeScans(history, selectedProject.id));
+            const history = await fetchProjectHistory(
+                selectedProject.name
+            );
+            const scans = await normalizeScans(
+                history,
+                selectedProject.id
+            );
+
+            setProjectScans(scans);
         } catch (err) {
             console.error("Upload failed:", err.message);
         }
@@ -90,11 +152,11 @@ function Projectpage() {
 
             <div className="project-container">
                 <ul id="project-list">
-                    {mockProjects.map(project => (
+                    {projects.map(project => (
                         <li
                             key={project.id}
                             onClick={() => setSelectedProject(project)}
-                            className={selectedProject.id === project.id ? "active-project" : "idle-project"}
+                            className={selectedProject?.id === project.id ? "active-project" : "idle-project"}
                         >
                             {project.name}
                         </li>
@@ -103,7 +165,7 @@ function Projectpage() {
 
                 <div id="content">
                     <div id="header-content">
-                        <p id="project-name">{selectedProject.name}</p>
+                        <p id="project-name">{selectedProject?.name}</p>
                         <button id="add-btn" onClick={() => setShowNewScan(true)}>
                             <Plus color="var(--textlight)" size={15} />
                             <p>New Scan</p>

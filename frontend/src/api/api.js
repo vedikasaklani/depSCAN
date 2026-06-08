@@ -8,7 +8,6 @@ async function apiFetch(path, options = {}) {
   if (!res.ok) throw new Error(`API ${path} → ${res.status} ${res.statusText}`);
   return res.json();
 }
-
 export async function fetchAllScans() {
   return apiFetch('/sbom/all');
 }

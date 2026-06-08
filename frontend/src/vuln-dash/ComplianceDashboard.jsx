@@ -1,22 +1,11 @@
-// Props received from vuln-dash.jsx:
-//   components  →  array from GET /sbom/components/{sbom_id}
-//                  each: { sbom_id, name, version, purl, supplier, license }
-//   security    →  the raw sbom object from GET /sbom/{sbom_id}
-//                  used for scan date / project name in the meta bar
+
 export default function ComplianceDashboard({ components = [], security = {} }) {
-  // Backend stores license as a flat string, not nested object
-  // Handle both shapes: "MIT"  OR  { license: { id: "MIT" } }
   const getLicense = (comp) =>
     typeof comp.license === 'string'
       ? comp.license
       : comp.licenses?.[0]?.license?.id ?? 'Unknown';
-
-  // Backend has no pass/fail field — derive from whether component has known vulns
-  // For now treat all as pass; vuln-dash can extend this once vuln data is correlated
   const passCount = components.length;
   const failCount = 0;
-
-  // supplier comes as a string from the backend (stored as comp.supplier, not {name:...})
   const getSupplier = (comp) =>
     typeof comp.supplier === 'string'
       ? comp.supplier

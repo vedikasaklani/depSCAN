@@ -4,32 +4,32 @@ import 'reactflow/dist/style.css';
 
 const severityColors = {
   critical: 'var(--critical)',
-  high:     'var(--high)',
-  medium:   'var(--medium)',
-  low:      'var(--low)',
-  safe:     'var(--teal)',
+  high: 'var(--high)',
+  medium: 'var(--medium)',
+  low: 'var(--low)',
+  safe: 'var(--teal)',
 };
 
 function buildTreeFromComponents(components = [], projectName = 'Project') {
   return [{
-    id:       'root',
-    name:     projectName,
-    version:  '',
-    purl:     '',
+    id: 'root',
+    name: projectName,
+    version: '',
+    purl: '',
     supplier: { name: '—' },
     licenses: [],
     severity: 'safe',
     children: components.map((comp) => ({
-      id:       comp.purl ?? comp.name,
-      name:     comp.name,
-      version:  comp.version,
-      purl:     comp.purl ?? '',
+      id: comp.purl ?? comp.name,
+      name: comp.name,
+      version: comp.version,
+      purl: comp.purl ?? '',
       supplier: typeof comp.supplier === 'string'
-                  ? { name: comp.supplier }
-                  : (comp.supplier ?? { name: '—' }),
+        ? { name: comp.supplier }
+        : (comp.supplier ?? { name: '—' }),
       licenses: comp.license
-                  ? [{ license: { id: comp.license } }]
-                  : (comp.licenses ?? []),
+        ? [{ license: { id: comp.license } }]
+        : (comp.licenses ?? []),
       severity: comp.severity ?? 'safe',
       children: [],
     })),
@@ -41,16 +41,16 @@ const NODE_SPACING = 180;
 function buildFlowItems(tree) {
   const nodes = [];
   const edges = [];
-  const rows  = {};
+  const rows = {};
   function walk(item, depth = 0) {
     const row = rows[depth] || 0;
     rows[depth] = row + 1;
     const color = severityColors[item.severity] || severityColors.safe;
     nodes.push({
-      id:       item.id,
+      id: item.id,
       position: { x: depth * NODE_SPACING, y: row * 100 },
-      data:     { label: `${item.name}${item.version ? ' ' + item.version : ''}` },
-      style:    { background: color, color: '#07101d', border: '1px solid rgba(255,255,255,0.12)', width: 210, fontFamily: 'Anta', fontSize: '0.8rem' },
+      data: { label: `${item.name}${item.version ? ' ' + item.version : ''}` },
+      style: { background: color, color: '#07101d', border: '1px solid rgba(255,255,255,0.12)', width: 210, fontFamily: 'Anta', fontSize: '0.8rem' },
     });
     (item.children || []).forEach((child) => {
       edges.push({ id: `${item.id}-${child.id}`, source: item.id, target: child.id, animated: false });
@@ -65,7 +65,7 @@ function filterTree(tree, query) {
   if (!query.trim()) return tree;
   const q = query.toLowerCase();
   function traverse(node) {
-    const match    = node.name.toLowerCase().includes(q);
+    const match = node.name.toLowerCase().includes(q);
     const children = (node.children || []).map(traverse).filter(Boolean);
     return (match || children.length > 0) ? { ...node, children } : null;
   }
@@ -73,7 +73,7 @@ function filterTree(tree, query) {
 }
 
 function renderTree(node, expandedSet, toggleNode, searchTerm, onSelect) {
-  const active      = node.name.toLowerCase().includes(searchTerm.toLowerCase());
+  const active = node.name.toLowerCase().includes(searchTerm.toLowerCase());
   const hasChildren = (node.children || []).length > 0;
   return (
     <div key={node.id} className={`dep-tree-node${active ? ' dep-tree-active' : ''}`}>
@@ -94,13 +94,13 @@ function renderTree(node, expandedSet, toggleNode, searchTerm, onSelect) {
 export default function DependencyGraph({ components = [], vulns = [] }) {
   const tree = useMemo(() => buildTreeFromComponents(components), [components]);
 
-  const [search,          setSearch]          = useState('');
+  const [search, setSearch] = useState('');
   const [selectedPackage, setSelectedPackage] = useState(() => tree[0] ?? null);
-  const [expanded,        setExpanded]        = useState(() => new Set(['root']));
-  const [view,            setView]            = useState('tree');
+  const [expanded, setExpanded] = useState(() => new Set(['root']));
+  const [view, setView] = useState('tree');
 
   const filteredTree = useMemo(() => filterTree(tree, search), [tree, search]);
-  const flowData     = useMemo(() => buildFlowItems(filteredTree), [filteredTree]);
+  const flowData = useMemo(() => buildFlowItems(filteredTree), [filteredTree]);
 
   // CVEs matching selected package — vulns from backend have a "component" or "package" field
   const packageHistory = useMemo(() =>
@@ -182,22 +182,22 @@ export default function DependencyGraph({ components = [], vulns = [] }) {
           {selectedPackage ? (
             <>
               {[
-                ['Name',        selectedPackage.name],
-                ['Version',     selectedPackage.version || '—'],
-                ['Supplier',    selectedPackage.supplier?.name || '—'],
-                ['License',     selectedPackage.licenses?.[0]?.license?.id || '—'],
-                ['PURL',        selectedPackage.purl || '—'],
-                ['Severity',    selectedPackage.severity || 'safe'],
+                ['Name', selectedPackage.name],
+                ['Version', selectedPackage.version || '—'],
+                ['Supplier', selectedPackage.supplier?.name || '—'],
+                ['License', selectedPackage.licenses?.[0]?.license?.id || '—'],
+                ['PURL', selectedPackage.purl || '—'],
+                ['Severity', selectedPackage.severity || 'safe'],
                 ['Direct Deps', (selectedPackage.children || []).length],
-                ['CVE Count',   packageHistory.length],
+                ['CVE Count', packageHistory.length],
               ].map(([label, value]) => (
                 <div className="dep-detail-row" key={label}>
                   <span className="stat-label">{label}</span>
                   <strong
                     className={label === 'PURL' ? 'mono-cell' : ''}
                     style={label === 'Severity' ? { color: severityColors[value] ?? 'var(--teal)' }
-                          : label === 'Name'    ? { color: 'var(--teal)', fontFamily: 'Anta' }
-                          : {}}
+                      : label === 'Name' ? { color: 'var(--teal)', fontFamily: 'Anta' }
+                        : {}}
                   >
                     {String(value)}
                   </strong>
@@ -210,9 +210,8 @@ export default function DependencyGraph({ components = [], vulns = [] }) {
                   packageHistory.map((v, i) => (
                     <div key={v.cve_id ?? v.cve ?? i} className="remedy-item">
                       <span className="component-name">{v.cve_id ?? v.cve ?? 'CVE Unknown'}</span>
-                      <span className={`status-badge-${
-                        ['high','critical'].includes((v.severity ?? '').toLowerCase()) ? 'unfixed' : 'new'
-                      }`}>
+                      <span className={`status-badge-${['high', 'critical'].includes((v.severity ?? '').toLowerCase()) ? 'unfixed' : 'new'
+                        }`}>
                         {v.severity ?? '—'}
                       </span>
                     </div>
