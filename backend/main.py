@@ -1,6 +1,7 @@
 from fastapi import FastAPI
-from depSCAN.backend.routers.sbom import router as sbom_router
+from routers.sbom import router as sbom_router
 from fastapi.middleware.cors import CORSMiddleware
+
 
 app = FastAPI(title="SBOM Backend")
 app.add_middleware(

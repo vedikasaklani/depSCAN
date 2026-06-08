@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from depSCAN.backend.database import db
+from database import db
 from datetime import datetime
 
 router = APIRouter(prefix="/sbom", tags=["SBOM"])
@@ -100,7 +100,7 @@ def get_sbom(sbom_id: str):
 @router.post("/vulns/add")
 def add_vuln(data: dict):
 
-    result = db.vulns.insert_one(data)
+    result = db.vulnerabilities.insert_one(data)
 
     return {
         "status": "stored",
@@ -113,7 +113,7 @@ def add_vuln(data: dict):
 def get_vulns(sbom_id: str):
 
     return list(
-        db.vulns.find(
+        db.vulnerabilities.find(
             {"sbom_id": sbom_id},
             {"_id": 0}
         )
