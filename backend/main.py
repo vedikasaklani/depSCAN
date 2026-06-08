@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from depSCAN.backend.routers.sbom import router as sbom_router
+from routers.sbom import router as sbom_router
 
 app = FastAPI(title="SBOM Backend")
 

@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from depSCAN.backend.database import db
+from database import db
 from datetime import datetime
 
 router = APIRouter(prefix="/sbom", tags=["SBOM"])
