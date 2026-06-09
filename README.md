@@ -11,7 +11,7 @@ depSCAN is an open-source dependency scanner that generates SBOMs that comply wi
 ## Tech Stack
 **Frontend:** React, Recharts, D3.js, shadcn/ui  
 **Backend:** FastAPI, PostgreSQL, Celery, Redis  
-**Standards:** CycloneDX 1.6, SPDX 2.3, NTIA minimum elements
+**Standards:** CycloneDX 1.6, SPDX 2.3, NTIA minimum elements.
 
 # Team
 - Anwita Padhi
