@@ -1,5 +1,5 @@
 import json
-from sbom_builder import build_and_output_sbom
+from sbom_builder import build_and_output_sbom, build_frontend_format
 
 
 def load_scanner_output(file_path="parsed_components.json"):
@@ -9,7 +9,6 @@ def load_scanner_output(file_path="parsed_components.json"):
 
 def convert_scanner_components(scanner_components):
     components_data = []
-
     for comp in scanner_components:
         components_data.append({
             "name": comp.get("name"),
@@ -21,7 +20,6 @@ def convert_scanner_components(scanner_components):
             "hash": comp.get("hash"),
             "deps": []
         })
-
     return components_data
 
 
@@ -36,9 +34,9 @@ def main():
         return
 
     components_data = convert_scanner_components(components)
-
     print(f"Loaded {len(components_data)} components from parsed_components.json")
 
+    # Build CycloneDX
     print("Building CycloneDX SBOM...")
     build_and_output_sbom(
         project_name=project_name,
@@ -48,6 +46,7 @@ def main():
         output_path="sbom.cdx.json"
     )
 
+    # Build SPDX
     print("Building SPDX SBOM...")
     build_and_output_sbom(
         project_name=project_name,
@@ -57,8 +56,20 @@ def main():
         output_path="sbom.spdx.json"
     )
 
-    print("Integration complete.")
-    print("Generated sbom.cdx.json and sbom.spdx.json")
+    # Build Frontend Format
+    print("Building frontend format...")
+    frontend_json = build_frontend_format(
+        project_name=project_name,
+        components_data=components_data
+    )
+    with open("sbom_frontend.json", "w") as f:
+        f.write(frontend_json)
+    print("Frontend format saved to sbom_frontend.json")
+
+    print("\nAll done! Generated:")
+    print("  - sbom.cdx.json")
+    print("  - sbom.spdx.json")
+    print("  - sbom_frontend.json")
 
 
 if __name__ == "__main__":

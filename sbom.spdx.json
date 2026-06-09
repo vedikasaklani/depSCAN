@@ -2,10 +2,10 @@
   "spdxVersion": "SPDX-2.3",
   "dataLicense": "CC0-1.0",
   "SPDXID": "SPDXRef-DOCUMENT",
-  "name": "my-demo-project",
-  "documentNamespace": "https://example.org/sbomgen/my-demo-project-e13ed08e-e4ed-4b42-a879-a415c8b44a9a",
+  "name": "scanner-project",
+  "documentNamespace": "https://example.org/sbomgen/scanner-project-a39da9e4-a27b-4c8b-9ee0-948488365682",
   "creationInfo": {
-    "created": "2026-06-03T10:17:03Z",
+    "created": "2026-06-09T08:33:31Z",
     "creators": [
       "Tool: sbomgen-tool"
     ]
@@ -13,7 +13,7 @@
   "packages": [
     {
       "SPDXID": "SPDXRef-Package-root",
-      "name": "my-demo-project",
+      "name": "scanner-project",
       "versionInfo": "NOASSERTION",
       "downloadLocation": "NOASSERTION",
       "filesAnalyzed": false,
@@ -23,7 +23,7 @@
       "SPDXID": "SPDXRef-Package-django-0",
       "name": "django",
       "versionInfo": "4.2.1",
-      "supplier": "Organization: Django Software Foundation",
+      "supplier": "Organization: NOASSERTION",
       "downloadLocation": "NOASSERTION",
       "filesAnalyzed": false,
       "externalRefs": [

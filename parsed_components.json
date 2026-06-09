@@ -1,0 +1,20 @@
+{
+  "components": [
+    {
+      "name": "django",
+      "version": "4.2.1",
+      "ecosystem": "pypi",
+      "supplier": "Django Software Foundation",
+      "license": "BSD-3-Clause",
+      "deps": [1]
+    },
+    {
+      "name": "sqlparse",
+      "version": "0.4.4",
+      "ecosystem": "pypi",
+      "supplier": "NOASSERTION",
+      "license": "BSD-2-Clause",
+      "deps": []
+    }
+  ]
+}
