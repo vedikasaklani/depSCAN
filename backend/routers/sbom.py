@@ -7,13 +7,12 @@ router = APIRouter(prefix="/sbom", tags=["SBOM"])
 @router.post("/upload")
 def upload_sbom(data: dict):
 
-
     data["uploaded_at"] = datetime.utcnow().isoformat()
 
     project_name = (
         data.get("metadata", {})
-            .get("component", {})
-            .get("name")
+        .get("component", {})
+        .get("name")
     )
 
     data["project"] = project_name
@@ -59,12 +58,13 @@ def get_all_sboms():
     for sbom in db.sboms.find():
 
         scans.append({
-            "sbom_id": str(sbom["_id"]),
+            "sbom_id": str(sbom.get("sbom_id", sbom["_id"])),
             "project": sbom.get("project"),
             "uploaded_at": sbom.get("uploaded_at")
         })
 
     return scans
+
 
 @router.get("/components/{sbom_id}")
 def get_components(sbom_id: str):
@@ -88,14 +88,128 @@ def get_history(project_name: str):
     )
 
 
+@router.get("/package/{package_name}")
+def get_package(package_name: str):
+
+    component = db.components.find_one(
+        {"name": package_name},
+        {"_id": 0}
+    )
+
+    if not component:
+        return {"message": "Package not found"}
+
+    return component
+
+
+@router.get("/summary/{sbom_id}")
+def get_summary(sbom_id: str):
+
+    sbom = db.sboms.find_one(
+        {"sbom_id": sbom_id}
+    )
+
+    if not sbom:
+        return {"message": "SBOM not found"}
+
+    components = list(
+        db.components.find(
+            {"sbom_id": sbom_id}
+        )
+    )
+
+    vulns = list(
+        db.vulnerabilities.find(
+            {"sbom_id": sbom_id}
+        )
+    )
+
+    critical = sum(
+        1 for v in vulns
+        if v.get("severity", "").upper() == "CRITICAL"
+    )
+
+    high = sum(
+        1 for v in vulns
+        if v.get("severity", "").upper() == "HIGH"
+    )
+
+    medium = sum(
+        1 for v in vulns
+        if v.get("severity", "").upper() == "MEDIUM"
+    )
+
+    low = sum(
+        1 for v in vulns
+        if v.get("severity", "").upper() == "LOW"
+    )
+
+    return {
+        "projectName": sbom.get("project"),
+        "scanDate": sbom.get("uploaded_at"),
+        "components": len(components),
+        "vulnerabilities": len(vulns),
+        "critical": critical,
+        "high": high,
+        "medium": medium,
+        "low": low,
+        "timestamp": sbom.get("uploaded_at")
+    }
+
+
+@router.get("/compliance/{sbom_id}")
+def get_compliance(sbom_id: str):
+
+    sbom = db.sboms.find_one(
+        {"sbom_id": sbom_id}
+    )
+
+    if not sbom:
+        return {"message": "SBOM not found"}
+
+    components = list(
+        db.components.find(
+            {"sbom_id": sbom_id},
+            {"_id": 0}
+        )
+    )
+
+    vulns = list(
+        db.vulnerabilities.find(
+            {"sbom_id": sbom_id},
+            {"_id": 0}
+        )
+    )
+
+    return {
+        "projectMeta": {
+            "projectName": sbom.get("project"),
+            "author": "depSCAN Team",
+            "timestamp": sbom.get("uploaded_at"),
+            "complianceScore": 88,
+            "compliancePercentage": 88,
+            "totalComponents": len(components),
+            "totalDependencies": 0,
+            "totalVulnerabilities": len(vulns)
+        },
+        "components": components,
+        "dependencies": []
+    }
+
 
 @router.get("/{sbom_id}")
 def get_sbom(sbom_id: str):
 
-    return {
-        "message": "Fetch SBOM by ID",
-        "sbom_id": sbom_id
-    }
+    sbom = db.sboms.find_one(
+        {"sbom_id": sbom_id},
+        {"_id": 0}
+    )
+
+    if not sbom:
+        return {"message": "SBOM not found"}
+
+    return sbom
+
 
 @router.post("/vulns/add")
 def add_vuln(data: dict):
@@ -108,7 +222,6 @@ def add_vuln(data: dict):
     }
 
 
-
 @router.get("/vulns/{sbom_id}")
 def get_vulns(sbom_id: str):
 
@@ -118,7 +231,6 @@ def get_vulns(sbom_id: str):
             {"_id": 0}
         )
     )
-
 
 
 @router.get("/diff/{old_scan}/{new_scan}")
