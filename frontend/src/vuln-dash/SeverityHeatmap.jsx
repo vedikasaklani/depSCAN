@@ -27,7 +27,7 @@ export default function SeverityHeatmap({ id }) {
   );
 
   return (
-    <section className="cardvuln" style={{ padding: "0.6rem", marginBottom: "1rem" }}>
+    <section className="cardvuln heatmap "style={{ padding: "0.6rem" }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
         <h3 className="header-card">Severity Heatmap</h3>
         <span className="stat-label">Components: {components.length}</span>

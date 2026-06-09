@@ -1,8 +1,8 @@
-import { mockScans } from "../project-page/data"; 
+import { mockScans } from "../project-page/data";
 import { dashboardData } from "./dashboardData";
 import SeverityHeatmap from "./SeverityHeatmap";
 import { useState } from "react";
-function SummaryCard({id}) {
+function SummaryCard({ id }) {
     const scan = mockScans.find(
         scan => scan.id === Number(id)
     );
@@ -16,7 +16,7 @@ function SummaryCard({id}) {
     const filteredVulns = activeFilter
         ? allVulns.filter(v => v.status === activeFilter)
         : allVulns;
-    
+
     return (
         <div className="summary-section">
             <div className="summary-card cardvuln">
@@ -80,9 +80,8 @@ function SummaryCard({id}) {
                     ))}
                 </div>
             </div>
-            <div className="heatmap cardvuln" >
-                <SeverityHeatmap id={id} />
-            </div>
+            <SeverityHeatmap id={id} />
+
         </div>
     )
 }

@@ -126,6 +126,8 @@ body{
     width:95%;
     justify-self: center;
     align-self: center;
+    align-items: end;
+    justify-items:end;
 }
 
 .summary-card,
@@ -570,4 +572,7 @@ body{
   .dep-layout {
     grid-template-columns: 1fr;
   }
+}
+SeverityHeatmap{
+  align-self:center;
 }

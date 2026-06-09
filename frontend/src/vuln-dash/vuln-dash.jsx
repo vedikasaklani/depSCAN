@@ -50,7 +50,6 @@ const TABS = [
   { id: "vulnerabilities", label: "Vulnerabilities" },
   { id: "compliance",      label: "Compliance" },
   { id: "dependencies",    label: "Dependencies" },
-  { id: "export",          label: "Export" },
 ];
 
 function VulnerabilityDashboard() {
@@ -162,7 +161,6 @@ function VulnerabilityDashboard() {
       )}
       {activeTab === "compliance"   && <ComplianceDashboard />}
       {activeTab === "dependencies" && <DependencyGraph />}
-      {activeTab === "export"       && <ExportReport report={reportSummary} />}
     </div>
   );
 }
