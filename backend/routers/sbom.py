@@ -26,30 +26,47 @@ def upload_sbom(data: dict):
 
     for comp in components:
 
-        db.components.insert_one({
-            "sbom_id": scan_id,
-            "name": comp.get("name"),
-            "version": comp.get("version"),
-            "purl": comp.get("purl"),
-            "supplier": (
-                comp.get("supplier", {})
-                .get("name")
-            ),
-            "license": (
-                comp.get("licenses", [{}])[0]
-                .get("license", {})
-                .get("id")
-            )
-        })
+            db.components.insert_one({
+                "sbom_id": scan_id,
+                "name": comp.get("name"),
+                "version": comp.get("version"),
+                "purl": comp.get("purl"),
+                "supplier": (
+                    comp.get("supplier", {})
+                    .get("name")
+                ),
+                "license": (
+                    comp["licenses"][0]
+                    .get("license", {})
+                    .get("id")
+                    if comp.get("licenses")
+                    else None
+                )
+            })
+
+    #added today
+    dependencies = data.get("dependencies", [])
+
+    for dep in dependencies:
+
+        parent = dep.get("ref")
+
+        for child in dep.get("dependsOn", []):
+
+            db.dependency_edges.insert_one({
+                "sbom_id": scan_id,
+                "parent": parent,
+                "child": child
+            })
 
     return {
         "status": "stored",
         "id": scan_id,
         "project": project_name,
         "components_stored": len(components),
+        "dependencies_stored": len(dependencies),
         "uploaded_at": data["uploaded_at"]
     }
-
 
 @router.get("/all")
 def get_all_sboms():
@@ -72,6 +89,16 @@ def get_components(sbom_id: str):
 
     return list(
         db.components.find(
+            {"sbom_id": sbom_id},
+            {"_id": 0}
+        )
+    )
+
+@router.get("/dependencies/{sbom_id}")
+def get_dependencies(sbom_id: str):
+
+    return list(
+        db.dependency_edges.find(
             {"sbom_id": sbom_id},
             {"_id": 0}
         )
