@@ -1,24 +1,15 @@
 import { useState } from "react";
+import SeverityHeatmap from "./SeverityHeatmap";
 
-function SummaryCard({
-    groupedVulns,
-    totalComponents
-}) {
+function SummaryCard({ groupedVulns, totalComponents }) {
     const [activeFilter, setActiveFilter] = useState(null);
 
     const allVulns = Object.entries(groupedVulns).flatMap(
-        ([level, vulns]) =>
-            vulns.map(v => ({
-                ...v,
-                level
-            }))
+        ([level, vulns]) => vulns.map(v => ({ ...v, level }))
     );
 
     const filteredVulns = activeFilter
-        ? allVulns.filter(
-            v =>
-                (v.status ?? "new").toLowerCase() === activeFilter
-        )
+        ? allVulns.filter(v => (v.status ?? "new").toLowerCase() === activeFilter)
         : allVulns;
 
     const critical = groupedVulns.critical.length;
@@ -44,29 +35,21 @@ function SummaryCard({
 
                 <div className="metric critical">
                     <span>Critical</span>
-                    <span style={{ color: "var(--critical)" }}>
-                        {critical}
-                    </span>
+                    <span style={{ color: "var(--critical)" }}>{critical}</span>
                 </div>
 
                 <div className="metric high">
                     <span>High</span>
-                    <span style={{ color: "var(--high)" }}>
-                        {high}
-                    </span>
+                    <span style={{ color: "var(--high)" }}>{high}</span>
                 </div>
 
                 <div className="metric medium">
                     <span>Medium</span>
-                    <span style={{ color: "var(--medium)" }}>
-                        {medium}
-                    </span>
+                    <span style={{ color: "var(--medium)" }}>{medium}</span>
                 </div>
 
                 <div className="metric low">
-                    <span style={{ color: "var(--low)" }}>
-                        Low
-                    </span>
+                    <span style={{ color: "var(--low)" }}>Low</span>
                     <span>{low}</span>
                 </div>
             </div>
@@ -77,18 +60,14 @@ function SummaryCard({
 
                     <div className="filter-btns">
                         <button
-                            className={`filter-btn${
-                                activeFilter === "new"
-                                    ? "-active"
-                                    : ""
-                            }`}
-                            onClick={() =>
-                                setActiveFilter(
-                                    activeFilter === "new"
-                                        ? null
-                                        : "new"
-                                )
-                            }
+                            className={`filter-btn${activeFilter === "unfixed" ? "-active" : ""}`}
+                            onClick={() => setActiveFilter(prev => prev === "unfixed" ? null : "unfixed")}
+                        >
+                            Unfixed
+                        </button>
+                        <button
+                            className={`filter-btn${activeFilter === "new" ? "-active" : ""}`}
+                            onClick={() => setActiveFilter(prev => prev === "new" ? null : "new")}
                         >
                             New
                         </button>
@@ -97,22 +76,13 @@ function SummaryCard({
 
                 <div className="item-vuln">
                     {filteredVulns.map((vuln, i) => (
-                        <div
-                            key={vuln.cve ?? i}
-                            className={`remedy-item ${vuln.level}`}
-                        >
-                            <span className="component-name">
-                                {vuln.cve}
-                            </span>
-
-                            <span
-                                className={`status-badge-${
-                                    vuln.level === "critical" ||
-                                    vuln.level === "high"
-                                        ? "unfixed"
-                                        : "new"
-                                }`}
-                            >
+                        <div key={vuln.cve ?? i} className={`remedy-item ${vuln.level}`}>
+                            <span className="component-name">{vuln.cve}</span>
+                            <span className={`status-badge-${
+                                vuln.level === "critical" || vuln.level === "high"
+                                    ? "unfixed"
+                                    : "new"
+                            }`}>
                                 {vuln.severity}
                             </span>
                         </div>
@@ -120,25 +90,7 @@ function SummaryCard({
                 </div>
             </div>
 
-            <div className="heatmap cardvuln">
-                <h2>Heatmap</h2>
-
-                <p>
-                    Critical: {critical}
-                </p>
-
-                <p>
-                    High: {high}
-                </p>
-
-                <p>
-                    Medium: {medium}
-                </p>
-
-                <p>
-                    Low: {low}
-                </p>
-            </div>
+            <SeverityHeatmap groupedVulns={groupedVulns} />
 
         </div>
     );

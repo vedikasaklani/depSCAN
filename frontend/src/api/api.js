@@ -42,3 +42,10 @@ export async function addVuln(vulnData) {
     body: JSON.stringify(vulnData),
   });
 }
+export async function fetchSummary(sbomId) {
+  return apiFetch(`/sbom/summary/${sbomId}`);
+}
+
+export async function fetchCompliance(sbomId) {
+  return apiFetch(`/sbom/compliance/${sbomId}`);
+}

@@ -154,7 +154,7 @@ function VulnerabilityDashboard() {
 
       {activeTab === "vulnerabilities" && (
         <>
-          <SummaryCard sbomId={id} groupedVulns={groupedVulns} totalComponents={components.length} />
+          <SummaryCard groupedVulns={groupedVulns} totalComponents={components.length} />
           <Vulnsection groupedVulns={groupedVulns} />
         </>
       )}
