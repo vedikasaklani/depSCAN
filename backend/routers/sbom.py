@@ -82,6 +82,7 @@ def get_all_sboms():
         })
 
     return scans
+    
 
 
 @router.get("/components/{sbom_id}")
