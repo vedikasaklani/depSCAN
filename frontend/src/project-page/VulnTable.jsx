@@ -28,7 +28,7 @@ function VulnTable({ selectedProject, projectScans }) {
     <div id="vuln-log-panel">
       <div className="vuln-log-bar">
         <span className="vuln-log-prompt">
-          <span className="vuln-log-prompt-sigil">$</span> tail -f scan_history.log
+          <span className="vuln-log-prompt-sigil">scan_history.log</span>
           <span className="blinking-cursor">_</span>
         </span>
         <span className="vuln-log-live">

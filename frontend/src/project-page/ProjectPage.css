@@ -1,5 +1,7 @@
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
 *{
-    font-family:"Inter"
+    font-family:"JetBrains Mono", monospace;
 }#parent-container{
     background-color: var(--black);
     justify-content:start;
@@ -16,7 +18,8 @@
 }
 
 .profile-circle{
-    border-radius: 50%;
+    border-radius: 2px;
+    border: 1px solid var(--border);
     padding:0.5em;
     height:30px;
     width:30px;
@@ -24,7 +27,7 @@
     justify-content: center;
     align-items: center;
     margin:0.5em;
-    background-color: var(--black);
+    background-color: var(--blackgrey);
 }
 .project-container{
     display:flex;
@@ -32,15 +35,15 @@
     overflow: hidden;
     background: radial-gradient(
     circle at top left,
-    rgba(0,255,255,0.35) 0%,
-    rgba(0,255,255,0.15) 15%,
-    rgba(0,255,255,0.05) 30%,
+    rgba(0,255,179,0.18) 0%,
+    rgba(0,255,179,0.08) 15%,
+    rgba(0,255,179,0.03) 30%,
     transparent 80%
 ) ;
     width:95vw;
     height:90vh;
-    border-top-right-radius: 10px;
-    border-bottom-right-radius: 10px;
+    border-top-right-radius: 2px;
+    border-bottom-right-radius: 2px;
 }
 .project-container::before {
     content: "";
@@ -49,14 +52,14 @@
     z-index: -1;
     pointer-events: none;
     background-image:
-        linear-gradient(rgba(0,255,255,0.035) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0,255,255,0.035) 1px, transparent 1px);
+        linear-gradient(rgba(0,255,179,0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,255,179,0.035) 1px, transparent 1px);
     background-size: 42px 42px;
 }
 .project-container > ul {
     overflow: hidden;
     height: 90vh;
-    width:150px;
+    width:200px;
     display: flex;
     flex-direction: column;
     gap: 0.35rem;
@@ -83,10 +86,10 @@
     content: "PROJECTS";
     display: block;
     padding: 0 0.9em 0.6em;
-    font-family: "Anta";
+    font-family: "Share Tech Mono";
     font-size: 0.65em;
     letter-spacing: 0.18em;
-    color: rgba(0,255,255,0.4);
+    color: rgba(0,255,179,0.4);
     text-transform: uppercase;
 }
 .project-container > ul::-webkit-scrollbar {
@@ -96,7 +99,7 @@
     background: transparent;
 }
 .project-container > ul::-webkit-scrollbar-thumb {
-    background: rgba(0,255,255,0.18);
+    background: rgba(0,255,179,0.18);
 }
 .project-container> ul li{
     color: var(--textlight);
@@ -108,7 +111,7 @@
     padding:0em 0.5em;
     display: flex;
     align-items: center;
-    font-family: "Anta";
+    font-family: "JetBrains Mono", monospace;
     cursor:pointer;
     transition:background 0.2 ease,
     transform 0.2s ease
@@ -153,10 +156,10 @@ grid-template-areas: "box1 box1 box1"
     background: transparent;
 }
 #content::-webkit-scrollbar-thumb {
-    background: rgba(0,255,255,0.18);
+    background: rgba(0,255,179,0.18);
 }
 #content::-webkit-scrollbar-thumb:hover {
-    background: rgba(0,255,255,0.4);
+    background: rgba(0,255,179,0.4);
 }
 
 
@@ -214,8 +217,9 @@ grid-template-areas: "box1 box1 box1"
     color: rgba(255,255,255,0.45);
     border-radius: 0;
     cursor: pointer;
-    font-family: "Inter";
+    font-family: "JetBrains Mono", monospace;
     font-size: 0.85em;
+    text-transform: uppercase;
     letter-spacing: 0.05em;
     transition: color 0.15s ease, border-color 0.15s ease;
     position: relative;
@@ -252,7 +256,7 @@ grid-template-areas: "box1 box1 box1"
     border:1px solid var(--teal);
     margin-left:2em;
     align-self: center;
-    font-family: "Anta";
+    font-family: "Share Tech Mono";
     font-size: 0.8em;
     letter-spacing: 0.04em;
     padding:0 1em;
@@ -276,7 +280,7 @@ grid-template-areas: "box1 box1 box1"
     border:1px solid rgba(255,255,255,0.25);
     margin-left:2em;
     align-self: center;
-    font-family: "Anta";
+    font-family: "Share Tech Mono";
     font-size: 0.8em;
     letter-spacing: 0.04em;
     padding:0 1em;
@@ -301,7 +305,7 @@ grid-template-areas: "box1 box1 box1"
 
 #project-name{
     color:var(--textlight);
-    font-family:"Anta";
+    font-family:"Share Tech Mono";
     font-size: 1.2rem;
     font-weight: 400;
     letter-spacing: 0.05em;
@@ -309,7 +313,7 @@ grid-template-areas: "box1 box1 box1"
 #project-name:not(:empty)::after {
     content: "● ACTIVE";
     margin-left: 0.9em;
-    font-family: "Courier New", Courier, monospace;
+    font-family: "JetBrains Mono", monospace;
     font-size: 0.5em;
     letter-spacing: 0.1em;
     color: var(--low);
@@ -362,7 +366,6 @@ svg:focus {
     margin-right: auto;
 }
 
-/* ── scan log panel (was a bare table — now a terminal-style log) ───── */
 #vuln-log-panel {
     grid-area: table;
     width: 90%;
@@ -370,7 +373,7 @@ svg:focus {
     margin-top: 2em;
     border: 1px solid var(--border);
     background: linear-gradient(180deg, rgba(8, 12, 18, 0.92) 0%, rgba(10, 10, 12, 0.92) 100%);
-    box-shadow: 0 0 0 1px rgba(0,255,255,0.03), 0 20px 50px rgba(0,0,0,0.35);
+    box-shadow: 0 0 0 1px rgba(0,255,179,0.03), 0 20px 50px rgba(0,0,0,0.35);
 }
 
 .vuln-log-bar {
@@ -383,7 +386,7 @@ svg:focus {
 }
 
 .vuln-log-prompt {
-    font-family: "Courier New", Courier, monospace;
+    font-family: "JetBrains Mono", monospace;
     font-size: 0.82em;
     color: rgba(0, 255, 255, 0.65);
     letter-spacing: 0.02em;
@@ -415,7 +418,7 @@ svg:focus {
     display: flex;
     align-items: center;
     gap: 0.5em;
-    font-family: "Anta";
+    font-family: "Share Tech Mono";
     font-size: 0.7em;
     letter-spacing: 0.08em;
     color: rgba(255,255,255,0.4);
@@ -450,7 +453,7 @@ svg:focus {
     font-size: 0.78em;
     text-transform: uppercase;
     letter-spacing: 0.1em;
-    font-family: "Anta";
+    font-family: "Share Tech Mono";
 }
 #vuln-table th.col-id {
     width: 56px;
@@ -473,13 +476,13 @@ svg:focus {
     box-shadow: inset 3px 0 0 0 rgba(255,255,255,0.08);
 }
 #vuln-table tbody tr[data-severity="critical"] td:first-child {
-    box-shadow: inset 3px 0 0 0 var(--critical);
+    box-shadow: inset 3px 0 0 0 var(--crit);
 }
 #vuln-table tbody tr[data-severity="high"] td:first-child {
     box-shadow: inset 3px 0 0 0 var(--high);
 }
 #vuln-table tbody tr[data-severity="medium"] td:first-child {
-    box-shadow: inset 3px 0 0 0 var(--medium);
+    box-shadow: inset 3px 0 0 0 var(--med);
 }
 #vuln-table tbody tr[data-severity="low"] td:first-child {
     box-shadow: inset 3px 0 0 0 var(--low);
@@ -489,16 +492,15 @@ svg:focus {
     font-size: 0.82em;
 }
 .mono-cell {
-    font-family: "Courier New", Courier, monospace;
+    font-family: "JetBrains Mono", monospace;
     letter-spacing: 0.01em;
 }
 
-/* ── status chips ────────────────────────────────────────── */
 .status-chip {
     display: inline-flex;
     align-items: center;
     gap: 0.5em;
-    font-family: "Courier New", Courier, monospace;
+    font-family: "JetBrains Mono", monospace;
     font-size: 0.76em;
     letter-spacing: 0.06em;
     padding: 0.25em 0.6em;
@@ -515,8 +517,8 @@ svg:focus {
     flex-shrink: 0;
 }
 .status-chip-low { color: var(--low); }
-.status-chip-medium { color: var(--medium); }
-.status-chip-critical { color: var(--critical); }
+.status-chip-medium { color: var(--med); }
+.status-chip-critical { color: var(--crit); }
 .status-chip-idle { color: rgba(255,255,255,0.4); }
 
 .view-btn {
@@ -526,7 +528,7 @@ svg:focus {
     padding: 0.25em 0.85em;
     border-radius: 2px;
     cursor: pointer;
-    font-family: "Courier New", Courier, monospace;
+    font-family: "JetBrains Mono", monospace;
     font-size: 0.82em;
     letter-spacing: 0.04em;
     transition: border-color 0.15s ease, color 0.15s ease, background 0.15s ease;
@@ -603,7 +605,7 @@ svg:focus {
     font-size: 1.2em;
     font-weight: 700;
     margin: 0.25em 0 0 0;
-    font-family:"Anta";
+    font-family:"Share Tech Mono";
     letter-spacing: 0.04em;
 }
 .change-stat-container{
@@ -618,7 +620,7 @@ svg:focus {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-family: "Anta";
+    font-family: "Share Tech Mono";
     font-size: 0.78em;
     letter-spacing: 0.14em;
     text-transform: uppercase;
