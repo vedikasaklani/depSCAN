@@ -1,23 +1,38 @@
-from fastapi import APIRouter
-from database import db
+from fastapi import APIRouter, HTTPException
+from mongodb import db
 from datetime import datetime
 
 import tempfile
 import subprocess
 import requests
 import json
+import sys
 
 from pathlib import Path
 
+# Project root: depSCAN/
 BASE_DIR = Path(__file__).resolve().parents[2]
 
+# Allow importing run_enrichment.py from project root
+if str(BASE_DIR) not in sys.path:
+    sys.path.append(str(BASE_DIR))
+
+from run_enrichment import run_enrichment
 
 router = APIRouter(prefix="/scan", tags=["Scan"])
+
+
 @router.post("/")
 def start_scan(data: dict):
 
     project_name = data.get("project_name")
     repo_url = data.get("repo_url")
+
+    if not project_name or not repo_url:
+        raise HTTPException(
+            status_code=400,
+            detail="project_name and repo_url are required"
+        )
 
     scan_job = {
         "project_name": project_name,
@@ -52,7 +67,7 @@ def start_scan(data: dict):
             }
         )
 
-        # File paths
+        # Output file paths
         scanner_output = BASE_DIR / "parsed_components.json"
         sbom_output = BASE_DIR / "sbom.cdx.json"
 
@@ -110,19 +125,24 @@ def start_scan(data: dict):
 
         upload_result = response.json()
 
+        sbom_id = upload_result["id"]
+
+        # Run vulnerability enrichment
+        run_enrichment(sbom_id)
+
         db.scan_jobs.update_one(
             {"_id": result.inserted_id},
             {
                 "$set": {
                     "status": "completed",
-                    "sbom_id": upload_result["id"]
+                    "sbom_id": sbom_id
                 }
             }
         )
 
         return {
             "scan_id": scan_id,
-            "sbom_id": upload_result["id"],
+            "sbom_id": sbom_id,
             "status": "completed"
         }
 
@@ -138,4 +158,7 @@ def start_scan(data: dict):
             }
         )
 
-        raise e
+        raise HTTPException(
+            status_code=500,
+            detail=str(e)
+        )

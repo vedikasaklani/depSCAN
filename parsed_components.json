@@ -1,60 +1,77 @@
 {
-  "project_name": "tmp5l9knb9z",
+  "project_name": "tmphaj2bw_2",
   "detected_ecosystems": [
+    "node",
     "python"
   ],
   "frontend": "Unknown",
   "backend": "Unknown",
   "database": "Unknown",
-  "component_count": 6,
+  "component_count": 8,
   "components": [
     {
-      "name": "blinker",
-      "version": "1.9.0",
-      "ecosystem": "pypi",
-      "purl": "pkg:pypi/blinker@1.9.0",
+      "name": "@biomejs/biome",
+      "version": "2.4.15",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/%40biomejs/biome@2.4.15",
       "license": "NOASSERTION",
-      "hash": "sha256:c71dad8b3594d1435619c5d35462a77fb290e132c490eb4112f5e2f3f548795a"
+      "hash": "sha256:536fc41db6fc43a09cf7bcd6b57deebac2b89b864a7c7f347bc9743e2cba220c"
     },
     {
-      "name": "click",
-      "version": "8.1.3",
-      "ecosystem": "pypi",
-      "purl": "pkg:pypi/click@8.1.3",
+      "name": "grunt",
+      "version": "1.6.2",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/grunt@1.6.2",
       "license": "NOASSERTION",
-      "hash": "sha256:3cc6519e8a2c0d8155b0440af336aefb09f4f352282ed5845ef6408706db57dd"
+      "hash": "sha256:d261277ec0e5b8d2c9c816dc979ab4ffc31b62916ecc65a71feac78b791b8a7b"
     },
     {
-      "name": "itsdangerous",
-      "version": "2.2.0",
-      "ecosystem": "pypi",
-      "purl": "pkg:pypi/itsdangerous@2.2.0",
+      "name": "grunt-cli",
+      "version": "1.5.0",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/grunt-cli@1.5.0",
       "license": "NOASSERTION",
-      "hash": "sha256:c0502d13e29a361a2bc456ac9457894585cebc68a45f57de5a269152722cfaab"
+      "hash": "sha256:9a599a5a239017818469b040b4b822369356a8f20d0bceb031fa12f79a24fbea"
     },
     {
-      "name": "jinja2",
-      "version": "3.1.2",
-      "ecosystem": "pypi",
-      "purl": "pkg:pypi/jinja2@3.1.2",
+      "name": "grunt-contrib-qunit",
+      "version": "10.2.0",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/grunt-contrib-qunit@10.2.0",
       "license": "NOASSERTION",
-      "hash": "sha256:9b154c639b59ab001043dfcc419cf5064c87964ae3df75a13cc5a24626022ad6"
+      "hash": "sha256:acb722390097611c819012e19018db61a5b3a2c3be6e66449ddf79619ddcafbf"
     },
     {
-      "name": "markupsafe",
-      "version": "2.1.1",
-      "ecosystem": "pypi",
-      "purl": "pkg:pypi/markupsafe@2.1.1",
+      "name": "qunit",
+      "version": "2.25.0",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/qunit@2.25.0",
       "license": "NOASSERTION",
-      "hash": "sha256:0ee36098f776de5dcae57aef02d7749c352970080b436c0bce0079c9e94d218c"
+      "hash": "sha256:e367e6bd24be8cebe44c9d5b59bc0042c638d33521c3d4bb913add42ce4d3804"
     },
     {
-      "name": "werkzeug",
-      "version": "3.1.0",
+      "name": "asgiref",
+      "version": "3.9.1",
       "ecosystem": "pypi",
-      "purl": "pkg:pypi/werkzeug@3.1.0",
+      "purl": "pkg:pypi/asgiref@3.9.1",
       "license": "NOASSERTION",
-      "hash": "sha256:7faa57170f3a4981ccee48f9e863f6ba4276e0551118853de94e82e5e43e5662"
+      "hash": "sha256:a56d89a792af1fc4883b48b2c2b5efe18badb1f818cb2bf80f823dad9a7d7b1b"
+    },
+    {
+      "name": "sqlparse",
+      "version": "0.5.0",
+      "ecosystem": "pypi",
+      "purl": "pkg:pypi/sqlparse@0.5.0",
+      "license": "NOASSERTION",
+      "hash": "sha256:c5c0e1d5fc0aaa465c62caf0d737ca06d2451580df0c100f48ebc836f36c3acc"
+    },
+    {
+      "name": "tzdata;",
+      "version": "",
+      "ecosystem": "pypi",
+      "purl": "pkg:pypi/tzdata%3b",
+      "license": "NOASSERTION",
+      "hash": "sha256:4e3e654e01f66fc41f589f32eb5bbc0622dcae55b2d984f309971c43564b7eba"
     }
   ]
 }

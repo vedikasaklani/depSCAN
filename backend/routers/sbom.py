@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from database import db
+from mongodb import db
 from datetime import datetime
 
 router = APIRouter(prefix="/sbom", tags=["SBOM"])
