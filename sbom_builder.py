@@ -313,3 +313,42 @@ def build_and_output_sbom(
     output_sbom(sbom_json, mode, output_path, api_url, api_key, project_name)
 
     return sbom_json
+
+if __name__ == "__main__":
+    import argparse
+
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument(
+        "--input",
+        required=True,
+        help="Path to parsed_components.json"
+    )
+
+    parser.add_argument(
+        "--output",
+        default="sbom.cdx.json",
+        help="Output SBOM file path"
+    )
+
+    parser.add_argument(
+        "--project",
+        default="demo-project",
+        help="Project name"
+    )
+
+    args = parser.parse_args()
+
+    with open(args.input, "r") as f:
+        scan_data = json.load(f)
+
+    project_name = scan_data.get("project_name", args.project)
+    components_data = scan_data["components"]
+
+    build_and_output_sbom(
+        project_name=project_name,
+        components_data=components_data,
+        format="cyclonedx",
+        mode="file",
+        output_path=args.output
+    )
