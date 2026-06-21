@@ -46,7 +46,13 @@ function StatsBar({ previousScan, latestScan, projectScans = [] }) {
       <div className="stat-card">
         <p className="stat-label">Last Scanned</p>
         <p className="stat-value">
-          {latestScan ? String(latestScan.date).substring(0, 6) : "Never"}
+          {latestScan
+            ? new Date(latestScan.date).toLocaleDateString("en-IN", {
+              day: "2-digit",
+              month: "short",
+              year: "numeric",
+            })
+            : "Never"}
         </p>
       </div>
     </div>

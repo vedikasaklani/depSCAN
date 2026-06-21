@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
-function VulnTable({ selectedProject, projectScans = [] }) {
+function VulnTable({ selectedProject, projectScans }) {
   const navigate = useNavigate();
+  console.log(projectScans)
   return (
     <table id="vuln-table">
       <thead>
@@ -25,23 +26,29 @@ function VulnTable({ selectedProject, projectScans = [] }) {
         )}
         {projectScans.map(scan => (
           <tr key={scan.id}>
-            <td>{scan.date}</td>
+            <td>
+              {new Date(scan.date).toLocaleString("en-IN", {
+                day: "2-digit",
+                month: "short",
+                year: "numeric",
+              })}
+            </td>
             <td>{scan.components}</td>
             <td style={{ color: "var(--critical)" }}>{scan.critical}</td>
-            <td style={{ color: "var(--high)"     }}>{scan.high}</td>
-            <td style={{ color: "var(--medium)"   }}>{scan.medium}</td>
-            <td style={{ color: "var(--low)"      }}>{scan.low}</td>
+            <td style={{ color: "var(--high)" }}>{scan.high}</td>
+            <td style={{ color: "var(--medium)" }}>{scan.medium}</td>
+            <td style={{ color: "var(--low)" }}>{scan.low}</td>
             <td style={{
-              color: scan.progress === "Complete"    ? "var(--low)"      :
-                     scan.progress === "In Progress" ? "var(--medium)"   :
-                     scan.progress === "Error"       ? "var(--critical)" : "var(--textlight)"
+              color: scan.progress === "Complete" ? "var(--low)" :
+                scan.progress === "In Progress" ? "var(--medium)" :
+                  scan.progress === "Error" ? "var(--critical)" : "var(--textlight)"
             }}>
               {scan.progress}
             </td>
             <td>
               <button
                 className="view-btn"
-                onClick={() => navigate(`/projects/${selectedProject.id}/scans/${scan.id}`)}
+                onClick={() => navigate(`/projects/${selectedProject.name}/scans/${scan.id}`)}
               >
                 View →
               </button>

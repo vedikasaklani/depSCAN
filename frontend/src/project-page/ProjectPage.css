@@ -331,7 +331,7 @@ svg:focus {
     padding: 0.5rem 0.5rem;
     position: relative;
     overflow: hidden;
-    flex: 0 0 120px;
+    flex: 0 0 150px;
 }
 .stat-label {
     color: rgba(255,255,255,0.4);
@@ -343,7 +343,7 @@ svg:focus {
 }
 .stat-value {
     color: var(--textlight);
-    font-size: 1.4em;
+    font-size: 1.2em;
     font-weight: 700;
     margin: 0.25em 0 0 0;
     font-family:"Anta";

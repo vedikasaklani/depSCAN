@@ -353,6 +353,10 @@ body{
   color: rgba(255,255,255,0.35);
   padding: 2em;
   text-align: center;
+  height:100vh;
+  display:flex;
+  align-items: center;
+  justify-content: center;
 }
 
 

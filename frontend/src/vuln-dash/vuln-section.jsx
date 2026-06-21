@@ -58,7 +58,7 @@ function Vulnsection({ groupedVulns }) {
                         className={`cardvuln severity-column ${level}`}
                     >
                         <h3 className="header-card">
-                            {level}
+                            {level.toUpperCase()}
                             {" "}
                             (
                             {groupedVulns[level].length}

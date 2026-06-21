@@ -1,7 +1,7 @@
 import "./vuln-dash.css";
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { fetchAllScans, fetchSbom, fetchComponents, fetchVulns } from "../api/api.js";
+import { fetchAllScans, fetchSbom, fetchComponents, fetchVulns, fetchDependencies } from "../api/api.js";
 import Vulnsection from "./vuln-section";
 import SummaryCard from "./summarycard";
 import ComplianceDashboard from "./ComplianceDashboard";
@@ -39,6 +39,7 @@ function VulnerabilityDashboard() {
   const [sbom, setSbom] = useState(null);
   const [components, setComponents] = useState([]);
   const [vulns, setVulns] = useState([]);
+  const [edges, setEdges] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -50,11 +51,17 @@ function VulnerabilityDashboard() {
       fetchSbom(id),
       fetchComponents(id),
       fetchVulns(id),
+      fetchDependencies(id),
     ])
-      .then(([sbomData, compData, vulnData]) => {
+      .then(([sbomData, compData, vulnData, depData]) => {
+        console.log("SBOM", sbomData);
+console.log("COMPONENTS", compData);
+console.log("VULNS", vulnData);
+console.log("DEPENDENCIES", depData);
         setSbom(sbomData);
         setComponents(compData);
         setVulns(vulnData);
+        setEdges(depData);
       })
       .catch((err) => setError(err.message))
       .finally(() => setLoading(false));
@@ -162,7 +169,7 @@ function VulnerabilityDashboard() {
         <ComplianceDashboard components={components} security={sbom} />
       )}
       {activeTab === "dependencies" && (
-        <DependencyGraph components={components} vulns={vulns} />
+        <DependencyGraph edges={edges} components={components} vulns={vulns} projectName={projectName} />
       )}
     </div>
   );

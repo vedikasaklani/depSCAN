@@ -10,55 +10,98 @@ const severityColors = {
   safe: 'var(--teal)',
 };
 
-function buildTreeFromComponents(components = [], projectName = 'Project') {
-  return [{
-    id: 'root',
-    name: projectName,
-    version: '',
-    purl: '',
-    supplier: { name: '—' },
-    licenses: [],
-    severity: 'safe',
-    children: components.map((comp) => ({
-      id: comp.purl ?? comp.name,
-      name: comp.name,
-      version: comp.version,
-      purl: comp.purl ?? '',
-      supplier: typeof comp.supplier === 'string'
-        ? { name: comp.supplier }
-        : (comp.supplier ?? { name: '—' }),
-      licenses: comp.license
-        ? [{ license: { id: comp.license } }]
-        : (comp.licenses ?? []),
-      severity: comp.severity ?? 'safe',
-      children: [],
-    })),
-  }];
-}
-
 const NODE_SPACING = 180;
 
-function buildFlowItems(tree) {
-  const nodes = [];
-  const edges = [];
-  const rows = {};
-  function walk(item, depth = 0) {
-    const row = rows[depth] || 0;
-    rows[depth] = row + 1;
-    const color = severityColors[item.severity] || severityColors.safe;
-    nodes.push({
-      id: item.id,
-      position: { x: depth * NODE_SPACING, y: row * 100 },
-      data: { label: `${item.name}${item.version ? ' ' + item.version : ''}` },
-      style: { background: color, color: '#07101d', border: '1px solid rgba(255,255,255,0.12)', width: 210, fontFamily: 'Anta', fontSize: '0.8rem' },
+// --- purl parsing -----------------------------------------------------
+// "pkg:pypi/django@4.2.1" -> { name: "django", version: "4.2.1" }
+// "pkg:generic/my-demo-project" -> { name: "my-demo-project", version: "" }
+function parsePurl(purl) {
+  if (!purl) return { name: 'unknown', version: '' };
+  const withoutScheme = purl.replace(/^pkg:/, '');
+  const slashIdx = withoutScheme.indexOf('/');
+  const rest = slashIdx >= 0 ? withoutScheme.slice(slashIdx + 1) : withoutScheme;
+  const pathPart = rest.split('?')[0].split('#')[0];
+  const atIdx = pathPart.lastIndexOf('@');
+  const namePart = atIdx > -1 ? pathPart.slice(0, atIdx) : pathPart;
+  const version = atIdx > -1 ? pathPart.slice(atIdx + 1) : '';
+  const segments = namePart.split('/');
+  return { name: segments[segments.length - 1], version };
+}
+
+// --- build lookup maps from the /sbom/dependencies edge list -----------
+// edges: [{ sbom_id, parent, child }, ...]
+// components/vulns are still used purely for metadata enrichment (severity,
+// supplier, license) since the edges endpoint only describes structure.
+function buildGraphMaps(edges = [], components = [], projectName) {
+  const metaByPurl = new Map();
+  const metaByName = new Map();
+  components.forEach((c) => {
+    if (c.purl) metaByPurl.set(c.purl, c);
+    if (c.name) metaByName.set(c.name.toLowerCase(), c);
+  });
+
+  const childrenByParent = new Map();
+  const parentsByChild = new Map();
+  const allPurls = new Set();
+
+  edges.forEach(({ parent, child }) => {
+    if (!parent || !child) return;
+    allPurls.add(parent);
+    allPurls.add(child);
+    if (!childrenByParent.has(parent)) childrenByParent.set(parent, []);
+    childrenByParent.get(parent).push(child);
+    if (!parentsByChild.has(child)) parentsByChild.set(child, []);
+    parentsByChild.get(child).push(parent);
+  });
+
+  // Roots = anything that never appears as a "child" (e.g. the project itself)
+  const rootPurls = [...allPurls].filter((p) => !parentsByChild.has(p));
+  const rootSet = new Set(rootPurls);
+
+  const nodeCache = new Map();
+  allPurls.forEach((purl) => {
+    const { name, version } = parsePurl(purl);
+    const meta = metaByPurl.get(purl) ?? metaByName.get(name.toLowerCase()) ?? {};
+    const licenses = meta.license ? [{ license: { id: meta.license } }] : (meta.licenses ?? []);
+    const supplier = typeof meta.supplier === 'string'
+      ? { name: meta.supplier }
+      : (meta.supplier ?? { name: '—' });
+    nodeCache.set(purl, {
+      id: purl,
+      purl,
+      name: rootSet.has(purl) && projectName ? projectName : name,
+      version,
+      supplier,
+      licenses,
+      severity: meta.severity ?? 'safe',
     });
-    (item.children || []).forEach((child) => {
-      edges.push({ id: `${item.id}-${child.id}`, source: item.id, target: child.id, animated: false });
-      walk(child, depth + 1);
-    });
+  });
+
+  return { nodeCache, childrenByParent, parentsByChild, rootPurls, allPurls: [...allPurls] };
+}
+
+// --- tree view -----------------------------------------------------------
+// Because the graph is a DAG (a package can have multiple parents — see
+// sqlparse under both the project root and django), the same purl can show
+// up at multiple positions in the tree. `id`/`purl` stay stable for data
+// lookups (severity, selection, vulns); `treeId` is unique per *position*
+// so React keys and expand/collapse state don't collide between occurrences.
+function buildTree(rootPurls, childrenByParent, nodeCache) {
+  function walk(purl, path) {
+    const base = nodeCache.get(purl);
+    const treeId = [...path, purl].join('>');
+    if (path.includes(purl)) {
+      // defensive cycle guard — shouldn't happen in a valid SBOM graph
+      return { ...base, treeId, children: [] };
+    }
+    const childPurls = childrenByParent.get(purl) ?? [];
+    return {
+      ...base,
+      treeId,
+      children: childPurls.map((c) => walk(c, [...path, purl])),
+    };
   }
-  tree.forEach((item) => walk(item));
-  return { nodes, edges };
+  return rootPurls.map((r) => walk(r, []));
 }
 
 function filterTree(tree, query) {
@@ -76,13 +119,13 @@ function renderTree(node, expandedSet, toggleNode, searchTerm, onSelect) {
   const active = node.name.toLowerCase().includes(searchTerm.toLowerCase());
   const hasChildren = (node.children || []).length > 0;
   return (
-    <div key={node.id} className={`dep-tree-node${active ? ' dep-tree-active' : ''}`}>
-      <button type="button" className="dep-tree-label" onClick={() => { toggleNode(node.id); onSelect(node); }}>
-        {hasChildren && <span className="dep-tree-arrow">{expandedSet.has(node.id) ? '▾' : '▸'}</span>}
+    <div key={node.treeId} className={`dep-tree-node${active ? ' dep-tree-active' : ''}`}>
+      <button type="button" className="dep-tree-label" onClick={() => { toggleNode(node.treeId); onSelect(node); }}>
+        {hasChildren && <span className="dep-tree-arrow">{expandedSet.has(node.treeId) ? '▾' : '▸'}</span>}
         <span>{node.name}</span>
         <small style={{ marginLeft: 'auto', color: 'rgba(255,255,255,0.4)', fontSize: '0.8em' }}>{node.version}</small>
       </button>
-      {hasChildren && expandedSet.has(node.id) && (
+      {hasChildren && expandedSet.has(node.treeId) && (
         <div className="dep-tree-children">
           {node.children.map((child) => renderTree(child, expandedSet, toggleNode, searchTerm, onSelect))}
         </div>
@@ -91,42 +134,131 @@ function renderTree(node, expandedSet, toggleNode, searchTerm, onSelect) {
   );
 }
 
-export default function DependencyGraph({ components = [], vulns = [] }) {
-  const tree = useMemo(() => buildTreeFromComponents(components), [components]);
+function computeDepths(allPurls, parentsByChild, childrenByParent) {
+  const indegree = new Map();
+  allPurls.forEach((p) => indegree.set(p, (parentsByChild.get(p) ?? []).length));
+
+  const depth = new Map();
+  const queue = [];
+  allPurls.forEach((p) => {
+    if ((indegree.get(p) ?? 0) === 0) {
+      depth.set(p, 0);
+      queue.push(p);
+    }
+  });
+
+  let i = 0;
+  while (i < queue.length) {
+    const p = queue[i++];
+    const d = depth.get(p);
+    (childrenByParent.get(p) ?? []).forEach((c) => {
+      depth.set(c, Math.max(depth.get(c) ?? 0, d + 1));
+      indegree.set(c, indegree.get(c) - 1);
+      if (indegree.get(c) === 0) queue.push(c);
+    });
+  }
+  allPurls.forEach((p) => { if (!depth.has(p)) depth.set(p, 0); });
+  return depth;
+}
+
+function getConnected(startPurls, forwardMap, backwardMap) {
+  const keep = new Set();
+  function dfs(purl, map) {
+    if (keep.has(purl)) return;
+    keep.add(purl);
+    (map.get(purl) ?? []).forEach((next) => dfs(next, map));
+  }
+  startPurls.forEach((p) => {
+    keep.add(p);
+    dfs(p, forwardMap);
+    dfs(p, backwardMap);
+  });
+  return keep;
+}
+
+function buildFlowItems(purls, edges, depths, nodeCache) {
+  const purlSet = new Set(purls);
+  const rows = {};
+  const nodes = purls.map((purl) => {
+    const d = depths.get(purl) ?? 0;
+    const row = rows[d] || 0;
+    rows[d] = row + 1;
+    const meta = nodeCache.get(purl);
+    const color = severityColors[meta.severity] || severityColors.safe;
+    return {
+      id: purl,
+      position: { x: d * NODE_SPACING, y: row * 100 },
+      data: { label: `${meta.name}${meta.version ? ' ' + meta.version : ''}` },
+      style: { background: color, color: '#07101d', border: '1px solid rgba(255,255,255,0.12)', width: 210, fontFamily: 'Anta', fontSize: '0.8rem' },
+    };
+  });
+  const flowEdges = edges
+    .filter((e) => purlSet.has(e.parent) && purlSet.has(e.child))
+    .map((e) => ({ id: `${e.parent}->${e.child}`, source: e.parent, target: e.child, animated: false }));
+  return { nodes, edges: flowEdges };
+}
+
+export default function DependencyGraph({ edges = [], components = [], vulns = [], projectName = 'Project' }) {
+  const { nodeCache, childrenByParent, parentsByChild, rootPurls, allPurls } = useMemo(
+    () => buildGraphMaps(edges, components, projectName),
+    [edges, components, projectName]
+  );
+
+  const tree = useMemo(
+    () => buildTree(rootPurls, childrenByParent, nodeCache),
+    [rootPurls, childrenByParent, nodeCache]
+  );
+
+  const depths = useMemo(
+    () => computeDepths(allPurls, parentsByChild, childrenByParent),
+    [allPurls, parentsByChild, childrenByParent]
+  );
 
   const [search, setSearch] = useState('');
-  const [selectedPackage, setSelectedPackage] = useState(() => tree[0] ?? null);
-  const [expanded, setExpanded] = useState(() => new Set(['root']));
+  const [selectedPackage, setSelectedPackage] = useState(null);
+  const [expanded, setExpanded] = useState(() => new Set(rootPurls));
   const [view, setView] = useState('tree');
 
-  const filteredTree = useMemo(() => filterTree(tree, search), [tree, search]);
-  const flowData = useMemo(() => buildFlowItems(filteredTree), [filteredTree]);
+  const effectiveSelected = selectedPackage ?? (rootPurls.length ? nodeCache.get(rootPurls[0]) : null);
 
-  // CVEs matching selected package — vulns from backend have a "component" or "package" field
+  const filteredTree = useMemo(() => filterTree(tree, search), [tree, search]);
+
+  // Packages matching the search (deduped — a package only counts once even
+  // if it appears under multiple parents in the tree).
+  const matchPackages = useMemo(() => {
+    const all = [...nodeCache.values()];
+    if (!search.trim()) return all;
+    const q = search.toLowerCase();
+    return all.filter((p) => p.name.toLowerCase().includes(q));
+  }, [nodeCache, search]);
+
+  // For the graph view, keep matched nodes plus their ancestors/descendants
+  // so the surrounding structure stays visible while filtering.
+  const filteredPurls = useMemo(() => {
+    if (!search.trim()) return allPurls;
+    const matched = matchPackages.map((p) => p.purl);
+    return [...getConnected(matched, childrenByParent, parentsByChild)];
+  }, [search, matchPackages, allPurls, childrenByParent, parentsByChild]);
+
+  const flowData = useMemo(
+    () => buildFlowItems(filteredPurls, edges, depths, nodeCache),
+    [filteredPurls, edges, depths, nodeCache]
+  );
+
   const packageHistory = useMemo(() =>
     vulns.filter((v) => {
       const name = (v.component ?? v.package ?? '').toLowerCase();
-      return name === (selectedPackage?.name ?? '').toLowerCase();
+      return name === (effectiveSelected?.name ?? '').toLowerCase();
     }),
-    [vulns, selectedPackage]
+    [vulns, effectiveSelected]
   );
 
-  const allPackages = useMemo(() => {
-    const list = [];
-    function collect(node) { list.push(node); (node.children || []).forEach(collect); }
-    tree.forEach(collect);
-    return list;
-  }, [tree]);
+  const directDepsCount = (childrenByParent.get(effectiveSelected?.purl) ?? []).length;
 
-  const matchPackages = useMemo(() => {
-    const q = search.toLowerCase();
-    return allPackages.filter((p) => p.name.toLowerCase().includes(q));
-  }, [allPackages, search]);
-
-  const handleToggle = (id) => {
+  const handleToggle = (treeId) => {
     setExpanded((cur) => {
       const next = new Set(cur);
-      next.has(id) ? next.delete(id) : next.add(id);
+      next.has(treeId) ? next.delete(treeId) : next.add(treeId);
       return next;
     });
   };
@@ -157,7 +289,11 @@ export default function DependencyGraph({ components = [], vulns = [] }) {
           {view === 'tree' ? (
             filteredTree.length
               ? filteredTree.map((node) => renderTree(node, expanded, handleToggle, search, handleSelectPackage))
-              : <p style={{ color: 'rgba(255,255,255,0.35)' }}>No package matches that search term.</p>
+              : (
+                <p style={{ color: 'rgba(255,255,255,0.35)' }}>
+                  {search.trim() ? 'No package matches that search term.' : 'No dependency data available.'}
+                </p>
+              )
           ) : (
             <div style={{ height: '100%', minHeight: 520 }}>
               <ReactFlowProvider>
@@ -166,7 +302,7 @@ export default function DependencyGraph({ components = [], vulns = [] }) {
                   edges={flowData.edges}
                   fitView
                   fitViewOptions={{ padding: 0.85 }}
-                  onNodeClick={(_, node) => handleSelectPackage(allPackages.find((p) => p.id === node.id) || node)}
+                  onNodeClick={(_, node) => handleSelectPackage(nodeCache.get(node.id) || node)}
                 >
                   <Background color="#1a2a3a" gap={16} />
                   <MiniMap nodeStrokeColor={(n) => n.style.background} nodeColor={(n) => n.style.background} />
@@ -179,16 +315,16 @@ export default function DependencyGraph({ components = [], vulns = [] }) {
 
         <aside className="cardvuln dep-detail-card">
           <h2 style={{ paddingBottom: '0.75em' }}>Package Details</h2>
-          {selectedPackage ? (
+          {effectiveSelected ? (
             <>
               {[
-                ['Name', selectedPackage.name],
-                ['Version', selectedPackage.version || '—'],
-                ['Supplier', selectedPackage.supplier?.name || '—'],
-                ['License', selectedPackage.licenses?.[0]?.license?.id || '—'],
-                ['PURL', selectedPackage.purl || '—'],
-                ['Severity', selectedPackage.severity || 'safe'],
-                ['Direct Deps', (selectedPackage.children || []).length],
+                ['Name', effectiveSelected.name],
+                ['Version', effectiveSelected.version || '—'],
+                ['Supplier', effectiveSelected.supplier?.name || '—'],
+                ['License', effectiveSelected.licenses?.[0]?.license?.id || '—'],
+                ['PURL', effectiveSelected.purl || '—'],
+                ['Severity', effectiveSelected.severity || 'safe'],
+                ['Direct Deps', directDepsCount],
                 ['CVE Count', packageHistory.length],
               ].map(([label, value]) => (
                 <div className="dep-detail-row" key={label}>

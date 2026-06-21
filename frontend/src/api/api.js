@@ -16,6 +16,7 @@ export async function fetchSbom(sbomId) {
 }
 
 export async function fetchComponents(sbomId) {
+  console.trace("fetchComponents called with:", sbomId);
   return apiFetch(`/sbom/components/${sbomId}`);
 }
 
@@ -44,6 +45,9 @@ export async function addVuln(vulnData) {
 }
 export async function fetchSummary(sbomId) {
   return apiFetch(`/sbom/summary/${sbomId}`);
+}
+export async function fetchDependencies(sbomId) {
+  return apiFetch(`/sbom/dependencies/${sbomId}`);
 }
 
 export async function fetchCompliance(sbomId) {

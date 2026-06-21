@@ -8,8 +8,11 @@ import StatsBar from "./StatsBar.jsx";
 import NewScanModal from "./NewScanModal.jsx";
 import { fetchAllScans, fetchComponents, fetchVulns, fetchProjectHistory, uploadSBOM } from "../api/api.js";
 async function normalizeScans(history, projectId) {
+
     return Promise.all(
         history.map(async (scan) => {
+            console.log("SCAN OBJECT", scan);
+            console.log("SBOM ID", scan.sbom_id);
             const [components, vulns] = await Promise.all([
                 fetchComponents(scan.sbom_id),
                 fetchVulns(scan.sbom_id),
@@ -43,10 +46,7 @@ async function normalizeScans(history, projectId) {
                 id: scan.sbom_id,
                 projectId,
 
-                date: scan.uploaded_at
-                    ? new Date(scan.uploaded_at).toLocaleString()
-                    : "—",
-
+                date: scan.uploaded_at,
                 components: components.length,
 
                 critical: severityCounts.critical,
@@ -64,7 +64,7 @@ async function normalizeScans(history, projectId) {
 
 function Projectpage() {
     const navigate = useNavigate();
-    const [projects, setProjects] = useState([]);
+    const [uniqueProjects, setProjects] = useState([]);
     const [selectedProject, setSelectedProject] = useState(null);
     const [showNewScan, setShowNewScan] = useState(false);
     const [projectScans, setProjectScans] = useState([]);
@@ -73,15 +73,24 @@ function Projectpage() {
     useEffect(() => {
         fetchAllScans()
             .then((scans) => {
-                const projects = scans.map((scan) => ({
-                    id: scan.sbom_id,
-                    name: scan.project,
-                }));
+                const uniqueProjects = [
+                    ...new Map(
+                        scans
+                            .filter(scan => scan.project)
+                            .map(scan => [
+                                scan.project,
+                                {
+                                    name: scan.project,
+                                    id: scan.sbom_id
+                                }
+                            ])
+                    ).values()
+                ];
 
-                setProjects(projects);
+                setProjects(uniqueProjects);
 
-                if (projects.length > 0) {
-                    setSelectedProject(projects[0]);
+                if (uniqueProjects.length > 0) {
+                    setSelectedProject(uniqueProjects[0]);
                 }
             })
             .catch((err) => setError(err.message));
@@ -89,7 +98,9 @@ function Projectpage() {
     useEffect(() => {
         setLoading(true);
         setError(null);
+
         if (!selectedProject) return;
+
         fetchProjectHistory(selectedProject.name)
             .then(async (history) => {
                 const scans = await normalizeScans(
@@ -98,7 +109,12 @@ function Projectpage() {
                 );
 
                 setProjectScans(scans);
+                setLoading(false);
             })
+            .catch(err => {
+                setError(err.message);
+                setLoading(false);
+            });
     }, [selectedProject]);
 
     const sortedScans = [...projectScans].sort((a, b) => new Date(b.date) - new Date(a.date));
@@ -152,7 +168,7 @@ function Projectpage() {
 
             <div className="project-container">
                 <ul id="project-list">
-                    {projects.map(project => (
+                    {uniqueProjects.map(project => (
                         <li
                             key={project.id}
                             onClick={() => setSelectedProject(project)}
@@ -168,13 +184,13 @@ function Projectpage() {
                         <p id="project-name">{selectedProject?.name}</p>
                         <button id="add-btn" onClick={() => setShowNewScan(true)}>
                             <Plus color="var(--textlight)" size={15} />
-                            <p>New Scan</p>
+                            <p>New Project</p>
                         </button>
                     </div>
 
                     {loading && (
-                        <p style={{ gridColumn: "1/-1", color: "rgba(255,255,255,0.3)", fontSize: "0.82em", padding: "1em" }}>
-                            Loading scans…
+                        <p style={{ gridColumn: " 1 / -1", justifySelf: "center", marginTop: "1rem", color: "rgba(255,255,255,0.3)", fontSize: "0.82em", padding: "1em" }}>
+                            Loading scans...
                         </p>
                     )}
                     {error && (
