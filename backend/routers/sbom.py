@@ -18,9 +18,23 @@ def upload_sbom(data: dict):
 
     data["project"] = project_name
 
-    result = db.sboms.insert_one(data)
 
+    project = db.projects.find_one(
+        {"name": project_name}
+    )
+
+    if not project:
+        db.projects.insert_one({
+            "name": project_name,
+            "created_at": datetime.utcnow().isoformat()
+        })
+    result = db.sboms.insert_one(data)
     scan_id = str(result.inserted_id)
+
+    db.sboms.update_one(
+        {"_id": result.inserted_id},
+        {"$set": {"sbom_id": scan_id}}
+)
 
     components = data.get("components", [])
 
@@ -176,7 +190,7 @@ def get_summary(sbom_id: str):
     )
 
     vulns = list(
-        db.vulnerabilities.find(
+        db.vulns.find(
             {"sbom_id": sbom_id}
         )
     )
@@ -232,7 +246,7 @@ def get_compliance(sbom_id: str):
     )
 
     vulns = list(
-        db.vulnerabilities.find(
+        db.vulns.find(
             {"sbom_id": sbom_id},
             {"_id": 0}
         )
@@ -254,6 +268,49 @@ def get_compliance(sbom_id: str):
     }
 
 
+
+
+@router.post("/vulns/add")
+def add_vuln(data: dict):
+
+    result = db.vulns.insert_one(data)
+
+    return {
+        "status": "stored",
+        "id": str(result.inserted_id)
+    }
+
+
+@router.get("/vulns/{sbom_id}")
+def get_vulns(sbom_id: str):
+
+    return list(
+        db.vulns.find(
+            {"sbom_id": sbom_id},
+            {"_id": 0}
+        )
+    )
+
+@router.get("/projects")
+def get_projects():
+
+    return list(
+        db.projects.find(
+            {},
+            {"_id": 0}
+        )
+    )
+
+@router.get("/diff/{old_scan}/{new_scan}")
+def diff_scans(old_scan: str, new_scan: str):
+
+    return {
+        "old_scan": old_scan,
+        "new_scan": new_scan,
+        "message": "Diff endpoint placeholder"
+    }
+
+
 @router.get("/{sbom_id}")
 def get_sbom(sbom_id: str):
 
@@ -266,35 +323,3 @@ def get_sbom(sbom_id: str):
         return {"message": "SBOM not found"}
 
     return sbom
-
-
-@router.post("/vulns/add")
-def add_vuln(data: dict):
-
-    result = db.vulnerabilities.insert_one(data)
-
-    return {
-        "status": "stored",
-        "id": str(result.inserted_id)
-    }
-
-
-@router.get("/vulns/{sbom_id}")
-def get_vulns(sbom_id: str):
-
-    return list(
-        db.vulnerabilities.find(
-            {"sbom_id": sbom_id},
-            {"_id": 0}
-        )
-    )
-
-
-@router.get("/diff/{old_scan}/{new_scan}")
-def diff_scans(old_scan: str, new_scan: str):
-
-    return {
-        "old_scan": old_scan,
-        "new_scan": new_scan,
-        "message": "Diff endpoint placeholder"
-    }
