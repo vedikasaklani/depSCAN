@@ -16,36 +16,8 @@ function formatDate(value) {
     return Number.isNaN(d.getTime()) ? value : d.toLocaleDateString();
 }
 
-function VulnModal({ cveId, onClose }) {
-
-    const [data, setData] = useState(null);
-    const [status, setStatus] = useState("loading"); 
-
-    useEffect(() => {
-        let cancelled = false;
-        setStatus("loading");
-        setData(null);
-
-        fetch(`${API_BASE}/${encodeURIComponent(cveId)}`)
-            .then(res => {
-                if (!res.ok) throw new Error(`Request failed (${res.status})`);
-                return res.json();
-            })
-            .then(json => {
-                if (!cancelled) {
-                    setData(json);
-                    setStatus("ready");
-                }
-            })
-            .catch(() => {
-                if (!cancelled) setStatus("error");
-            });
-
-        return () => {
-            cancelled = true;
-        };
-    }, [cveId]);
-
+function VulnModal({ vuln, onClose }) {
+    const data = vuln;
     useEffect(() => {
         const onKeyDown = e => {
             if (e.key === "Escape") onClose();
@@ -54,8 +26,7 @@ function VulnModal({ cveId, onClose }) {
         return () => window.removeEventListener("keydown", onKeyDown);
     }, [onClose]);
 
-    const severityKey = data?.severity?.toLowerCase();
-    const severityColor = SEVERITY_VAR[severityKey] ?? "var(--teal)";
+const severityKey = vuln?.severity?.toLowerCase();    const severityColor = SEVERITY_VAR[severityKey] ?? "var(--teal)";
 
     return (
         <div className="vuln-modal-backdrop" onClick={onClose}>
@@ -63,7 +34,7 @@ function VulnModal({ cveId, onClose }) {
                 className="vuln-modal"
                 role="dialog"
                 aria-modal="true"
-                aria-label={`Vulnerability detail for ${cveId}`}
+                aria-label={`Vulnerability detail for ${vuln.cve}`}
                 onClick={e => e.stopPropagation()}
             >
                 <button
@@ -74,23 +45,11 @@ function VulnModal({ cveId, onClose }) {
                     ✕
                 </button>
 
-                {status === "loading" && (
-                    <div className="vuln-modal-status">
-                        FETCHING VULNERABILITY DATA
-                        <span className="blinking-cursor">_</span>
-                    </div>
-                )}
 
-                {status === "error" && (
-                    <div className="vuln-modal-status vuln-modal-status-error">
-                        [ ERROR ] COULD NOT LOAD {cveId}
-                    </div>
-                )}
-
-                {status === "ready" && data && (
+                {data && (
                     <>
                         <div className="vuln-modal-header">
-                            <h3>{data.cve_id}</h3>
+                            <h3>{data.cve}</h3>
                             <span
                                 className="vuln-modal-severity"
                                 style={{
@@ -106,7 +65,7 @@ function VulnModal({ cveId, onClose }) {
                             <div>
                                 <span className="vuln-modal-label">Component</span>
                                 <span className="vuln-modal-value">
-                                    {data.component_name} {data.component_version}
+                                    {data.component_name??"-"} {data.component_version??"-"}
                                 </span>
                             </div>
 
@@ -122,21 +81,21 @@ function VulnModal({ cveId, onClose }) {
                             <div className="vuln-modal-meta-full">
                                 <span className="vuln-modal-label">PURL</span>
                                 <span className="vuln-modal-value mono-cell">
-                                    {data.purl}
+                                    {data.purl??"-"}
                                 </span>
                             </div>
 
                             <div>
                                 <span className="vuln-modal-label">Published</span>
                                 <span className="vuln-modal-value">
-                                    {formatDate(data.published)}
+                                    {formatDate(data.published??"-")}
                                 </span>
                             </div>
 
                             <div>
                                 <span className="vuln-modal-label">Modified</span>
                                 <span className="vuln-modal-value">
-                                    {formatDate(data.modified)}
+                                    {formatDate(data.modified??"-")}
                                 </span>
                             </div>
 
@@ -156,12 +115,12 @@ function VulnModal({ cveId, onClose }) {
                         </div>
 
                         {data.summary && (
-                            <p className="vuln-modal-summary">{data.summary}</p>
+                            <p className="vuln-modal-summary">{data.summary??"-"}</p>
                         )}
 
                         {data.description && (
                             <p className="vuln-modal-description">
-                                {data.description}
+                                {data.description??"-"}
                             </p>
                         )}
                     </>
@@ -183,9 +142,8 @@ function Vulnsection({ groupedVulns }) {
     const [activeFilter, setActiveFilter] =
         useState(null);
 
-    const [selectedCve, setSelectedCve] =
+    const [selectedVuln, setSelectedVuln] =
         useState(null);
-
     const allVulns = Object.entries(groupedVulns)
         .flatMap(([level, vulns]) =>
             vulns.map(v => ({
@@ -250,12 +208,12 @@ function Vulnsection({ groupedVulns }) {
                                     role="button"
                                     tabIndex={0}
                                     onClick={() =>
-                                        setSelectedCve(vuln.cve)
+                                        setSelectedVuln(vuln)
                                     }
                                     onKeyDown={e => {
                                         if (e.key === "Enter" || e.key === " ") {
                                             e.preventDefault();
-                                            setSelectedCve(vuln.cve);
+                                            setSelectedVuln(vuln);;
                                         }
                                     }}
                                 >
@@ -277,11 +235,10 @@ function Vulnsection({ groupedVulns }) {
                     </div>
                 ))}
             </div>
-
-            {selectedCve && (
+            {selectedVuln && (
                 <VulnModal
-                    cveId={selectedCve}
-                    onClose={() => setSelectedCve(null)}
+                    vuln={selectedVuln}
+                    onClose={() => setSelectedVuln(null)}
                 />
             )}
 
