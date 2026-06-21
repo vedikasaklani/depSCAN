@@ -93,7 +93,6 @@ console.log("DEPENDENCIES", depData);
       `${safeName}-cyclonedx.json`
     );
   };
-
   const downloadSPDX = () => {
     const payload = {
       SPDXID: 'SPDXRef-DOCUMENT',

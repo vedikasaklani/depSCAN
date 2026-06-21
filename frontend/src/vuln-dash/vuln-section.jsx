@@ -34,7 +34,7 @@ const severityKey = vuln?.severity?.toLowerCase();    const severityColor = SEVE
                 className="vuln-modal"
                 role="dialog"
                 aria-modal="true"
-                aria-label={`Vulnerability detail for ${vuln.cve}`}
+                aria-label={`Vulnerability detail for ${vuln.cve_id}`}
                 onClick={e => e.stopPropagation()}
             >
                 <button
@@ -49,7 +49,7 @@ const severityKey = vuln?.severity?.toLowerCase();    const severityColor = SEVE
                 {data && (
                     <>
                         <div className="vuln-modal-header">
-                            <h3>{data.cve}</h3>
+                            <h3>{data.cve_id}</h3>
                             <span
                                 className="vuln-modal-severity"
                                 style={{
@@ -203,7 +203,7 @@ function Vulnsection({ groupedVulns }) {
                             )
                             .map((vuln, i) => (
                                 <div
-                                    key={vuln.cve ?? i}
+                                    key={vuln.cve_id ?? i}
                                     className="vulnerability-card"
                                     role="button"
                                     tabIndex={0}
@@ -218,11 +218,11 @@ function Vulnsection({ groupedVulns }) {
                                     }}
                                 >
                                     <h4>
-                                        {vuln.cve}
+                                        {vuln.cve_id}
                                     </h4>
 
                                     <p>
-                                        {vuln.component ??
+                                        {vuln.component_name ??
                                             vuln.package ??
                                             "Unknown"}
                                     </p>

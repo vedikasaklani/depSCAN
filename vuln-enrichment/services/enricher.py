@@ -5,7 +5,7 @@ from services.deduplicator import deduplicate_vulnerabilities
 nvd_cache = {}
 
 
-def enrich_component(component):
+def enrich_component(component, sbom_id):
     purl = component["purl"]
 
     print(f"\nScanning {component['name']}...")
@@ -36,6 +36,7 @@ def enrich_component(component):
                 cvss_score = nvd_data.get("cvss_score")
 
         clean_vuln = {
+            "sbom_id":sbom_id,
             "cve_id": cve_id,
             "summary": vuln.get("summary"),
             "severity": severity,
@@ -52,6 +53,7 @@ def enrich_component(component):
     print(f"After deduplication: {len(enriched_vulnerabilities)} vulnerabilities")
 
     return {
+        "sbom_id":sbom_id,
         "name": component["name"],
         "version": component["version"],
         "purl": component["purl"],

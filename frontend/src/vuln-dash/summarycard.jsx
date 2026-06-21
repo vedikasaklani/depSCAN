@@ -76,7 +76,7 @@ function SummaryCard({ groupedVulns, totalComponents }) {
 
                 <div className="item-vuln">
                     {filteredVulns.map((vuln, i) => (
-                        <div key={vuln.cve ?? i} className={`remedy-item ${vuln.level}`}>
+                        <div key={vuln.cve_id?? i} className={`remedy-item ${vuln.level}`}>
                             <span className="component-name">{vuln.cve}</span>
                             <span className={`status-badge-${
                                 vuln.level === "critical" || vuln.level === "high"

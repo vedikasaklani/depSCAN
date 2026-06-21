@@ -21,7 +21,7 @@ for component in components:
         print(f"Skipping {name}: missing purl")
         continue
 
-    enriched = enrich_component(component)
+    enriched = enrich_component(component, component.get("sbom_id"))
 
     vulnerabilities = enriched.get(
         "vulnerabilities",
@@ -65,7 +65,6 @@ for component in components:
             )
         }
 
-        # Insert into MongoDB
         vulns_collection.insert_one(
             vuln_document
         )

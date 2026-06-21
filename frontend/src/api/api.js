@@ -38,7 +38,7 @@ export async function uploadSBOM(sbomJson) {
   });
 }
 export async function addVuln(vulnData) {
-  return apiFetch('/sbom/vulns/add', {
+  return apiFetch(`/sbom/vulns/${sbomID}`, {
     method: 'POST',
     body: JSON.stringify(vulnData),
   });
