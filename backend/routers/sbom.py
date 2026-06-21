@@ -109,12 +109,40 @@ def get_dependencies(sbom_id: str):
 @router.get("/project/{project_name}/history")
 def get_history(project_name: str):
 
-    return list(
+    data = list(
         db.sboms.find(
             {"project": project_name},
             {"_id": 0}
         )
     )
+
+    normalized = []
+
+    for idx, item in enumerate(data):
+
+        normalized.append({
+            "sbom_id": (
+                item.get("sbom_id")
+                or item.get("serialNumber")
+                or f"scan_{idx}"
+            ),
+
+            "project": (
+                item.get("project")
+                or item.get("metadata", {})
+                      .get("component", {})
+                      .get("name")
+                or project_name
+            ),
+
+            "uploaded_at": (
+                item.get("uploaded_at")
+                or item.get("metadata", {})
+                      .get("timestamp")
+            )
+        })
+
+    return normalized
 
 
 @router.get("/package/{package_name}")
