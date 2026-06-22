@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import VulnTable from "./VulnTable.jsx";
 import StatsBar from "./StatsBar.jsx";
 import NewScanModal from "./NewScanModal.jsx";
+import NtiaOverview from "./NtiaOverview.jsx";
 import { fetchAllScans, fetchComponents, fetchVulns, fetchProjectHistory, uploadSBOM } from "../api/api.js";
 async function normalizeScans(history, projectId) {
 
@@ -139,7 +140,6 @@ function Projectpage() {
             };
             await uploadSBOM(sbomPayload);
 
-            // Use fetchProjectHistory instead of fetchAllScans + filter
             const history = await fetchProjectHistory(
                 selectedProject.name
             );
@@ -207,7 +207,7 @@ function Projectpage() {
                         latestScan={latestScan}
                         projectScans={projectScans}
                     />
-                    <div className="card" id="ntia-score">NTIA Score</div>
+                    <NtiaOverview sbomId={latestScan?.id} />
                 </div>
             </div>
 

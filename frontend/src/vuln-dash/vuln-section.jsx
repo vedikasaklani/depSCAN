@@ -1,12 +1,17 @@
 import "./vuln-dash.css";
+import {
+    CveIcon,
+    PackageIcon,
+    SeverityIcon
+} from "../project-page/StatusIcons";
 import { useState, useEffect } from "react";
 
 const API_BASE = "/api/vulnerabilities";
 
 const SEVERITY_VAR = {
-    critical: "var(--crit)",
+    critical: "var(--critical)",
     high: "var(--high)",
-    medium: "var(--med)",
+    medium: "var(--medium)",
     low: "var(--low)"
 };
 
@@ -26,7 +31,7 @@ function VulnModal({ vuln, onClose }) {
         return () => window.removeEventListener("keydown", onKeyDown);
     }, [onClose]);
 
-const severityKey = vuln?.severity?.toLowerCase();    const severityColor = SEVERITY_VAR[severityKey] ?? "var(--teal)";
+    const severityKey = vuln?.severity?.toLowerCase(); const severityColor = SEVERITY_VAR[severityKey] ?? "var(--teal)";
 
     return (
         <div className="vuln-modal-backdrop" onClick={onClose}>
@@ -65,7 +70,7 @@ const severityKey = vuln?.severity?.toLowerCase();    const severityColor = SEVE
                             <div>
                                 <span className="vuln-modal-label">Component</span>
                                 <span className="vuln-modal-value">
-                                    {data.component_name??"-"} {data.component_version??"-"}
+                                    {data.component_name ?? "-"} {data.component_version ?? "-"}
                                 </span>
                             </div>
 
@@ -81,21 +86,21 @@ const severityKey = vuln?.severity?.toLowerCase();    const severityColor = SEVE
                             <div className="vuln-modal-meta-full">
                                 <span className="vuln-modal-label">PURL</span>
                                 <span className="vuln-modal-value mono-cell">
-                                    {data.purl??"-"}
+                                    {data.purl ?? "-"}
                                 </span>
                             </div>
 
                             <div>
                                 <span className="vuln-modal-label">Published</span>
                                 <span className="vuln-modal-value">
-                                    {formatDate(data.published??"-")}
+                                    {formatDate(data.published ?? "-")}
                                 </span>
                             </div>
 
                             <div>
                                 <span className="vuln-modal-label">Modified</span>
                                 <span className="vuln-modal-value">
-                                    {formatDate(data.modified??"-")}
+                                    {formatDate(data.modified ?? "-")}
                                 </span>
                             </div>
 
@@ -115,12 +120,12 @@ const severityKey = vuln?.severity?.toLowerCase();    const severityColor = SEVE
                         </div>
 
                         {data.summary && (
-                            <p className="vuln-modal-summary">{data.summary??"-"}</p>
+                            <p className="vuln-modal-summary">{data.summary ?? "-"}</p>
                         )}
 
                         {data.description && (
                             <p className="vuln-modal-description">
-                                {data.description??"-"}
+                                {data.description ?? "-"}
                             </p>
                         )}
                     </>
@@ -161,6 +166,18 @@ function Vulnsection({ groupedVulns }) {
             )
             : allVulns;
 
+    const getSeverityIcon = severity => {
+        switch ((severity ?? "").toLowerCase()) {
+            case "critical":
+                return <ErrorOutlineRoundedIcon />;
+            case "high":
+                return <ReportProblemRoundedIcon />;
+            case "medium":
+                return <WarningAmberRoundedIcon />;
+            default:
+                return <ShieldOutlinedIcon />;
+        }
+    };
     return (
         <section className="vuln-section cardvuln">
 
@@ -217,19 +234,35 @@ function Vulnsection({ groupedVulns }) {
                                         }
                                     }}
                                 >
-                                    <h4>
-                                        {vuln.cve_id}
-                                    </h4>
 
-                                    <p>
-                                        {vuln.component_name ??
-                                            vuln.package ??
-                                            "Unknown"}
-                                    </p>
 
-                                    <span>
-                                        {vuln.severity}
-                                    </span>
+                                    <div className="vuln-row">
+                                        <CveIcon size={15} />
+                                        <h4>{vuln.cve_id}</h4>
+                                    </div>
+
+                                    <div className="vuln-row">
+                                        <PackageIcon size={15} />
+                                        <p>
+                                            {vuln.component_name ??
+                                                vuln.package ??
+                                                "Unknown"}
+                                        </p>
+                                    </div>
+
+                                    <div className="vuln-row">
+                                        <SeverityIcon
+                                            size={15}
+                                            severity={vuln.severity}
+                                        />
+                                        <span>
+                                            {vuln.severity === "UNKNOWN"
+                                                ? "LOW"
+                                                : vuln.severity}
+                                        </span>
+                                    </div>
+
+
                                 </div>
                             ))}
                     </div>

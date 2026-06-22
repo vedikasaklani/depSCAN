@@ -615,14 +615,86 @@ svg:focus {
 }
 
 #ntia-score{
-    justify-self:center;
-    grid-area:box2;
+    grid-area: box2;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    overflow-x: hidden;
+    justify-self: center;
+    justify-content: flex-start;
+    overflow-y:auto;
+    padding: 0.65em 0.75em;
+}
+
+.ntia-header{
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    flex-shrink: 0;
+}
+
+.ntia-score-value{
+    font-family: "Share Tech Mono";
+    font-size: 1.5rem;
+    letter-spacing: 0.02em;
+    margin: 0;
+}
+
+.ntia-sub{
+    font-size: 0.72em;
+    color: rgba(255,255,255,0.4);
+    margin: 0.2em 0 0.6em;
+    flex-shrink: 0;
+}
+
+.ntia-checklist{
+    list-style: none;
+    margin: 0;
+    padding: 0 0.2em 0 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3em;
+    flex: 1 1 auto;
+    min-height: 0;
+}
+
+#ntia-score::-webkit-scrollbar{
+    width: 4px;
+}
+#ntia-score::-webkit-scrollbar-track{
+    background: transparent;
+}
+#ntia-score::-webkit-scrollbar-thumb{
+    background: rgba(0,255,179,0.18);
+}
+
+.ntia-check-row{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.6em;
+    font-size: 0.74em;
+    line-height: 1.25;
+    color: rgba(255,255,255,0.65);
+}
+
+.ntia-check-label{
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+}
+
+.ntia-check-icon{
+    flex-shrink: 0;
     display: flex;
     align-items: center;
-    justify-content: center;
-    font-family: "Share Tech Mono";
-    font-size: 0.78em;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: rgba(255,255,255,0.35);
+}
+
+.status-icon-pass{
+    color: var(--low);
+    filter: drop-shadow(0 0 3px rgba(0,255,150,0.35));
+}
+
+.status-icon-fail{
+    color: var(--critical);
+    filter: drop-shadow(0 0 3px rgba(255,60,60,0.35));
 }

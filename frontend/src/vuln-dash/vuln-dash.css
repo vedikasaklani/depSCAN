@@ -395,6 +395,7 @@ body::after{
     border-radius:0px;
     border-left:2px solid transparent;
     transition: border-color 0.15s ease, background-color 0.15s ease;
+    border-bottom:1px solid var(--border);
 }
 .vulnerability-card:hover{
     background-color:rgba(0,255,179,0.05);
@@ -680,8 +681,6 @@ body::after{
   }
 }
 
-/* ---- Vulnerability detail modal ---- */
-
 .vuln-modal-backdrop{
     position:fixed;
     inset:0;
@@ -837,4 +836,37 @@ body::after{
     .vuln-modal-meta{
         grid-template-columns: 1fr;
     }
+}
+.vuln-row{
+    display:flex;
+    align-items:center;
+    gap:0.5rem;
+    margin-bottom:0.25rem;
+}
+
+.vuln-row svg{
+    flex-shrink:0;
+}
+
+.vuln-row h4,
+.vuln-row p,
+.vuln-row span{
+    margin:0;
+}
+
+.severity-critical{
+    color:var(--crit);
+}
+
+.severity-high{
+    color:var(--high);
+}
+
+.severity-medium{
+    color:var(--med);
+}
+
+.severity-low,
+.severity-unknown{
+    color:var(--low);
 }

@@ -220,8 +220,12 @@ export async function startScan(projectName, repoUrl) {
 }
 
 
-export async function addVuln(vulnData) {
-  return apiFetch("/sbom/vulns/add", {
+export async function addVuln(sbomId, vulnData) {
+  if (!sbomId) {
+    throw new Error("addVuln requires an sbomId");
+  }
+
+  return apiFetch(`/sbom/vulns/${sbomId}`, {
     method: "POST",
     body: JSON.stringify(vulnData),
   });
