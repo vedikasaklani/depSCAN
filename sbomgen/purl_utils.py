@@ -1,4 +1,7 @@
-from packageurl import PackageURL
+try:
+    from packageurl import PackageURL
+except ImportError:
+    PackageURL = None
 
 
 def build_purl(name: str, version: str, ecosystem: str, namespace: str = None) -> str:
@@ -28,6 +31,9 @@ def build_purl(name: str, version: str, ecosystem: str, namespace: str = None) -
     clean_version = _clean_version(version)
 
     try:
+        if PackageURL is None:
+            raise ImportError
+
         purl = PackageURL(
             type=purl_type,
             namespace=namespace,  # used for Maven groupId

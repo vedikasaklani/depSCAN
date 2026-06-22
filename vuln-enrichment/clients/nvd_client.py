@@ -18,26 +18,25 @@ BASE_URL = (
 
 
 def get_nvd_details(cve_id):
+    """
+    Fetches CVE details from NVD. Never raises — on any failure
+    (timeout, rate limit, network error), returns None so the
+    calling enrichment loop can continue to the next component.
+    """
 
-    # Return cached result if already fetched
     if cve_id in cache:
         return cache[cve_id]
 
-    headers = {
-        "apiKey": NVD_API_KEY
-    }
+    headers = {}
+    if NVD_API_KEY:
+        headers["apiKey"] = NVD_API_KEY
 
-    params = {
-        "cveId": cve_id
-    }
+    params = {"cveId": cve_id}
 
     retries = 2
 
     for attempt in range(retries):
-
         try:
-
-            # Small delay to avoid hammering NVD
             time.sleep(0.5)
 
             response = requests.get(
@@ -47,17 +46,12 @@ def get_nvd_details(cve_id):
                 timeout=10
             )
 
-            # Success
             if response.status_code == 200:
-
                 data = response.json()
-
-                vulnerabilities = data.get(
-                    "vulnerabilities",
-                    []
-                )
+                vulnerabilities = data.get("vulnerabilities", [])
 
                 if not vulnerabilities:
+                    cache[cve_id] = None
                     return None
 
                 cve_data = vulnerabilities[0]["cve"]
@@ -66,73 +60,25 @@ def get_nvd_details(cve_id):
                 cvss_score = None
                 description = ""
 
-                # English description
-                descriptions = cve_data.get(
-                    "descriptions",
-                    []
-                )
-
-                for desc in descriptions:
-
+                for desc in cve_data.get("descriptions", []):
                     if desc.get("lang") == "en":
-
-                        description = desc.get(
-                            "value",
-                            ""
-                        )
-
+                        description = desc.get("value", "")
                         break
 
-                metrics = cve_data.get(
-                    "metrics",
-                    {}
-                )
+                metrics = cve_data.get("metrics", {})
 
-                # CVSS v3.1
                 if "cvssMetricV31" in metrics:
-
-                    metric = metrics[
-                        "cvssMetricV31"
-                    ][0]
-
-                    severity = metric[
-                        "cvssData"
-                    ]["baseSeverity"]
-
-                    cvss_score = metric[
-                        "cvssData"
-                    ]["baseScore"]
-
-                # CVSS v3.0
+                    metric = metrics["cvssMetricV31"][0]
+                    severity = metric["cvssData"]["baseSeverity"]
+                    cvss_score = metric["cvssData"]["baseScore"]
                 elif "cvssMetricV30" in metrics:
-
-                    metric = metrics[
-                        "cvssMetricV30"
-                    ][0]
-
-                    severity = metric[
-                        "cvssData"
-                    ]["baseSeverity"]
-
-                    cvss_score = metric[
-                        "cvssData"
-                    ]["baseScore"]
-
-                # CVSS v2
+                    metric = metrics["cvssMetricV30"][0]
+                    severity = metric["cvssData"]["baseSeverity"]
+                    cvss_score = metric["cvssData"]["baseScore"]
                 elif "cvssMetricV2" in metrics:
-
-                    metric = metrics[
-                        "cvssMetricV2"
-                    ][0]
-
-                    severity = metric.get(
-                        "baseSeverity",
-                        "UNKNOWN"
-                    )
-
-                    cvss_score = metric[
-                        "cvssData"
-                    ]["baseScore"]
+                    metric = metrics["cvssMetricV2"][0]
+                    severity = metric.get("baseSeverity", "UNKNOWN")
+                    cvss_score = metric["cvssData"]["baseScore"]
 
                 result = {
                     "cve_id": cve_id,
@@ -141,49 +87,26 @@ def get_nvd_details(cve_id):
                     "description": description
                 }
 
-                # Save to cache
                 cache[cve_id] = result
-
                 return result
 
-            # Retry on rate limit / temporary failure
-            elif response.status_code in [429, 503]:
-
-                print(
-                    f"NVD temporary error "
-                    f"{response.status_code} "
-                    f"for {cve_id} "
-                    f"(attempt {attempt + 1})"
-                )
-
-                time.sleep(0.5)
+            elif response.status_code in (429, 503):
+                print(f"NVD temporary error {response.status_code} for {cve_id} (attempt {attempt + 1})")
+                time.sleep(1.5)
+                continue
 
             else:
-
-                print(
-                    f"NVD Error "
-                    f"{response.status_code}: "
-                    f"{cve_id}"
-                )
-
+                print(f"NVD error {response.status_code} for {cve_id} — skipping")
+                cache[cve_id] = None
                 return None
 
-        except requests.exceptions.Timeout:
-
-            print(
-                f"NVD Timeout for {cve_id} "
-                f"(attempt {attempt + 1})"
-            )
-
-            time.sleep(0.5)
-
         except requests.exceptions.RequestException as e:
+            # Catches Timeout, ConnectionError, ReadTimeout, etc — ALL network issues
+            print(f"NVD request failed for {cve_id} (attempt {attempt + 1}): {e}")
+            time.sleep(1.0)
+            continue
 
-            print(
-                f"NVD Request Exception "
-                f"for {cve_id}: {e}"
-            )
-
-            time.sleep(0.5)
-
+    # All retries exhausted — skip this CVE, don't crash the scan
+    print(f"NVD: giving up on {cve_id} after {retries} attempts, skipping")
+    cache[cve_id] = None
     return None

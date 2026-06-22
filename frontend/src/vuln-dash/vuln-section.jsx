@@ -1,8 +1,6 @@
 import "./vuln-dash.css";
 import { useState, useEffect } from "react";
 
-const API_BASE = "/api/vulnerabilities";
-
 const SEVERITY_VAR = {
     critical: "var(--crit)",
     high: "var(--high)",
@@ -26,7 +24,8 @@ function VulnModal({ vuln, onClose }) {
         return () => window.removeEventListener("keydown", onKeyDown);
     }, [onClose]);
 
-const severityKey = vuln?.severity?.toLowerCase();    const severityColor = SEVERITY_VAR[severityKey] ?? "var(--teal)";
+    const severityKey = vuln?.severity?.toLowerCase();
+    const severityColor = SEVERITY_VAR[severityKey] ?? "var(--teal)";
 
     return (
         <div className="vuln-modal-backdrop" onClick={onClose}>
@@ -131,109 +130,110 @@ const severityKey = vuln?.severity?.toLowerCase();    const severityColor = SEVE
 }
 
 function Vulnsection({ groupedVulns }) {
+    const [selectedVuln, setSelectedVuln] = useState(null);
+    const [showUnfixedOnly, setShowUnfixedOnly] = useState(false);
+    const [sortField, setSortField] = useState("cvss_score");
+    const [sortDirection, setSortDirection] = useState("desc");
 
-    const severityLevels = [
-        "critical",
-        "high",
-        "medium",
-        "low"
-    ];
-
-    const [activeFilter, setActiveFilter] =
-        useState(null);
-
-    const [selectedVuln, setSelectedVuln] =
-        useState(null);
     const allVulns = Object.entries(groupedVulns)
         .flatMap(([level, vulns]) =>
-            vulns.map(v => ({
+            vulns.map((v) => ({
                 ...v,
-                level
+                level,
+                fixed: Boolean(v.fixed_version && String(v.fixed_version).trim()),
             }))
         );
 
-    const filteredVulns =
-        activeFilter
-            ? allVulns.filter(
-                v =>
-                    (v.status ?? "new")
-                        .toLowerCase() === activeFilter
-            )
-            : allVulns;
+    const filteredVulns = allVulns
+        .filter((v) => !showUnfixedOnly || !v.fixed)
+        .sort((a, b) => {
+            const aVal = a[sortField] ?? "";
+            const bVal = b[sortField] ?? "";
+            if (sortField === "cvss_score") {
+                return sortDirection === "desc"
+                    ? Number(bVal) - Number(aVal)
+                    : Number(aVal) - Number(bVal);
+            }
+            const aText = String(aVal).toLowerCase();
+            const bText = String(bVal).toLowerCase();
+            if (aText > bText) return sortDirection === "desc" ? -1 : 1;
+            if (aText < bText) return sortDirection === "desc" ? 1 : -1;
+            return 0;
+        });
+
+    const toggleSort = (field) => {
+        if (sortField === field) {
+            setSortDirection((prev) => (prev === "desc" ? "asc" : "desc"));
+        } else {
+            setSortField(field);
+            setSortDirection("desc");
+        }
+    };
+
+    if (allVulns.length === 0) {
+        return (
+            <section className="vuln-section cardvuln">
+                <div className="section-header">
+                    <h2>Vulnerabilities</h2>
+                </div>
+                <div style={{ padding: '3rem 1.5rem', textAlign: 'center', color: 'rgba(255,255,255,0.55)' }}>
+                    <h3 style={{ margin: 0, color: 'var(--teal)' }}>No vulnerabilities found</h3>
+                    <p style={{ margin: '1rem 0 0', lineHeight: 1.6 }}>
+                        This scan does not contain any vulnerability records yet. Upload a new SBOM or run the vulnerability enrichment process to populate CVE data.
+                    </p>
+                </div>
+            </section>
+        );
+    }
 
     return (
         <section className="vuln-section cardvuln">
-
-            <div className="section-header">
-
-                <h2>Vulnerabilities</h2>
-
-                <div className="filters">
+            <div className="section-header" style={{ flexWrap: 'wrap', gap: '1rem' }}>
+                <div>
+                    <h2>Vulnerabilities</h2>
+                    <p style={{ color: 'rgba(255,255,255,0.55)', fontSize: '0.92em' }}>
+                        Showing {filteredVulns.length} of {allVulns.length} CVE{allVulns.length !== 1 ? 's' : ''}.
+                    </p>
+                </div>
+                <div className="filters" style={{ gap: '0.75rem' }}>
                     <button
-                        onClick={() =>
-                            setActiveFilter(null)
-                        }
-                        className="filter-btn"
+                        className={`filter-btn${showUnfixedOnly ? '-active' : ''}`}
+                        onClick={() => setShowUnfixedOnly((prev) => !prev)}
                     >
-                        All
+                        {showUnfixedOnly ? 'Show all CVEs' : 'Show only unfixed'}
                     </button>
                 </div>
-
             </div>
 
-            <div className="severity-grid">
-
-                {severityLevels.map(level => (
-                    <div
-                        key={level}
-                        className={`cardvuln severity-column ${level}`}
-                    >
-                        <h3 className="header-card">
-                            {level.toUpperCase()}
-                            {" "}
-                            (
-                            {groupedVulns[level].length}
-                            )
-                        </h3>
-
-                        {filteredVulns
-                            .filter(
-                                vuln =>
-                                    vuln.level === level
-                            )
-                            .map((vuln, i) => (
-                                <div
-                                    key={vuln.cve_id ?? i}
-                                    className="vulnerability-card"
-                                    role="button"
-                                    tabIndex={0}
-                                    onClick={() =>
-                                        setSelectedVuln(vuln)
-                                    }
-                                    onKeyDown={e => {
-                                        if (e.key === "Enter" || e.key === " ") {
-                                            e.preventDefault();
-                                            setSelectedVuln(vuln);;
-                                        }
-                                    }}
+            <div className="table-scroll" style={{ overflowX: 'auto' }}>
+                <table className="vuln-table" style={{ width: '100%', borderCollapse: 'collapse' }}>
+                    <thead>
+                        <tr>
+                            {['cve_id', 'component_name', 'severity', 'cvss_score', 'fixed_version', 'description'].map((field) => (
+                                <th
+                                    key={field}
+                                    onClick={() => toggleSort(field)}
+                                    style={{ cursor: 'pointer', padding: '0.8rem 0.9rem', textAlign: 'left', color: 'rgba(255,255,255,0.7)' }}
                                 >
-                                    <h4>
-                                        {vuln.cve_id}
-                                    </h4>
-
-                                    <p>
-                                        {vuln.component_name ??
-                                            vuln.package ??
-                                            "Unknown"}
-                                    </p>
-
-                                    <span>
-                                        {vuln.severity}
-                                    </span>
-                                </div>
+                                    {field === 'cve_id' ? 'CVE' : field === 'component_name' ? 'Component' : field === 'cvss_score' ? 'CVSS' : field === 'fixed_version' ? 'Fixed in' : 'Description'}
+                                    {sortField === field ? (sortDirection === 'desc' ? ' ▼' : ' ▲') : ''}
+                                </th>
                             ))}
-                    </div>
-                ))}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {filteredVulns.map((vuln, index) => (
+                            <tr key={vuln.cve_id ?? index} style={{ borderTop: '1px solid rgba(255,255,255,0.08)', cursor: 'pointer' }} onClick={() => setSelectedVuln(vuln)}>
+                                <td className="mono-cell" style={{ padding: '0.8rem 0.9rem' }}>{vuln.cve_id || vuln.cve || 'N/A'}</td>
+                                <td style={{ padding: '0.8rem 0.9rem' }}>{vuln.component_name || vuln.package || 'Unknown'}</td>
+                                <td style={{ padding: '0.8rem 0.9rem', color: SEVERITY_VAR[vuln.level] || 'var(--teal)' }}>{(vuln.severity || vuln.level || 'Unknown').toUpperCase()}</td>
+                                <td style={{ padding: '0.8rem 0.9rem' }}>{typeof vuln.cvss_score === 'number' ? vuln.cvss_score.toFixed(1) : vuln.cvss_score || '—'}</td>
+                                <td style={{ padding: '0.8rem 0.9rem' }}>{vuln.fixed_version || 'Unfixed'}</td>
+                                <td style={{ padding: '0.8rem 0.9rem' }} title={vuln.description}>{vuln.description ? `${vuln.description.slice(0, 120)}${vuln.description.length > 120 ? '…' : ''}` : 'No description'}</td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
             </div>
             {selectedVuln && (
                 <VulnModal
@@ -241,7 +241,6 @@ function Vulnsection({ groupedVulns }) {
                     onClose={() => setSelectedVuln(null)}
                 />
             )}
-
         </section>
     );
 }

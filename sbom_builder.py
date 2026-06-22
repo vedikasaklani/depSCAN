@@ -313,62 +313,41 @@ def build_and_output_sbom(
     output_sbom(sbom_json, mode, output_path, api_url, api_key, project_name)
 
     return sbom_json
-# ─────────────────────────────────────────────────────────────
-# FUNCTION 6 — Convert to Frontend Format (for Pakhi/Vedika)
-# ─────────────────────────────────────────────────────────────
 
-def build_frontend_format(project_name: str, components_data: list, vulnerabilities: list = []) -> str:
-    """
-    Converts component data into the format Pakhi/Vedika's frontend expects.
-    """
+if __name__ == "__main__":
+    import argparse
+    import sys
+    import traceback
 
-    # Count vulnerabilities per component
-    def get_severity(comp_name):
-        for v in vulnerabilities:
-            if v.get("component") == comp_name:
-                return v.get("severity", "none")
-        return "none"
+    print("DEBUG: script started", flush=True)
 
-    def get_status(comp_name):
-        for v in vulnerabilities:
-            if v.get("component") == comp_name:
-                return "fail"
-        return "pass"
+    try:
+        parser = argparse.ArgumentParser()
+        parser.add_argument("--input", required=True, help="Path to parsed_components.json")
+        parser.add_argument("--output", default="sbom.cdx.json", help="Output SBOM file path")
+        parser.add_argument("--project", default="demo-project", help="Project name")
 
-    # Build components list in frontend format
-    frontend_components = []
-    for comp in components_data:
-        frontend_components.append({
-            "name": comp["name"],
-            "version": comp["version"],
-            "supplier": { "name": comp.get("supplier", "NOASSERTION") },
-            "purl": f"pkg:{comp['ecosystem']}/{comp['name']}@{comp['version']}",
-            "licenses": [{ "license": { "id": comp.get("license", "NOASSERTION") } }],
-            "author": comp.get("supplier", "NOASSERTION"),
-            "status": get_status(comp["name"]),
-            "severity": get_severity(comp["name"])
-        })
+        args = parser.parse_args()
+        print(f"DEBUG: args = {args}", flush=True)
 
-    # Count deps
-    total_deps = sum(len(comp.get("deps", [])) for comp in components_data)
+        with open(args.input, "r") as f:
+            scan_data = json.load(f)
+        print(f"DEBUG: loaded json, keys = {list(scan_data.keys())}", flush=True)
 
-    # Calculate compliance score
-    # Based on how many components pass NTIA checks
-    passing = sum(1 for c in components_data if c.get("supplier") and c.get("license"))
-    compliance_pct = int((passing / len(components_data)) * 100) if components_data else 0
+        project_name = scan_data.get("project_name", args.project)
+        components_data = scan_data["components"]
+        print(f"DEBUG: project={project_name}, num_components={len(components_data)}", flush=True)
 
-    frontend_doc = {
-        "projectMeta": {
-            "projectName": project_name,
-            "author": "sbomgen-tool",
-            "timestamp": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
-            "complianceScore": compliance_pct,
-            "compliancePercentage": compliance_pct,
-            "totalComponents": len(components_data),
-            "totalDependencies": total_deps,
-            "totalVulnerabilities": len(vulnerabilities)
-        },
-        "components": frontend_components
-    }
+        build_and_output_sbom(
+            project_name=project_name,
+            components_data=components_data,
+            format="cyclonedx",
+            mode="file",
+            output_path=args.output
+        )
+        print("DEBUG: build_and_output_sbom finished successfully", flush=True)
 
-    return json.dumps(frontend_doc, indent=2)
+    except Exception:
+        print("DEBUG: EXCEPTION OCCURRED:", flush=True)
+        traceback.print_exc()
+        sys.exit(1)

@@ -5,18 +5,32 @@ async function apiFetch(path, options = {}) {
     headers: { 'Content-Type': 'application/json' },
     ...options,
   });
-  if (!res.ok) throw new Error(`API ${path} → ${res.status} ${res.statusText}`);
+
+  if (!res.ok) {
+    let message = `API ${path} failed with ${res.status} ${res.statusText}`;
+    try {
+      const errorBody = await res.json();
+      if (typeof errorBody.detail === 'string') {
+        message = errorBody.detail;
+      }
+    } catch {
+      // Keep the status-based message if the response is not JSON.
+    }
+    throw new Error(message);
+  }
+
   return res.json();
 }
+
 export async function fetchAllScans() {
   return apiFetch('/sbom/all');
 }
+
 export async function fetchSbom(sbomId) {
   return apiFetch(`/sbom/${sbomId}`);
 }
 
 export async function fetchComponents(sbomId) {
-  console.trace("fetchComponents called with:", sbomId);
   return apiFetch(`/sbom/components/${sbomId}`);
 }
 
@@ -31,21 +45,35 @@ export async function fetchProjectHistory(projectName) {
 export async function diffScans(oldId, newId) {
   return apiFetch(`/sbom/diff/${oldId}/${newId}`);
 }
+
 export async function uploadSBOM(sbomJson) {
   return apiFetch('/sbom/upload', {
     method: 'POST',
     body: JSON.stringify(sbomJson),
   });
 }
-export async function addVuln(vulnData) {
-  return apiFetch(`/sbom/vulns/${sbomID}`, {
+
+export async function scanRepository(scanConfig) {
+  return apiFetch('/scan/', {
+    method: 'POST',
+    body: JSON.stringify({
+      project_name: scanConfig.projectName,
+      repo_url: scanConfig.repoUrl,
+    }),
+  });
+}
+
+export async function addVuln(sbomID, vulnData) {
+  return apiFetch('/sbom/vulns/add', {
     method: 'POST',
     body: JSON.stringify(vulnData),
   });
 }
+
 export async function fetchSummary(sbomId) {
   return apiFetch(`/sbom/summary/${sbomId}`);
 }
+
 export async function fetchDependencies(sbomId) {
   return apiFetch(`/sbom/dependencies/${sbomId}`);
 }

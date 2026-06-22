@@ -1,14 +1,14 @@
 import "./vuln-dash.css";
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { fetchAllScans, fetchSbom, fetchComponents, fetchVulns, fetchDependencies } from "../api/api.js";
+import { fetchSbom, fetchComponents, fetchVulns, fetchDependencies } from "../api/api.js";
 import Vulnsection from "./vuln-section";
 import SummaryCard from "./summarycard";
 import ComplianceDashboard from "./ComplianceDashboard";
 import DependencyGraph from "./DependencyGraph";
 
 function downloadBlob(blob, filename) {
-  const link = document.createElement('a');
+  const link = document.createElement("a");
   link.href = URL.createObjectURL(blob);
   link.download = filename;
   document.body.appendChild(link);
@@ -21,13 +21,13 @@ const TABS = [
   { id: "vulnerabilities", label: "Vulnerabilities" },
   { id: "compliance", label: "Compliance" },
   { id: "dependencies", label: "Dependencies" },
-]
+];
+
 function groupVulnsBySeverity(vulnList = []) {
   const groups = { critical: [], high: [], medium: [], low: [] };
-  for (const v of vulnList) {
-    const key = (v.severity ?? '').toLowerCase();
-    if (key in groups) groups[key].push(v);
-    else groups.low.push(v);          // unknown severity → low bucket
+  for (const vuln of vulnList) {
+    const key = (vuln.severity ?? "").toLowerCase();
+    if (key in groups) groups[key].push(vuln);
   }
   return groups;
 }
@@ -45,8 +45,10 @@ function VulnerabilityDashboard() {
 
   useEffect(() => {
     if (!id) return;
+
     setLoading(true);
     setError(null);
+
     Promise.all([
       fetchSbom(id),
       fetchComponents(id),
@@ -54,10 +56,6 @@ function VulnerabilityDashboard() {
       fetchDependencies(id),
     ])
       .then(([sbomData, compData, vulnData, depData]) => {
-        console.log("SBOM", sbomData);
-console.log("COMPONENTS", compData);
-console.log("VULNS", vulnData);
-console.log("DEPENDENCIES", depData);
         setSbom(sbomData);
         setComponents(compData);
         setVulns(vulnData);
@@ -68,41 +66,53 @@ console.log("DEPENDENCIES", depData);
   }, [id]);
 
   if (loading) return <div className="tab-loading">Loading scan data...</div>;
-  if (error) return <div className="tab-loading" style={{ color: 'var(--critical)' }}>Error: {error}</div>;
+  if (error) return <div className="tab-loading" style={{ color: "var(--critical)" }}>Error: {error}</div>;
   if (!sbom) return <div className="tab-loading">Scan not found.</div>;
 
   const projectName = sbom.project ?? sbom.sbom_id ?? id;
   const scanDate = sbom.uploaded_at
     ? new Date(sbom.uploaded_at).toLocaleString()
-    : '—';
-  const safeName = projectName.replace(/\s+/g, '-');
+    : "-";
+  const safeName = projectName.replace(/\s+/g, "-");
   const groupedVulns = groupVulnsBySeverity(vulns);
+
   const downloadCycloneDX = () => {
     const payload = {
-      bomFormat: 'CycloneDX',
-      specVersion: '1.4',
+      ...sbom,
+      bomFormat: "CycloneDX",
+      specVersion: sbom.specVersion ?? "1.4",
       metadata: {
+        ...(sbom.metadata ?? {}),
         timestamp: sbom.uploaded_at,
-        component: { name: projectName },
+        component: sbom.metadata?.component ?? { name: projectName },
       },
       components,
+      dependencies: edges.map((edge) => ({
+        ref: edge.parent,
+        dependsOn: [edge.child],
+      })),
       vulnerabilities: vulns,
     };
+
     downloadBlob(
-      new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' }),
+      new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" }),
       `${safeName}-cyclonedx.json`
     );
   };
+
   const downloadSPDX = () => {
     const payload = {
-      SPDXID: 'SPDXRef-DOCUMENT',
+      spdxVersion: "SPDX-2.3",
+      dataLicense: "CC0-1.0",
+      SPDXID: "SPDXRef-DOCUMENT",
       name: projectName,
       documentNamespace: `http://spdx.org/spdxdocs/${safeName}-${sbom.uploaded_at}`,
       creationInfo: { created: sbom.uploaded_at, creators: [] },
       packages: components,
     };
+
     downloadBlob(
-      new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' }),
+      new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" }),
       `${safeName}-spdx.json`
     );
   };
@@ -147,7 +157,7 @@ console.log("DEPENDENCIES", depData);
       </header>
 
       <div className="dash-tabs">
-        {TABS.map(tab => (
+        {TABS.map((tab) => (
           <button
             key={tab.id}
             className={`dash-tab${activeTab === tab.id ? " active" : ""}`}
@@ -165,7 +175,7 @@ console.log("DEPENDENCIES", depData);
         </>
       )}
       {activeTab === "compliance" && (
-        <ComplianceDashboard components={components} security={sbom} />
+        <ComplianceDashboard sbomId={id} components={components} security={sbom} />
       )}
       {activeTab === "dependencies" && (
         <DependencyGraph edges={edges} components={components} vulns={vulns} projectName={projectName} />

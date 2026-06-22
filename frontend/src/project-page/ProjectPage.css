@@ -521,6 +521,30 @@ svg:focus {
 .status-chip-critical { color: var(--crit); }
 .status-chip-idle { color: rgba(255,255,255,0.4); }
 
+.severity-mini-bar {
+    display: flex;
+    align-items: stretch;
+    width: 112px;
+    height: 8px;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.1);
+    background: rgba(255,255,255,0.04);
+}
+
+.severity-mini-segment {
+    min-width: 4px;
+}
+
+.severity-mini-critical { background: var(--critical); }
+.severity-mini-high { background: var(--high); }
+.severity-mini-medium { background: var(--medium); }
+.severity-mini-low { background: var(--low); }
+
+.severity-mini-empty {
+    width: 100%;
+    background: rgba(255,255,255,0.08);
+}
+
 .view-btn {
     background: none;
     border: 1px solid var(--border);

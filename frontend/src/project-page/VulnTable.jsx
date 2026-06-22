@@ -21,6 +21,33 @@ function StatusChip({ progress }) {
   );
 }
 
+function SeverityBar({ scan }) {
+  const segments = [
+    ["critical", scan.critical],
+    ["high", scan.high],
+    ["medium", scan.medium],
+    ["low", scan.low],
+  ];
+  const total = segments.reduce((sum, [, count]) => sum + count, 0);
+
+  return (
+    <div className="severity-mini-bar" aria-label={`Severity breakdown for scan ${scan.id}`}>
+      {total === 0 ? (
+        <span className="severity-mini-empty" />
+      ) : (
+        segments.map(([level, count]) => (
+          <span
+            key={level}
+            className={`severity-mini-segment severity-mini-${level}`}
+            style={{ flexGrow: count || 0 }}
+            title={`${level}: ${count}`}
+          />
+        ))
+      )}
+    </div>
+  );
+}
+
 function VulnTable({ selectedProject, projectScans }) {
   const navigate = useNavigate();
 
@@ -47,6 +74,7 @@ function VulnTable({ selectedProject, projectScans }) {
             <th>High</th>
             <th>Med</th>
             <th>Low</th>
+            <th>Breakdown</th>
             <th>Status</th>
             <th>Action</th>
           </tr>
@@ -54,8 +82,8 @@ function VulnTable({ selectedProject, projectScans }) {
         <tbody>
           {projectScans.length === 0 && (
             <tr>
-              <td colSpan={9} style={{ textAlign: "center", color: "rgba(255,255,255,0.25)", padding: "1.5em" }}>
-                No scans yet — run one to populate the log.
+              <td colSpan={10} style={{ textAlign: "center", color: "rgba(255,255,255,0.25)", padding: "1.5em" }}>
+                No scans yet - run one to populate the log.
               </td>
             </tr>
           )}
@@ -76,6 +104,7 @@ function VulnTable({ selectedProject, projectScans }) {
               <td className="mono-cell" style={{ color: "var(--high)" }}>{scan.high}</td>
               <td className="mono-cell" style={{ color: "var(--medium)" }}>{scan.medium}</td>
               <td className="mono-cell" style={{ color: "var(--low)" }}>{scan.low}</td>
+              <td><SeverityBar scan={scan} /></td>
               <td><StatusChip progress={scan.progress} /></td>
               <td>
                 <button

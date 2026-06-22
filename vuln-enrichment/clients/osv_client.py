@@ -1,4 +1,11 @@
-import requests
+import json
+from urllib.error import HTTPError, URLError
+from urllib.request import Request, urlopen
+
+try:
+    import requests
+except ImportError:
+    requests = None
 
 
 def get_vulnerabilities(purl):
@@ -19,13 +26,23 @@ def get_vulnerabilities(purl):
     }
 
     try:
-        response = requests.post(url, json=payload, timeout=10)
+        if requests:
+            response = requests.post(url, json=payload, timeout=10)
 
-        if response.status_code != 200:
-            print(f"OSV Error: {response.status_code}")
-            return []
+            if response.status_code != 200:
+                print(f"OSV Error: {response.status_code}")
+                return []
 
-        data = response.json()
+            data = response.json()
+        else:
+            request = Request(
+                url,
+                data=json.dumps(payload).encode("utf-8"),
+                headers={"Content-Type": "application/json"},
+                method="POST",
+            )
+            with urlopen(request, timeout=10) as response:
+                data = json.loads(response.read().decode("utf-8"))
 
         vulnerabilities = data.get("vulns", [])
 
@@ -56,7 +73,7 @@ def get_vulnerabilities(purl):
 
         return results
 
-    except requests.exceptions.RequestException as e:
+    except (HTTPError, URLError, TimeoutError) as e:
         print(f"OSV Request Error: {e}")
         return []
 

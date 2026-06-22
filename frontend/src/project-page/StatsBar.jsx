@@ -6,8 +6,10 @@ function StatsBar({ previousScan, latestScan, projectScans = [] }) {
 
   const Delta = ({ value }) => {
     if (value === null) return null;
-    if (value === 0)
+    if (value === 0) {
       return <span style={{ color: "rgba(255,255,255,0.3)", fontSize: "0.75em" }}>— no change</span>;
+    }
+
     const positive = value > 0;
     return (
       <span style={{

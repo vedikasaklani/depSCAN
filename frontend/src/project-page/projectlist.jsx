@@ -6,13 +6,12 @@ import { useNavigate } from "react-router-dom";
 import VulnTable from "./VulnTable.jsx";
 import StatsBar from "./StatsBar.jsx";
 import NewScanModal from "./NewScanModal.jsx";
-import { fetchAllScans, fetchComponents, fetchVulns, fetchProjectHistory, uploadSBOM } from "../api/api.js";
+import { fetchAllScans, fetchComponents, fetchVulns, fetchProjectHistory } from "../api/api.js";
+
 async function normalizeScans(history, projectId) {
 
     return Promise.all(
         history.map(async (scan) => {
-            console.log("SCAN OBJECT", scan);
-            console.log("SBOM ID", scan.sbom_id);
             const [components, vulns] = await Promise.all([
                 fetchComponents(scan.sbom_id),
                 fetchVulns(scan.sbom_id),
@@ -96,11 +95,15 @@ function Projectpage() {
             .catch((err) => setError(err.message));
     }, []);
     useEffect(() => {
-        setLoading(true);
         setError(null);
 
-        if (!selectedProject) return;
+        if (!selectedProject) {
+            setProjectScans([]);
+            setLoading(false);
+            return;
+        }
 
+        setLoading(true);
         fetchProjectHistory(selectedProject.name)
             .then(async (history) => {
                 const scans = await normalizeScans(
@@ -123,31 +126,22 @@ function Projectpage() {
 
     const handleScanSubmit = async (scanConfig) => {
         try {
-            const sbomPayload = {
-                bomFormat: "CycloneDX",
-                specVersion: "1.4",
-                metadata: {
-                    timestamp: new Date().toISOString(),
-                    component: { name: scanConfig.projectName },
-                },
-                properties: [
-                    { name: "source", value: scanConfig.source },
-                    { name: "branch", value: scanConfig.branch },
-                    { name: "scanType", value: scanConfig.scanType },
-                ],
-                components: [],
-            };
-            await uploadSBOM(sbomPayload);
-
-            // Use fetchProjectHistory instead of fetchAllScans + filter
+            const projectName = scanConfig.projectName || selectedProject?.name;
+            const projectId = scanConfig.id || scanConfig.sbom_id || selectedProject?.id || projectName;
             const history = await fetchProjectHistory(
-                selectedProject.name
+                projectName
             );
             const scans = await normalizeScans(
                 history,
-                selectedProject.id
+                projectId
             );
 
+            setProjects((projects) => {
+                const nextProject = { name: projectName, id: projectId };
+                const withoutDuplicate = projects.filter(project => project.name !== projectName);
+                return [nextProject, ...withoutDuplicate];
+            });
+            setSelectedProject({ name: projectName, id: projectId });
             setProjectScans(scans);
         } catch (err) {
             console.error("Upload failed:", err.message);

@@ -1,0 +1,364 @@
+{
+  "project_name": "tmpbgb7slri",
+  "detected_ecosystems": [
+    "node"
+  ],
+  "frontend": "Unknown",
+  "backend": "Express.js",
+  "database": "Unknown",
+  "component_count": 44,
+  "components": [
+    {
+      "name": "accepts",
+      "version": "2.0.0",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/accepts@2.0.0",
+      "license": "NOASSERTION",
+      "hash": "sha256:f95b7a83c78ce214a33c8f8ef681fb76acf619e685469f394034d5d5ea1cfb23"
+    },
+    {
+      "name": "body-parser",
+      "version": "2.2.1",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/body-parser@2.2.1",
+      "license": "NOASSERTION",
+      "hash": "sha256:d7490fc67d710c27059fb0a86e6577555d3fe8ee074b92adb53a633dbc05d385"
+    },
+    {
+      "name": "content-disposition",
+      "version": "2.0.1",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/content-disposition@2.0.1",
+      "license": "NOASSERTION",
+      "hash": "sha256:73e2f8b1bf7f7f2f3793750718b498b94a882cbfe20181d0c582603a4ca95596"
+    },
+    {
+      "name": "content-type",
+      "version": "2.0.0",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/content-type@2.0.0",
+      "license": "NOASSERTION",
+      "hash": "sha256:0d234d6141cd4683bafd6bb0a4a43e3e0423360c9d41a493035e8ac3e1322728"
+    },
+    {
+      "name": "cookie",
+      "version": "0.7.1",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/cookie@0.7.1",
+      "license": "NOASSERTION",
+      "hash": "sha256:6fffbd43d8f0d9a659c21e31a0935f0a1226c9990be593a9649dcd61e4db1204"
+    },
+    {
+      "name": "cookie-signature",
+      "version": "1.2.1",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/cookie-signature@1.2.1",
+      "license": "NOASSERTION",
+      "hash": "sha256:bd6712005148650bc4a703d20267a5d3175dcfc5a2089b1ff94e9ca6426ca0ec"
+    },
+    {
+      "name": "debug",
+      "version": "4.4.0",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/debug@4.4.0",
+      "license": "NOASSERTION",
+      "hash": "sha256:f117ebafe49a5ae279e405caa8411b3c0084689db85a0d0fce172a562108f59b"
+    },
+    {
+      "name": "depd",
+      "version": "2.0.0",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/depd@2.0.0",
+      "license": "NOASSERTION",
+      "hash": "sha256:7028878ddf0fd7d977703a868b5ec8df7220b2f8e7d67827e93767cbb0f21b99"
+    },
+    {
+      "name": "encodeurl",
+      "version": "2.0.0",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/encodeurl@2.0.0",
+      "license": "NOASSERTION",
+      "hash": "sha256:177948a319ae0aeebbd65742c53c62b37c75ec1d021afa5a188d10a7ceae6623"
+    },
+    {
+      "name": "escape-html",
+      "version": "1.0.3",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/escape-html@1.0.3",
+      "license": "NOASSERTION",
+      "hash": "sha256:5463e0a52abb42be051fba2f4ea5d49d907d2b5ed09df0983b54f88c59c8c481"
+    },
+    {
+      "name": "etag",
+      "version": "1.8.1",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/etag@1.8.1",
+      "license": "NOASSERTION",
+      "hash": "sha256:dfcb09916bd8554b4d5ec250d985c02174ddfe92cb0efaa97df51b903ce0adf8"
+    },
+    {
+      "name": "finalhandler",
+      "version": "2.1.0",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/finalhandler@2.1.0",
+      "license": "NOASSERTION",
+      "hash": "sha256:610839c846723bf998ee372b433d489b30ec3a46a6565c17066a3226cf771335"
+    },
+    {
+      "name": "fresh",
+      "version": "2.0.0",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/fresh@2.0.0",
+      "license": "NOASSERTION",
+      "hash": "sha256:f40feff15332333f77ef3844d2ab9af4f31ddb4da37a99a2dbf7dfd255c314a5"
+    },
+    {
+      "name": "http-errors",
+      "version": "2.0.0",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/http-errors@2.0.0",
+      "license": "NOASSERTION",
+      "hash": "sha256:63ffbc6de129d4a36e73df25da1f31ee2a7da3b1060e1b5b3c2b5cad89ca04c7"
+    },
+    {
+      "name": "merge-descriptors",
+      "version": "2.0.0",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/merge-descriptors@2.0.0",
+      "license": "NOASSERTION",
+      "hash": "sha256:a3c9d6cd0c00fc169e2b31a011743811a595ccc55e85a6997a357e82587c33d4"
+    },
+    {
+      "name": "mime-types",
+      "version": "3.0.0",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/mime-types@3.0.0",
+      "license": "NOASSERTION",
+      "hash": "sha256:e2fef7c4bacc0b95ff64d0c158c56fb6bf21239018ff53ee40be7880f4e25513"
+    },
+    {
+      "name": "on-finished",
+      "version": "2.4.1",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/on-finished@2.4.1",
+      "license": "NOASSERTION",
+      "hash": "sha256:d3c391e10faad1d82190a06f5be315d94a9194cff75aa389940432ef15cf45de"
+    },
+    {
+      "name": "once",
+      "version": "1.4.0",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/once@1.4.0",
+      "license": "NOASSERTION",
+      "hash": "sha256:d0d1303998dfae04e4f898f477380aac35568f4d6679f4ea913c2441cf9ebb0b"
+    },
+    {
+      "name": "parseurl",
+      "version": "1.3.3",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/parseurl@1.3.3",
+      "license": "NOASSERTION",
+      "hash": "sha256:c3fdd1b6fb725cb30e8fed82cf929953b46129d347d8404a4a51b633389fbae8"
+    },
+    {
+      "name": "proxy-addr",
+      "version": "2.0.7",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/proxy-addr@2.0.7",
+      "license": "NOASSERTION",
+      "hash": "sha256:7b128e3d41d39ecb1a405a490a53ae86f70ef45f01079333ed3ca49939f5fba8"
+    },
+    {
+      "name": "qs",
+      "version": "6.15.2",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/qs@6.15.2",
+      "license": "NOASSERTION",
+      "hash": "sha256:f41e0645d0326d5fc38df1637f08773501ebf70badfc22df95ffb8f2c5fe27e2"
+    },
+    {
+      "name": "range-parser",
+      "version": "1.2.1",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/range-parser@1.2.1",
+      "license": "NOASSERTION",
+      "hash": "sha256:e973789240fef3c00f359e6acc8570dd769b70ee8b29fdcb679897fa2d696bff"
+    },
+    {
+      "name": "router",
+      "version": "2.2.0",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/router@2.2.0",
+      "license": "NOASSERTION",
+      "hash": "sha256:1b270661457a8f738b0cfe76c768fd3585c8771d04fad5f7aae1f1feed84a8da"
+    },
+    {
+      "name": "send",
+      "version": "1.1.0",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/send@1.1.0",
+      "license": "NOASSERTION",
+      "hash": "sha256:a6d400dbe26b2de2a749c3045b3903e50e6507352d119757f4884bac28d710e2"
+    },
+    {
+      "name": "serve-static",
+      "version": "2.2.0",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/serve-static@2.2.0",
+      "license": "NOASSERTION",
+      "hash": "sha256:ae8c8c81ae13ef8d08a78c4e33b04ea28b5ed9f8ccb43ace3850b1c6549fe636"
+    },
+    {
+      "name": "statuses",
+      "version": "2.0.1",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/statuses@2.0.1",
+      "license": "NOASSERTION",
+      "hash": "sha256:a347e5a1994ef74647a2af80f58030a572f71173d5c1dfc0ce6eb55f4005b17d"
+    },
+    {
+      "name": "type-is",
+      "version": "2.1.0",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/type-is@2.1.0",
+      "license": "NOASSERTION",
+      "hash": "sha256:1fd87d3dab5d902c5df71adddfd6099d62e211ee24b4fecc833947159e75bcce"
+    },
+    {
+      "name": "vary",
+      "version": "1.1.2",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/vary@1.1.2",
+      "license": "NOASSERTION",
+      "hash": "sha256:d308bd3935a6f29310b20de016cdb7b3de3aa40a7d4c3365b96e35d2c248d74a"
+    },
+    {
+      "name": "after",
+      "version": "0.8.2",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/after@0.8.2",
+      "license": "NOASSERTION",
+      "hash": "sha256:fbde301801205b9a5c9168478d5a1142334b32d6ec08cf1bb7c9b84b705e9421"
+    },
+    {
+      "name": "connect-redis",
+      "version": "8.0.1",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/connect-redis@8.0.1",
+      "license": "NOASSERTION",
+      "hash": "sha256:7564eaa88c717aa5a9886c1a318ffdd70ba2d8cfb8e91b31470d1eb4ee495b7f"
+    },
+    {
+      "name": "cookie-parser",
+      "version": "1.4.7",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/cookie-parser@1.4.7",
+      "license": "NOASSERTION",
+      "hash": "sha256:9304ff6d38044c5363370d0080dab04c724cd262606490c13890f80bbc9f16b6"
+    },
+    {
+      "name": "cookie-session",
+      "version": "2.1.1",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/cookie-session@2.1.1",
+      "license": "NOASSERTION",
+      "hash": "sha256:eb1c29d72fe9bf4dfdb741a4fbdef14eccf89b96bda49b61e87823eedc013df0"
+    },
+    {
+      "name": "ejs",
+      "version": "3.1.10",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/ejs@3.1.10",
+      "license": "NOASSERTION",
+      "hash": "sha256:a75e48993e71e391d0a984e5ee5ea7b144d2ad40a512bdb910688727f6d3714f"
+    },
+    {
+      "name": "eslint",
+      "version": "8.47.0",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/eslint@8.47.0",
+      "license": "NOASSERTION",
+      "hash": "sha256:8dc27d0f67f67c31ecb3f51c13c924cc1b3f7bf0e5c18885eced59783f6e366a"
+    },
+    {
+      "name": "express-session",
+      "version": "1.18.1",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/express-session@1.18.1",
+      "license": "NOASSERTION",
+      "hash": "sha256:b8c39dfb3dd902a1928aad4169c9ad03b2c8d550df57a56e795888d1b7bf6a0f"
+    },
+    {
+      "name": "hbs",
+      "version": "4.2.0",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/hbs@4.2.0",
+      "license": "NOASSERTION",
+      "hash": "sha256:17d033761a07889be7c4733bbc045c66d73fc1887fbf51602318159cbbcb76ec"
+    },
+    {
+      "name": "marked",
+      "version": "15.0.3",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/marked@15.0.3",
+      "license": "NOASSERTION",
+      "hash": "sha256:8bc525fa800c15be810b63d6c9de77376ef9353ef4e1df9543117fb21216312b"
+    },
+    {
+      "name": "method-override",
+      "version": "3.0.0",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/method-override@3.0.0",
+      "license": "NOASSERTION",
+      "hash": "sha256:541bf35fc7fcd8b7fdde7b5baddb1182588ae9fdf85e345176713c2555914fe2"
+    },
+    {
+      "name": "mocha",
+      "version": "11.7.5",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/mocha@11.7.5",
+      "license": "NOASSERTION",
+      "hash": "sha256:7032031f5a9e8e53aeed3756edb404f4d12ae9a2ead34754053ab035c9527a6b"
+    },
+    {
+      "name": "morgan",
+      "version": "1.10.1",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/morgan@1.10.1",
+      "license": "NOASSERTION",
+      "hash": "sha256:30d73c11cb1d0d0b6d64c356ae74f2714918682022e7e0540bf5a08d6db69b86"
+    },
+    {
+      "name": "nyc",
+      "version": "17.1.0",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/nyc@17.1.0",
+      "license": "NOASSERTION",
+      "hash": "sha256:2b3ec09032f47c980693203974b4e61aab4dc76ef31e0b8f2dbd629d30503c9c"
+    },
+    {
+      "name": "pbkdf2-password",
+      "version": "1.2.1",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/pbkdf2-password@1.2.1",
+      "license": "NOASSERTION",
+      "hash": "sha256:51cf1d8bb2f6991ab826bce3e7bf797a9fed2db17de473548bb869bc75ec891d"
+    },
+    {
+      "name": "supertest",
+      "version": "6.3.0",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/supertest@6.3.0",
+      "license": "NOASSERTION",
+      "hash": "sha256:342d4deedbb6791387aa1d3712bc9bcbc6aac9b69c773da0ce972892c9684947"
+    },
+    {
+      "name": "vhost",
+      "version": "3.0.2",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/vhost@3.0.2",
+      "license": "NOASSERTION",
+      "hash": "sha256:92d40d1ef7bc5f573250e913ef858ecbf9e567020455aa6e60659c1a95bc43a9"
+    }
+  ]
+}
