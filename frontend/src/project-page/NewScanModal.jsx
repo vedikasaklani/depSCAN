@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { X, GitCommit, Link2, Search, GitBranch, Shield, FileCode2, Package } from "lucide-react";
-import { uploadSBOM } from "../api/api.js";
+import { startScan } from "../api/api.js";
 import "./NewScanModal.css";
 
 const MOCK_REPOS = [
@@ -12,8 +12,6 @@ const MOCK_REPOS = [
     { id: 6, name: "mobile-client", full_name: "acme/mobile-client", language: "Kotlin", updated_at: "1 month ago", private: false },
 ];
 
-// Accepts https://github.com/org/repo(.git), https://gitlab.com/org/repo, etc,
-// and the git@host:org/repo.git scp-style form.
 const HTTP_GIT_URL = /^https?:\/\/[\w.-]+\.[a-z]{2,}(\/[\w.\-~]+){2,}(\.git)?\/?$/i;
 const SCP_GIT_URL = /^git@[\w.-]+:[\w.\-~]+\/[\w.\-~]+(\.git)?$/i;
 
@@ -22,40 +20,18 @@ function isValidGitUrl(url) {
     return HTTP_GIT_URL.test(trimmed) || SCP_GIT_URL.test(trimmed);
 }
 
-// We can't clone/parse a repo from the browser, so this builds a minimal
-// CycloneDX-shaped request carrying the scan metadata. Real component/
-// dependency extraction has to happen server-side once it sees `source`.
-function buildScanPayload({ projectName, source, branch, scanType }) {
-    return {
-        bomFormat: "CycloneDX",
-        specVersion: "1.4",
-        metadata: {
-            timestamp: new Date().toISOString(),
-            component: { name: projectName },
-            properties: [
-                { name: "source", value: source },
-                { name: "branch", value: branch },
-                { name: "scanType", value: scanType },
-            ],
-        },
-        components: [],
-        dependencies: [],
-    };
-}
-
 export default function NewScanModal({ onClose, onSubmit }) {
     const [tab, setTab] = useState("github");
     const [repoQuery, setRepoQuery] = useState("");
     const [selectedRepo, setSelectedRepo] = useState(null);
     const [publicUrl, setPublicUrl] = useState("");
     const [projectName, setProjectName] = useState("");
-    const [branch, setBranch] = useState("main");
-    const [scanType, setScanType] = useState("full");
 
     const [urlError, setUrlError] = useState("");
     const [status, setStatus] = useState("idle"); // idle | submitting | success | error
     const [submitError, setSubmitError] = useState("");
     const [result, setResult] = useState(null);
+    const [submittedRepoUrl, setSubmittedRepoUrl] = useState("");
 
     useEffect(() => {
         const handler = (e) => { if (e.key === "Escape") onClose(); };
@@ -83,21 +59,11 @@ export default function NewScanModal({ onClose, onSubmit }) {
     const handleSubmit = async () => {
         if (!isValid) return;
 
-        if (tab === "github") {
-            // GitHub OAuth flow isn't wired to a real API yet — still mock data.
-            onSubmit?.({
-                projectName: projectName.trim(),
-                source: selectedRepo?.full_name,
-                branch,
-                scanType,
-            });
-            onClose();
-            return;
-        }
+        const repoUrl = tab === "github"
+            ? `https://github.com/${selectedRepo.full_name}`
+            : publicUrl.trim();
 
-        // Public URL flow — validate, then actually hit the API.
-        const source = publicUrl.trim();
-        if (!isValidGitUrl(source)) {
+        if (tab === "url" && !isValidGitUrl(repoUrl)) {
             setUrlError("That doesn't look like a valid Git repository URL — try something like https://github.com/org/repo");
             return;
         }
@@ -106,13 +72,14 @@ export default function NewScanModal({ onClose, onSubmit }) {
         setSubmitError("");
         setStatus("submitting");
         try {
-            const payload = buildScanPayload({ projectName: projectName.trim(), source, branch, scanType });
-            const response = await uploadSBOM(payload);
-            setResult(response);
+            const name = projectName.trim();
+            const response = await startScan(name, repoUrl);
+            setSubmittedRepoUrl(repoUrl);
+            setResult(response ?? {});
             setStatus("success");
-            onSubmit?.({ ...response, projectName: projectName.trim(), source, branch, scanType });
+            onSubmit?.({ ...response, projectName: name, repoUrl });
         } catch (err) {
-            setSubmitError(err.message || "Upload failed. Please try again.");
+            setSubmitError(err.message || "Scan failed. Please try again.");
             setStatus("error");
         }
     };
@@ -135,16 +102,16 @@ export default function NewScanModal({ onClose, onSubmit }) {
                         <div className="modal-body">
                             <div className="field-group">
                                 <p style={{ color: "var(--teal)", fontWeight: 600, marginBottom: "0.9em" }}>
-                                    Scan submitted
+                                    Scan started
                                 </p>
                                 {[
+                                    ["Project", projectName.trim()],
+                                    ["Repository", submittedRepoUrl],
+                                    ["Scan ID", result.id ?? result.scan_id],
                                     ["Status", result.status],
-                                    ["Scan ID", result.id],
-                                    ["Project", result.project ?? projectName],
-                                    ["Components Stored", result.components_stored],
-                                    ["Dependencies Stored", result.dependencies_stored],
-                                    ["Uploaded At", result.uploaded_at ? new Date(result.uploaded_at).toLocaleString() : "—"],
-                                ].map(([label, value]) => (
+                                ]
+                                    .filter(([, value]) => value !== undefined && value !== null && value !== "")
+                                    .map(([label, value]) => (
                                     <div
                                         key={label}
                                         style={{
@@ -160,11 +127,6 @@ export default function NewScanModal({ onClose, onSubmit }) {
                                         <strong style={{ textAlign: "right", wordBreak: "break-all" }}>{String(value)}</strong>
                                     </div>
                                 ))}
-                                {result.components_stored === 0 && (
-                                    <p style={{ marginTop: "1em", fontSize: "0.82em", color: "rgba(255,255,255,0.4)" }}>
-                                        No components were extracted yet, the backend hasn yet to analyze this source URL
-                                    </p>
-                                )}
                             </div>
                         </div>
                         <div className="modal-footer">
@@ -266,15 +228,6 @@ export default function NewScanModal({ onClose, onSubmit }) {
                                 />
                             </div>
 
-                            <div className="field-group">
-                                <label className="field-label">Branch</label>
-                                <input
-                                    className="field-input"
-                                    placeholder="main"
-                                    value={branch}
-                                    onChange={e => setBranch(e.target.value)}
-                                />
-                            </div>
                         </div>
                         <div className="modal-footer">
                             <button className="btn-cancel" onClick={onClose} disabled={status === "submitting"}>Cancel</button>

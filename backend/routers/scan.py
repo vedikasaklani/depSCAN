@@ -6,6 +6,7 @@ import tempfile
 import subprocess
 import requests
 import json
+import sys
 
 from pathlib import Path
 
@@ -59,7 +60,7 @@ def start_scan(data: dict):
         # Run scanner
         subprocess.run(
             [
-                "python",
+                sys.executable,
                 "-m",
                 "sbomgen.cli",
                 "scan",
@@ -79,7 +80,7 @@ def start_scan(data: dict):
         # Build SBOM
         subprocess.run(
             [
-                "python",
+                sys.executable,
                 "sbom_builder.py",
                 "--input",
                 str(scanner_output),
