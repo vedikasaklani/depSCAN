@@ -1,7 +1,7 @@
 from fastapi import FastAPI
-from backend.routers.sbom import router as sbom_router
 from fastapi.middleware.cors import CORSMiddleware
-
+from backend.routers.sbom import router as sbom_router
+from backend.routers.scan import router as scan_router
 
 app = FastAPI(title="SBOM Backend")
 app.add_middleware(
@@ -15,6 +15,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 app.include_router(sbom_router)
+app.include_router(scan_router)
 
 @app.get("/")
 def home():

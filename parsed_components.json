@@ -1,20 +1,284 @@
 {
+  "project_name": "tmpp2mggbax",
+  "detected_ecosystems": [
+    "python"
+  ],
+  "frontend": "Unknown",
+  "backend": "Unknown",
+  "database": "Unknown",
+  "component_count": 34,
   "components": [
     {
-      "name": "django",
-      "version": "4.2.1",
+      "name": "spacy-legacy",
+      "version": "3.0.10",
       "ecosystem": "pypi",
-      "supplier": "Django Software Foundation",
-      "license": "BSD-3-Clause",
-      "deps": [1]
+      "purl": "pkg:pypi/spacy-legacy@3.0.10",
+      "license": "NOASSERTION",
+      "hash": "sha256:493ba69d52a4c61fb090f09a88da579e4aabf6be633832fb599e52921097a07b"
     },
     {
-      "name": "sqlparse",
-      "version": "0.4.4",
+      "name": "spacy-loggers",
+      "version": "1.0.0",
       "ecosystem": "pypi",
-      "supplier": "NOASSERTION",
-      "license": "BSD-2-Clause",
-      "deps": []
+      "purl": "pkg:pypi/spacy-loggers@1.0.0",
+      "license": "NOASSERTION",
+      "hash": "sha256:d2a38fd83079bc41e454ca27758b1005163352be2b541c090baed27aec77f0ee"
+    },
+    {
+      "name": "cymem",
+      "version": "2.0.2",
+      "ecosystem": "pypi",
+      "purl": "pkg:pypi/cymem@2.0.2",
+      "license": "NOASSERTION",
+      "hash": "sha256:755e1c4dbb9656a192c3aa598241cc52a474e11acbffa359bcadb7319ef03e36"
+    },
+    {
+      "name": "preshed",
+      "version": "3.0.2",
+      "ecosystem": "pypi",
+      "purl": "pkg:pypi/preshed@3.0.2",
+      "license": "NOASSERTION",
+      "hash": "sha256:4592ad87dda3fe7b68062d088a342b031eb9e8fba2548bc736ac2457aa2dba08"
+    },
+    {
+      "name": "thinc",
+      "version": "8.1.0",
+      "ecosystem": "pypi",
+      "purl": "pkg:pypi/thinc@8.1.0",
+      "license": "NOASSERTION",
+      "hash": "sha256:a65380a770cbd2452d888e0a75a706b03e19b21785ac5ca631f56e2f1275c67e"
+    },
+    {
+      "name": "ml-datasets",
+      "version": "0.2.0",
+      "ecosystem": "pypi",
+      "purl": "pkg:pypi/ml-datasets@0.2.0",
+      "license": "NOASSERTION",
+      "hash": "sha256:8149ab027d187134119ab19bef88f1fbaa29aa5e7e92a9a0606050e277ad1a23"
+    },
+    {
+      "name": "murmurhash",
+      "version": "0.28.0",
+      "ecosystem": "pypi",
+      "purl": "pkg:pypi/murmurhash@0.28.0",
+      "license": "NOASSERTION",
+      "hash": "sha256:cfe6711926257be9d6c2b9268cc97ba77b6b0ebc35a1ac896cb9d259397a6fdb"
+    },
+    {
+      "name": "wasabi",
+      "version": "0.9.1",
+      "ecosystem": "pypi",
+      "purl": "pkg:pypi/wasabi@0.9.1",
+      "license": "NOASSERTION",
+      "hash": "sha256:b0ba024cac2a57bf0b0fa6c263e4f915d722d065a7d50703d77030a9d8c3c9fc"
+    },
+    {
+      "name": "srsly",
+      "version": "2.4.3",
+      "ecosystem": "pypi",
+      "purl": "pkg:pypi/srsly@2.4.3",
+      "license": "NOASSERTION",
+      "hash": "sha256:9b6795f22480753676b5f6a9839aae4fe2ab284bbf3f46898ebc7d42c953da93"
+    },
+    {
+      "name": "catalogue",
+      "version": "2.0.6",
+      "ecosystem": "pypi",
+      "purl": "pkg:pypi/catalogue@2.0.6",
+      "license": "NOASSERTION",
+      "hash": "sha256:de9759dde88dab05f52f5e1ba56a90fb83d2ff3c82162e80cf9f112756cea1d9"
+    },
+    {
+      "name": "typer",
+      "version": "0.3.0",
+      "ecosystem": "pypi",
+      "purl": "pkg:pypi/typer@0.3.0",
+      "license": "NOASSERTION",
+      "hash": "sha256:54f86339f71b6b352f2041594f4a48036b1813c05fdd9b34f5490b710a1d0242"
+    },
+    {
+      "name": "pathy",
+      "version": "0.3.5",
+      "ecosystem": "pypi",
+      "purl": "pkg:pypi/pathy@0.3.5",
+      "license": "NOASSERTION",
+      "hash": "sha256:e6e794cafee338ec79c264d405b51b6908ae08fa2aa985c557e214b3aafa4b8c"
+    },
+    {
+      "name": "numpy",
+      "version": "1.15.0",
+      "ecosystem": "pypi",
+      "purl": "pkg:pypi/numpy@1.15.0",
+      "license": "NOASSERTION",
+      "hash": "sha256:a890e78aadf77316231617827af6b351817d6b81592d7754f2c149a5f6acb461"
+    },
+    {
+      "name": "requests",
+      "version": "2.13.0",
+      "ecosystem": "pypi",
+      "purl": "pkg:pypi/requests@2.13.0",
+      "license": "NOASSERTION",
+      "hash": "sha256:15799750867f929535ce1bddc7b0249ddadd74d2f62b28c8f1a43991be2f2256"
+    },
+    {
+      "name": "tqdm",
+      "version": "4.38.0",
+      "ecosystem": "pypi",
+      "purl": "pkg:pypi/tqdm@4.38.0",
+      "license": "NOASSERTION",
+      "hash": "sha256:a98c47eaf9fb3878ef4960855548abd190b0e138c3a6f91d8aa443598740f339"
+    },
+    {
+      "name": "pydantic",
+      "version": "1.7.4",
+      "ecosystem": "pypi",
+      "purl": "pkg:pypi/pydantic@1.7.4",
+      "license": "NOASSERTION",
+      "hash": "sha256:a73bc0965371c6654df783fdb80c8d0ea552ed396c426b2b8ab9ddbaf0ee29c3"
+    },
+    {
+      "name": "jinja2",
+      "version": "",
+      "ecosystem": "pypi",
+      "purl": "pkg:pypi/jinja2",
+      "license": "NOASSERTION",
+      "hash": "sha256:c880041191208768af6f5ce65b6850ffa33cab03a9e009962e769e66332296cf"
+    },
+    {
+      "name": "langcodes",
+      "version": "3.2.0",
+      "ecosystem": "pypi",
+      "purl": "pkg:pypi/langcodes@3.2.0",
+      "license": "NOASSERTION",
+      "hash": "sha256:e9cd858ca4aa38ef79d74168177ebb0c63a00494fed454ee6fc24e1d0de19dc0"
+    },
+    {
+      "name": "setuptools",
+      "version": "",
+      "ecosystem": "pypi",
+      "purl": "pkg:pypi/setuptools",
+      "license": "NOASSERTION",
+      "hash": "sha256:ea2b31ab2c6861f2271c4cabe4bb4727a3d48447a49e14391b516c22d983df94"
+    },
+    {
+      "name": "packaging",
+      "version": "20.0",
+      "ecosystem": "pypi",
+      "purl": "pkg:pypi/packaging@20.0",
+      "license": "NOASSERTION",
+      "hash": "sha256:d847dd9f74c6de7bb3d8609f9e1ee2562b700adca7de735bd136cc78cfad65bc"
+    },
+    {
+      "name": "typing-extensions",
+      "version": "3.7.4.1",
+      "ecosystem": "pypi",
+      "purl": "pkg:pypi/typing-extensions@3.7.4.1",
+      "license": "NOASSERTION",
+      "hash": "sha256:bffd433048cb36bdf1177ad31631345863ed33859ebe2a74b07c093b5c70a4e5"
+    },
+    {
+      "name": "pre-commit",
+      "version": "2.13.0",
+      "ecosystem": "pypi",
+      "purl": "pkg:pypi/pre-commit@2.13.0",
+      "license": "NOASSERTION",
+      "hash": "sha256:8b81ccab8d9783c9afaef1032e4f6b9e6ae44b6822d9532821c761a1298c959e"
+    },
+    {
+      "name": "cython",
+      "version": "0.25",
+      "ecosystem": "pypi",
+      "purl": "pkg:pypi/cython@0.25",
+      "license": "NOASSERTION",
+      "hash": "sha256:07f13806d9a739c0c4cddf2eb528f01b57b23d2350910a90fcc3c261bfaafc26"
+    },
+    {
+      "name": "pytest",
+      "version": "5.2.0",
+      "ecosystem": "pypi",
+      "purl": "pkg:pypi/pytest@5.2.0",
+      "license": "NOASSERTION",
+      "hash": "sha256:5a97dc774ee2aede0dc2ab506713aca177ce53a6676bfa4f6bd6bee509e7b4b6"
+    },
+    {
+      "name": "pytest-timeout",
+      "version": "1.3.0",
+      "ecosystem": "pypi",
+      "purl": "pkg:pypi/pytest-timeout@1.3.0",
+      "license": "NOASSERTION",
+      "hash": "sha256:cb7ce496319524a4ef932014ce61aab204e261ee351c178389cdd009a0c016c0"
+    },
+    {
+      "name": "mock",
+      "version": "2.0.0",
+      "ecosystem": "pypi",
+      "purl": "pkg:pypi/mock@2.0.0",
+      "license": "NOASSERTION",
+      "hash": "sha256:a995dbdc5a5400262cb44f271f180e1fd72729da348c7cbfe96a9bac07870e2e"
+    },
+    {
+      "name": "flake8",
+      "version": "3.8.0",
+      "ecosystem": "pypi",
+      "purl": "pkg:pypi/flake8@3.8.0",
+      "license": "NOASSERTION",
+      "hash": "sha256:d3a26f915833165d4658bfab0dec8a59d36686daeba2c9ae387c3917d9830a7a"
+    },
+    {
+      "name": "hypothesis",
+      "version": "3.27.0",
+      "ecosystem": "pypi",
+      "purl": "pkg:pypi/hypothesis@3.27.0",
+      "license": "NOASSERTION",
+      "hash": "sha256:51a3de3db202b1ad2d2915eb52682da0ae1782724e8471465b354fa206daf011"
+    },
+    {
+      "name": "mypy",
+      "version": "0.910",
+      "ecosystem": "pypi",
+      "purl": "pkg:pypi/mypy@0.910",
+      "license": "NOASSERTION",
+      "hash": "sha256:1ab39e9c38468e4ee3df5a781bb822f46b4181d20f1c77876b6f0822e442b122"
+    },
+    {
+      "name": "types-dataclasses",
+      "version": "0.1.3",
+      "ecosystem": "pypi",
+      "purl": "pkg:pypi/types-dataclasses@0.1.3",
+      "license": "NOASSERTION",
+      "hash": "sha256:d82915664ed029ada09d6161f464802dd93e2c4d5de0bc1b60bed782e77b0152"
+    },
+    {
+      "name": "types-mock",
+      "version": "0.1.1",
+      "ecosystem": "pypi",
+      "purl": "pkg:pypi/types-mock@0.1.1",
+      "license": "NOASSERTION",
+      "hash": "sha256:f189d4c7f06ba035bd36c400e9a6515592f767dd11a281076d8ad76e03816ffd"
+    },
+    {
+      "name": "types-setuptools",
+      "version": "57.0.0",
+      "ecosystem": "pypi",
+      "purl": "pkg:pypi/types-setuptools@57.0.0",
+      "license": "NOASSERTION",
+      "hash": "sha256:a090675b09370e3cb13e5b05b3d147fe3d4c09dd394ff107ceeed59f1e531891"
+    },
+    {
+      "name": "types-requests",
+      "version": "",
+      "ecosystem": "pypi",
+      "purl": "pkg:pypi/types-requests",
+      "license": "NOASSERTION",
+      "hash": "sha256:4b6c1c1bb3d94a7070cfd7bce5427a006c931dedd94c5f70f72aef4a276df6fb"
+    },
+    {
+      "name": "black",
+      "version": "22.0",
+      "ecosystem": "pypi",
+      "purl": "pkg:pypi/black@22.0",
+      "license": "NOASSERTION",
+      "hash": "sha256:df897daaff8ba434c2c3e0592abfeb41b942f25773eb7e35ce0b05e6a53a48c1"
     }
   ]
 }

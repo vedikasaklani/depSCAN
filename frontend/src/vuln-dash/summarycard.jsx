@@ -75,18 +75,27 @@ function SummaryCard({ groupedVulns, totalComponents }) {
                 </div>
 
                 <div className="item-vuln">
-                    {filteredVulns.map((vuln, i) => (
-                        <div key={vuln.cve_id?? i} className={`remedy-item ${vuln.level}`}>
-                            <span className="component-name">{vuln.cve}</span>
-                            <span className={`status-badge-${
-                                vuln.level === "critical" || vuln.level === "high"
-                                    ? "unfixed"
-                                    : "new"
-                            }`}>
-                                {vuln.severity}
-                            </span>
-                        </div>
-                    ))}
+                    {filteredVulns.length === 0 && (
+                        <p className="empty-vuln-msg">
+                            No vulnerabilities match this filter.
+                        </p>
+                    )}
+                    {filteredVulns.map((vuln, i) => {
+                        const status = (vuln.status ?? "new").toLowerCase();
+                        return (
+                            <div key={vuln.cve_id ?? i} className={`remedy-item ${vuln.level}`}>
+                                <div className="remedy-item-main">
+                                    <span className="component-name">{vuln.cve_id ?? "Unknown CVE"}</span>
+                                    <span className="component-sub"> 
+                                        {" "+ vuln.component_name ?? vuln.package ?? "Unknown component"}
+                                    </span>
+                                </div>
+                                <span className={`status-badge-${status}`}>
+                                    {status === "unfixed" ? "Unfixed" : "New"}
+                                </span>
+                            </div>
+                        );
+                    })}
                 </div>
             </div>
 
