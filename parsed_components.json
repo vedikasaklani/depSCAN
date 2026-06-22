@@ -1,77 +1,541 @@
 {
-  "project_name": "tmphaj2bw_2",
+  "project_name": "tmp_qrz89la",
   "detected_ecosystems": [
     "node",
     "python"
   ],
-  "frontend": "Unknown",
-  "backend": "Unknown",
-  "database": "Unknown",
-  "component_count": 8,
+  "frontend": "Vite",
+  "backend": "FastAPI",
+  "database": "PostgreSQL",
+  "component_count": 66,
   "components": [
     {
-      "name": "@biomejs/biome",
-      "version": "2.4.15",
+      "name": "@esbuild/aix-ppc64",
+      "version": "0.21.5",
       "ecosystem": "npm",
-      "purl": "pkg:npm/%40biomejs/biome@2.4.15",
-      "license": "NOASSERTION",
-      "hash": "sha256:536fc41db6fc43a09cf7bcd6b57deebac2b89b864a7c7f347bc9743e2cba220c"
+      "purl": "pkg:npm/%40esbuild/aix-ppc64@0.21.5",
+      "license": "MIT",
+      "hash": "sha256:3c0d83698aa7f419b73373c57d3b5f323a42c16baf961b0ffbd7452cc765fbec"
     },
     {
-      "name": "grunt",
-      "version": "1.6.2",
+      "name": "@esbuild/android-arm",
+      "version": "0.21.5",
       "ecosystem": "npm",
-      "purl": "pkg:npm/grunt@1.6.2",
-      "license": "NOASSERTION",
-      "hash": "sha256:d261277ec0e5b8d2c9c816dc979ab4ffc31b62916ecc65a71feac78b791b8a7b"
+      "purl": "pkg:npm/%40esbuild/android-arm@0.21.5",
+      "license": "MIT",
+      "hash": "sha256:52d2c247f4e39c336ddd68c71187e53443b917c15db05c071d96b2537bd89b9d"
     },
     {
-      "name": "grunt-cli",
-      "version": "1.5.0",
+      "name": "@esbuild/android-arm64",
+      "version": "0.21.5",
       "ecosystem": "npm",
-      "purl": "pkg:npm/grunt-cli@1.5.0",
-      "license": "NOASSERTION",
-      "hash": "sha256:9a599a5a239017818469b040b4b822369356a8f20d0bceb031fa12f79a24fbea"
+      "purl": "pkg:npm/%40esbuild/android-arm64@0.21.5",
+      "license": "MIT",
+      "hash": "sha256:33655c26df75866b60921b04502344c6c45f81b7a4e433221920eb78061525d4"
     },
     {
-      "name": "grunt-contrib-qunit",
-      "version": "10.2.0",
+      "name": "@esbuild/android-x64",
+      "version": "0.21.5",
       "ecosystem": "npm",
-      "purl": "pkg:npm/grunt-contrib-qunit@10.2.0",
-      "license": "NOASSERTION",
-      "hash": "sha256:acb722390097611c819012e19018db61a5b3a2c3be6e66449ddf79619ddcafbf"
+      "purl": "pkg:npm/%40esbuild/android-x64@0.21.5",
+      "license": "MIT",
+      "hash": "sha256:6349b08d4db43775de92d654298b79151dd8ed808138f5ee685a8c27a7eac550"
     },
     {
-      "name": "qunit",
-      "version": "2.25.0",
+      "name": "@esbuild/darwin-arm64",
+      "version": "0.21.5",
       "ecosystem": "npm",
-      "purl": "pkg:npm/qunit@2.25.0",
-      "license": "NOASSERTION",
-      "hash": "sha256:e367e6bd24be8cebe44c9d5b59bc0042c638d33521c3d4bb913add42ce4d3804"
+      "purl": "pkg:npm/%40esbuild/darwin-arm64@0.21.5",
+      "license": "MIT",
+      "hash": "sha256:417f08cb22f9cfd0438ac5541bcc1527f7bcdcf08e96565ed66288b8e99585cc"
     },
     {
-      "name": "asgiref",
-      "version": "3.9.1",
+      "name": "@esbuild/darwin-x64",
+      "version": "0.21.5",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/%40esbuild/darwin-x64@0.21.5",
+      "license": "MIT",
+      "hash": "sha256:abbdff7afd97aff7d6356aaf6aac74eaef49cf4549b189ca48558ff2161baf17"
+    },
+    {
+      "name": "@esbuild/freebsd-arm64",
+      "version": "0.21.5",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/%40esbuild/freebsd-arm64@0.21.5",
+      "license": "MIT",
+      "hash": "sha256:4114935d0c75533f4cca6e46ad4bd5e54c1159544e8449870b63eba519d03be3"
+    },
+    {
+      "name": "@esbuild/freebsd-x64",
+      "version": "0.21.5",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/%40esbuild/freebsd-x64@0.21.5",
+      "license": "MIT",
+      "hash": "sha256:ccfde7e570d534c286b0b775f50e19a608b899cabcfd013589671c157f5caaa8"
+    },
+    {
+      "name": "@esbuild/linux-arm",
+      "version": "0.21.5",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/%40esbuild/linux-arm@0.21.5",
+      "license": "MIT",
+      "hash": "sha256:57038498b3c3741f0fdcf7a9ed94f243fd4d34c2e168dbe2f73b3a48810a3426"
+    },
+    {
+      "name": "@esbuild/linux-arm64",
+      "version": "0.21.5",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/%40esbuild/linux-arm64@0.21.5",
+      "license": "MIT",
+      "hash": "sha256:642e809f549da3b0c9d2b3a27d692ef8defd46b4da597a76b0722c214a1b117f"
+    },
+    {
+      "name": "@esbuild/linux-ia32",
+      "version": "0.21.5",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/%40esbuild/linux-ia32@0.21.5",
+      "license": "MIT",
+      "hash": "sha256:8a4f0047d17659cdc68f004e2c15dd15acc483cf6efaf3e31547aa2a5b6ca524"
+    },
+    {
+      "name": "@esbuild/linux-loong64",
+      "version": "0.21.5",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/%40esbuild/linux-loong64@0.21.5",
+      "license": "MIT",
+      "hash": "sha256:fd49289db409e349db211a293b4afd9ed262dfb345c44d5e9266788b751e77ad"
+    },
+    {
+      "name": "@esbuild/linux-mips64el",
+      "version": "0.21.5",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/%40esbuild/linux-mips64el@0.21.5",
+      "license": "MIT",
+      "hash": "sha256:b43cb798b17d46d9bb9a6b5519e11c01b4b988e1983d49ca9fb481b60792f303"
+    },
+    {
+      "name": "@esbuild/linux-ppc64",
+      "version": "0.21.5",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/%40esbuild/linux-ppc64@0.21.5",
+      "license": "MIT",
+      "hash": "sha256:6e6325922075a23dd72d7de29f62f24c18815ae97f323005876901c47136b85f"
+    },
+    {
+      "name": "@esbuild/linux-riscv64",
+      "version": "0.21.5",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/%40esbuild/linux-riscv64@0.21.5",
+      "license": "MIT",
+      "hash": "sha256:0a7791a0e067bd92512bbcbec8ca934fa386d61ffdac7762b7bbbbf2c7d42c2d"
+    },
+    {
+      "name": "@esbuild/linux-s390x",
+      "version": "0.21.5",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/%40esbuild/linux-s390x@0.21.5",
+      "license": "MIT",
+      "hash": "sha256:173df1d3cf6dbb43362bf6062be1156eb42c8eed325234de337afa69b0834ed5"
+    },
+    {
+      "name": "@esbuild/linux-x64",
+      "version": "0.21.5",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/%40esbuild/linux-x64@0.21.5",
+      "license": "MIT",
+      "hash": "sha256:bd0ce150334308df41118c8977bf910c683d598ddd7aeac25d0eef681da8e957"
+    },
+    {
+      "name": "@esbuild/netbsd-x64",
+      "version": "0.21.5",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/%40esbuild/netbsd-x64@0.21.5",
+      "license": "MIT",
+      "hash": "sha256:5ca1e32a2759938b941ae1bdec553cbfdcd23de4d091e31b3641e51e5f3f52e2"
+    },
+    {
+      "name": "@esbuild/openbsd-x64",
+      "version": "0.21.5",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/%40esbuild/openbsd-x64@0.21.5",
+      "license": "MIT",
+      "hash": "sha256:51569adaf3768377fda9ff03a31b13ba8a6adbad93bc6500f12da806746093db"
+    },
+    {
+      "name": "@esbuild/sunos-x64",
+      "version": "0.21.5",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/%40esbuild/sunos-x64@0.21.5",
+      "license": "MIT",
+      "hash": "sha256:4ad0af2f2195fa071e6f750d2c1978afac861dda4ab9351f2926978cf61aae1d"
+    },
+    {
+      "name": "@esbuild/win32-arm64",
+      "version": "0.21.5",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/%40esbuild/win32-arm64@0.21.5",
+      "license": "MIT",
+      "hash": "sha256:c297a4c27b9caf79d6145562910e6692ca10d40980e62d755d8f011672b8fce7"
+    },
+    {
+      "name": "@esbuild/win32-ia32",
+      "version": "0.21.5",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/%40esbuild/win32-ia32@0.21.5",
+      "license": "MIT",
+      "hash": "sha256:c71a16a3ea1f74dc07ec25213df2f58900df72d63a23ac31b6900f48c434dd47"
+    },
+    {
+      "name": "@esbuild/win32-x64",
+      "version": "0.21.5",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/%40esbuild/win32-x64@0.21.5",
+      "license": "MIT",
+      "hash": "sha256:5e5b1b4ef75a534ede17f519b7b9b35b1356f666393b6e5e3bff0320930cd3c2"
+    },
+    {
+      "name": "@rollup/rollup-android-arm-eabi",
+      "version": "4.62.0",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/%40rollup/rollup-android-arm-eabi@4.62.0",
+      "license": "MIT",
+      "hash": "sha256:f0caa0161e7ec58dc7e4b2fdf821552aa7d2d7a008540f057c41bea6dbc365ac"
+    },
+    {
+      "name": "@rollup/rollup-android-arm64",
+      "version": "4.62.0",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/%40rollup/rollup-android-arm64@4.62.0",
+      "license": "MIT",
+      "hash": "sha256:3f969012d54e2625f0d2836f38de4d7bb06660c57bde6a3f2fbe4944e88d26dd"
+    },
+    {
+      "name": "@rollup/rollup-darwin-arm64",
+      "version": "4.62.0",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/%40rollup/rollup-darwin-arm64@4.62.0",
+      "license": "MIT",
+      "hash": "sha256:dd57e97bfc284399d1b5a6bcd3d0814333d87a6c1e66bf1204a3d205dc4a31a0"
+    },
+    {
+      "name": "@rollup/rollup-darwin-x64",
+      "version": "4.62.0",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/%40rollup/rollup-darwin-x64@4.62.0",
+      "license": "MIT",
+      "hash": "sha256:0339d34cb30e4dc009a4807b5605b308c0ff424fcf55edf7bc14b2cb7cb5cc69"
+    },
+    {
+      "name": "@rollup/rollup-freebsd-arm64",
+      "version": "4.62.0",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/%40rollup/rollup-freebsd-arm64@4.62.0",
+      "license": "MIT",
+      "hash": "sha256:12f937873ac0ea704d290e5508a4cb36ad9dd6093e315a3ec61f1e7865751c2b"
+    },
+    {
+      "name": "@rollup/rollup-freebsd-x64",
+      "version": "4.62.0",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/%40rollup/rollup-freebsd-x64@4.62.0",
+      "license": "MIT",
+      "hash": "sha256:f998666443e5ec9810299db1a996d765a53adbf7786bdcb5352752dde32db71a"
+    },
+    {
+      "name": "@rollup/rollup-linux-arm-gnueabihf",
+      "version": "4.62.0",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/%40rollup/rollup-linux-arm-gnueabihf@4.62.0",
+      "license": "MIT",
+      "hash": "sha256:c833b4c13911ddd812f9724c891e3f480ea71c3fffd1a76feed134bc908ce9d2"
+    },
+    {
+      "name": "@rollup/rollup-linux-arm-musleabihf",
+      "version": "4.62.0",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/%40rollup/rollup-linux-arm-musleabihf@4.62.0",
+      "license": "MIT",
+      "hash": "sha256:1298de5d5f47192e3edd02db7b30f8d18ca3aed40f8954fb27c307d6b05b522f"
+    },
+    {
+      "name": "@rollup/rollup-linux-arm64-gnu",
+      "version": "4.62.0",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/%40rollup/rollup-linux-arm64-gnu@4.62.0",
+      "license": "MIT",
+      "hash": "sha256:9cf5c7d6c790dee3384c1429ecb5dce3422dc0d4b2b944c5d5b265828119b139"
+    },
+    {
+      "name": "@rollup/rollup-linux-arm64-musl",
+      "version": "4.62.0",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/%40rollup/rollup-linux-arm64-musl@4.62.0",
+      "license": "MIT",
+      "hash": "sha256:8d8041416e102dd83fabee0bece0e619776e85c08fd33c009436633b6ee1b59e"
+    },
+    {
+      "name": "@rollup/rollup-linux-loong64-gnu",
+      "version": "4.62.0",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/%40rollup/rollup-linux-loong64-gnu@4.62.0",
+      "license": "MIT",
+      "hash": "sha256:096be71e782687541f1f66123a40cc0966c998703cff36598161b50a10cfd799"
+    },
+    {
+      "name": "@rollup/rollup-linux-loong64-musl",
+      "version": "4.62.0",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/%40rollup/rollup-linux-loong64-musl@4.62.0",
+      "license": "MIT",
+      "hash": "sha256:cf20a81014b01363092d73de5b73ff7e629bbbcbac4a9d2b552d857ce6c1e8db"
+    },
+    {
+      "name": "@rollup/rollup-linux-ppc64-gnu",
+      "version": "4.62.0",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/%40rollup/rollup-linux-ppc64-gnu@4.62.0",
+      "license": "MIT",
+      "hash": "sha256:3ce42d9ee9a710163d0e38b2308ef84cee16d3e4524e4e1edff96fd26ffe96d5"
+    },
+    {
+      "name": "@rollup/rollup-linux-ppc64-musl",
+      "version": "4.62.0",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/%40rollup/rollup-linux-ppc64-musl@4.62.0",
+      "license": "MIT",
+      "hash": "sha256:0b8c8b1b82d3cf75fbf684a1efdb8b0142cba974dc33bea8695327d6fc787e4f"
+    },
+    {
+      "name": "@rollup/rollup-linux-riscv64-gnu",
+      "version": "4.62.0",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/%40rollup/rollup-linux-riscv64-gnu@4.62.0",
+      "license": "MIT",
+      "hash": "sha256:1b0295692e4c373b79ff34016c33b706ffc5fcbdcab5a580327e6ae875271603"
+    },
+    {
+      "name": "@rollup/rollup-linux-riscv64-musl",
+      "version": "4.62.0",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/%40rollup/rollup-linux-riscv64-musl@4.62.0",
+      "license": "MIT",
+      "hash": "sha256:e4d4273c42cc3d3fea26708fa5cfeb997f6cb60db349c271406233bbc2e607ab"
+    },
+    {
+      "name": "@rollup/rollup-linux-s390x-gnu",
+      "version": "4.62.0",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/%40rollup/rollup-linux-s390x-gnu@4.62.0",
+      "license": "MIT",
+      "hash": "sha256:59059920f4571e53761cc8fe520c7a7904d7c41ebfbd589833a82d79196a4d4c"
+    },
+    {
+      "name": "@rollup/rollup-linux-x64-gnu",
+      "version": "4.62.0",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/%40rollup/rollup-linux-x64-gnu@4.62.0",
+      "license": "MIT",
+      "hash": "sha256:9aa10e970c812caccca12da7ddbdc6f414ff9ae8dbd2826e883c982581c9ea81"
+    },
+    {
+      "name": "@rollup/rollup-linux-x64-musl",
+      "version": "4.62.0",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/%40rollup/rollup-linux-x64-musl@4.62.0",
+      "license": "MIT",
+      "hash": "sha256:a70e7555dd2e7b190b49f4a7fc2a32fb76dc6262859bb2ce5f26f0cf0deef7e5"
+    },
+    {
+      "name": "@rollup/rollup-openbsd-x64",
+      "version": "4.62.0",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/%40rollup/rollup-openbsd-x64@4.62.0",
+      "license": "MIT",
+      "hash": "sha256:93a264a98ae2f3bdbdcdc42d2fc1b71ce1ce499b1793364472b451b51f900094"
+    },
+    {
+      "name": "@rollup/rollup-openharmony-arm64",
+      "version": "4.62.0",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/%40rollup/rollup-openharmony-arm64@4.62.0",
+      "license": "MIT",
+      "hash": "sha256:ce6b9668597c896d9c044fb4cc732089ce01aa74f6723183a9a6fe7f53bedcbf"
+    },
+    {
+      "name": "@rollup/rollup-win32-arm64-msvc",
+      "version": "4.62.0",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/%40rollup/rollup-win32-arm64-msvc@4.62.0",
+      "license": "MIT",
+      "hash": "sha256:97385604f3e76dc7bdca28b787847f476938bcf5b1c3b05dad329b093d9e9e8e"
+    },
+    {
+      "name": "@rollup/rollup-win32-ia32-msvc",
+      "version": "4.62.0",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/%40rollup/rollup-win32-ia32-msvc@4.62.0",
+      "license": "MIT",
+      "hash": "sha256:313ce36096c9af955e9f43f054d8524f86e4a218b9928af4db44b645cf3369e1"
+    },
+    {
+      "name": "@rollup/rollup-win32-x64-gnu",
+      "version": "4.62.0",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/%40rollup/rollup-win32-x64-gnu@4.62.0",
+      "license": "MIT",
+      "hash": "sha256:52f7557dd65b362ce11da0a77cbc56f43386e68f96a30b75fc92cd8caac2c149"
+    },
+    {
+      "name": "@rollup/rollup-win32-x64-msvc",
+      "version": "4.62.0",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/%40rollup/rollup-win32-x64-msvc@4.62.0",
+      "license": "MIT",
+      "hash": "sha256:665a3df53fa5265d89960e90b26d758a72fe496207180fa739493231cf1d843c"
+    },
+    {
+      "name": "@types/estree",
+      "version": "1.0.9",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/%40types/estree@1.0.9",
+      "license": "MIT",
+      "hash": "sha256:ec29746adee7d0f372e85339ec5a10d6846e5350fdb22b06cb1173faff855895"
+    },
+    {
+      "name": "esbuild",
+      "version": "0.21.5",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/esbuild@0.21.5",
+      "license": "MIT",
+      "hash": "sha256:cefd1ac86a8b721d6fd416ad54c1d74673318a51bff3dd3f5880cabe92609c51"
+    },
+    {
+      "name": "fsevents",
+      "version": "2.3.3",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/fsevents@2.3.3",
+      "license": "MIT",
+      "hash": "sha256:6dbcd7937292cf95f50060d84e939399761f0f5c7b72bdc227c8db455a0fe7c8"
+    },
+    {
+      "name": "nanoid",
+      "version": "3.3.12",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/nanoid@3.3.12",
+      "license": "MIT",
+      "hash": "sha256:a27ab0180b73fb5ba2d127f04a8af0319f02aa6fe622d49880d6aac17df7b259"
+    },
+    {
+      "name": "picocolors",
+      "version": "1.1.1",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/picocolors@1.1.1",
+      "license": "ISC",
+      "hash": "sha256:7c5f372425355293c448d7405cb3b0a1fe19402bd0298caae8e341077624f0b7"
+    },
+    {
+      "name": "postcss",
+      "version": "8.5.15",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/postcss@8.5.15",
+      "license": "MIT",
+      "hash": "sha256:9fa510b284f5298280b52f39f235bb92b9876815d402e153f8dce5b31883881f"
+    },
+    {
+      "name": "rollup",
+      "version": "4.62.0",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/rollup@4.62.0",
+      "license": "MIT",
+      "hash": "sha256:ebadd00723f7e7687a369bf7c9591bd10aa7f7d05b0b0ba9345da6fc7356e2ce"
+    },
+    {
+      "name": "source-map-js",
+      "version": "1.2.1",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/source-map-js@1.2.1",
+      "license": "BSD-3-Clause",
+      "hash": "sha256:43b6dddbe93e9eda8497329846ea58901c0532efb392c5a93eda7a8bc0a0aeef"
+    },
+    {
+      "name": "vite",
+      "version": "5.4.21",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/vite@5.4.21",
+      "license": "MIT",
+      "hash": "sha256:e17b475f1f0d04bfc1eb4a6043ada507e6c22baaf9562f20e0be7b6883aad025"
+    },
+    {
+      "name": "fastapi",
+      "version": "0.115.0",
       "ecosystem": "pypi",
-      "purl": "pkg:pypi/asgiref@3.9.1",
+      "purl": "pkg:pypi/fastapi@0.115.0",
       "license": "NOASSERTION",
-      "hash": "sha256:a56d89a792af1fc4883b48b2c2b5efe18badb1f818cb2bf80f823dad9a7d7b1b"
+      "hash": "sha256:c6baad8c51010599ba19205d731de2c3124ac4a97957c6a0e4de42fee1ceb3e2"
     },
     {
-      "name": "sqlparse",
-      "version": "0.5.0",
-      "ecosystem": "pypi",
-      "purl": "pkg:pypi/sqlparse@0.5.0",
-      "license": "NOASSERTION",
-      "hash": "sha256:c5c0e1d5fc0aaa465c62caf0d737ca06d2451580df0c100f48ebc836f36c3acc"
-    },
-    {
-      "name": "tzdata;",
+      "name": "uvicorn",
       "version": "",
       "ecosystem": "pypi",
-      "purl": "pkg:pypi/tzdata%3b",
+      "purl": "pkg:pypi/uvicorn",
       "license": "NOASSERTION",
-      "hash": "sha256:4e3e654e01f66fc41f589f32eb5bbc0622dcae55b2d984f309971c43564b7eba"
+      "hash": "sha256:68d930025213ffb787a2222fca9f71a5525fab1085641d6835ad0790e87e8ed9"
+    },
+    {
+      "name": "sqlalchemy",
+      "version": "2.0.35",
+      "ecosystem": "pypi",
+      "purl": "pkg:pypi/sqlalchemy@2.0.35",
+      "license": "NOASSERTION",
+      "hash": "sha256:89d6cc6bf96f3f43caa1da4af2613b322675ded394513b23ce299da2d25733ab"
+    },
+    {
+      "name": "psycopg2-binary",
+      "version": "2.9.9",
+      "ecosystem": "pypi",
+      "purl": "pkg:pypi/psycopg2-binary@2.9.9",
+      "license": "NOASSERTION",
+      "hash": "sha256:91b3962aa09fe9b062f82662f415d241ef6dc8e75745a576fb89a88583761be2"
+    },
+    {
+      "name": "pydantic",
+      "version": "2.9.2",
+      "ecosystem": "pypi",
+      "purl": "pkg:pypi/pydantic@2.9.2",
+      "license": "NOASSERTION",
+      "hash": "sha256:9cd20e964651501417a96a29d034439c2ffce8be1e124eeec0069ea7f847f4d2"
+    },
+    {
+      "name": "pydantic-settings",
+      "version": "2.5.2",
+      "ecosystem": "pypi",
+      "purl": "pkg:pypi/pydantic-settings@2.5.2",
+      "license": "NOASSERTION",
+      "hash": "sha256:3a2db25613b4849c19ed306e7e6b85b948ff32f0ebc05eb36911eb838425816b"
+    },
+    {
+      "name": "httpx",
+      "version": "0.27.2",
+      "ecosystem": "pypi",
+      "purl": "pkg:pypi/httpx@0.27.2",
+      "license": "NOASSERTION",
+      "hash": "sha256:fb811396665c134422fc823cbae124fe9fd1936d38ec4c1fc1624dec1332ca8b"
+    },
+    {
+      "name": "python-dotenv",
+      "version": "1.0.1",
+      "ecosystem": "pypi",
+      "purl": "pkg:pypi/python-dotenv@1.0.1",
+      "license": "NOASSERTION",
+      "hash": "sha256:806af94b1a7a28277fa4243003a72837cc41c8b111ce2e45f0d72f60d9fa6c96"
+    },
+    {
+      "name": "gunicorn",
+      "version": "23.0.0",
+      "ecosystem": "pypi",
+      "purl": "pkg:pypi/gunicorn@23.0.0",
+      "license": "NOASSERTION",
+      "hash": "sha256:bfc46c7d38e9160219657f96ae38c341ed2062a19ac7ff2a58a1eab12f243cff"
     }
   ]
 }

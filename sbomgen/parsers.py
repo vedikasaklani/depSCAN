@@ -5,25 +5,33 @@ from pathlib import Path
 
 from sbomgen.purl_utils import build_purl
 from sbomgen.hash_utils import make_component_hash
+from sbomgen.detector import ECOSYSTEM_FILE_MAP
 
 
 def parse_all(folder: Path, ecosystems: list[str]) -> list[dict]:
-    """Run all parsers for detected ecosystems and return a deduplicated component list."""
-    all_components = []
-    seen = set()
+    components = []
 
-    for ecosystem in ecosystems:
-        parser_fn = PARSER_MAP.get(ecosystem)
-        if parser_fn:
-            components = parser_fn(folder)
-            for comp in components:
-                # Skip if we already have this exact name+version+ecosystem combo
-                dedup_key = f"{comp['name']}@{comp['version']}@{comp['ecosystem']}"
-                if dedup_key not in seen:
-                    seen.add(dedup_key)
-                    all_components.append(comp)
+    visited_dirs = set()
 
-    return all_components
+    for filename, ecosystem in ECOSYSTEM_FILE_MAP.items():
+
+        if ecosystem not in ecosystems:
+            continue
+
+        for file_path in folder.rglob(filename):
+
+            parent_dir = file_path.parent
+
+            if (ecosystem, parent_dir) in visited_dirs:
+                continue
+
+            parser = PARSER_MAP.get(ecosystem)
+
+            if parser:
+                components.extend(parser(parent_dir))
+                visited_dirs.add((ecosystem, parent_dir))
+
+    return components
 
 
 def _make_component(name: str, version: str, ecosystem: str,

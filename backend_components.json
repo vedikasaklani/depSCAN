@@ -1,0 +1,84 @@
+{
+  "project_name": "backend",
+  "detected_ecosystems": [
+    "python"
+  ],
+  "frontend": "Unknown",
+  "backend": "FastAPI",
+  "database": "PostgreSQL",
+  "component_count": 9,
+  "components": [
+    {
+      "name": "fastapi",
+      "version": "0.115.0",
+      "ecosystem": "pypi",
+      "purl": "pkg:pypi/fastapi@0.115.0",
+      "license": "NOASSERTION",
+      "hash": "sha256:c6baad8c51010599ba19205d731de2c3124ac4a97957c6a0e4de42fee1ceb3e2"
+    },
+    {
+      "name": "uvicorn",
+      "version": "",
+      "ecosystem": "pypi",
+      "purl": "pkg:pypi/uvicorn",
+      "license": "NOASSERTION",
+      "hash": "sha256:68d930025213ffb787a2222fca9f71a5525fab1085641d6835ad0790e87e8ed9"
+    },
+    {
+      "name": "sqlalchemy",
+      "version": "2.0.35",
+      "ecosystem": "pypi",
+      "purl": "pkg:pypi/sqlalchemy@2.0.35",
+      "license": "NOASSERTION",
+      "hash": "sha256:89d6cc6bf96f3f43caa1da4af2613b322675ded394513b23ce299da2d25733ab"
+    },
+    {
+      "name": "psycopg2-binary",
+      "version": "2.9.9",
+      "ecosystem": "pypi",
+      "purl": "pkg:pypi/psycopg2-binary@2.9.9",
+      "license": "NOASSERTION",
+      "hash": "sha256:91b3962aa09fe9b062f82662f415d241ef6dc8e75745a576fb89a88583761be2"
+    },
+    {
+      "name": "pydantic",
+      "version": "2.9.2",
+      "ecosystem": "pypi",
+      "purl": "pkg:pypi/pydantic@2.9.2",
+      "license": "NOASSERTION",
+      "hash": "sha256:9cd20e964651501417a96a29d034439c2ffce8be1e124eeec0069ea7f847f4d2"
+    },
+    {
+      "name": "pydantic-settings",
+      "version": "2.5.2",
+      "ecosystem": "pypi",
+      "purl": "pkg:pypi/pydantic-settings@2.5.2",
+      "license": "NOASSERTION",
+      "hash": "sha256:3a2db25613b4849c19ed306e7e6b85b948ff32f0ebc05eb36911eb838425816b"
+    },
+    {
+      "name": "httpx",
+      "version": "0.27.2",
+      "ecosystem": "pypi",
+      "purl": "pkg:pypi/httpx@0.27.2",
+      "license": "NOASSERTION",
+      "hash": "sha256:fb811396665c134422fc823cbae124fe9fd1936d38ec4c1fc1624dec1332ca8b"
+    },
+    {
+      "name": "python-dotenv",
+      "version": "1.0.1",
+      "ecosystem": "pypi",
+      "purl": "pkg:pypi/python-dotenv@1.0.1",
+      "license": "NOASSERTION",
+      "hash": "sha256:806af94b1a7a28277fa4243003a72837cc41c8b111ce2e45f0d72f60d9fa6c96"
+    },
+    {
+      "name": "gunicorn",
+      "version": "23.0.0",
+      "ecosystem": "pypi",
+      "purl": "pkg:pypi/gunicorn@23.0.0",
+      "license": "NOASSERTION",
+      "hash": "sha256:bfc46c7d38e9160219657f96ae38c341ed2062a19ac7ff2a58a1eab12f243cff"
+    }
+  ]
+}
