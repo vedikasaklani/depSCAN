@@ -15,7 +15,7 @@ function getSupplierName(component) {
   return component?.supplier?.name;
 }
 
-function buildNtiaChecks(meta, components) {
+export function buildNtiaChecks(meta, components) {
   const hasSupplier = (component) =>
     Boolean(getSupplierName(component)?.trim()) ||
     getSupplierName(component) === "NOASSERTION";

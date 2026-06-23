@@ -85,7 +85,6 @@ async function fetchCollectionWithSbomFallback(sbomId, collectionPath, getEmbedd
     const collectionData = await apiFetch(collectionPath);
     if (hasItems(collectionData)) return collectionData;
   } catch {
-    // Fall through to the embedded SBOM document.
   }
 
   const sbom = await fetchSbom(sbomId);
@@ -155,31 +154,7 @@ export async function fetchVulns(sbomId) {
 }
 
 export async function fetchCompliance(sbomId) {
-  if (!sbomId) {
-    throw new Error("fetchCompliance requires an sbomId");
-  }
-
-  const [sbom, components, dependencies, vulns] = await Promise.all([
-    fetchSbom(sbomId),
-    fetchComponents(sbomId),
-    fetchDependencies(sbomId),
-    fetchVulns(sbomId),
-  ]);
-
-  return {
-    projectMeta: {
-      projectName: sbom.project ?? sbom.metadata?.component?.name,
-      author: "depSCAN Team",
-      timestamp: sbom.uploaded_at ?? sbom.metadata?.timestamp,
-      complianceScore: 88,
-      compliancePercentage: 88,
-      totalComponents: components.length,
-      totalDependencies: dependencies.length,
-      totalVulnerabilities: vulns.length,
-    },
-    components,
-    dependencies,
-  };
+  return apiFetch(`/sbom/compliance/${sbomId}`);
 }
 
 export async function fetchProjectHistory(projectName) {
