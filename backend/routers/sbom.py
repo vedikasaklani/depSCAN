@@ -1,15 +1,13 @@
 from fastapi import APIRouter
 from backend.database import db
-from datetime import datetime
+from datetime import datetime, timezone
 
 router = APIRouter(prefix="/sbom", tags=["SBOM"])
 
 
 @router.post("/upload")
 def upload_sbom(data: dict):
-
-    data["uploaded_at"] = datetime.utcnow().isoformat()
-
+    data["uploaded_at"] = datetime.now(timezone.utc).isoformat()
     project_name = (
         data.get("metadata", {})
         .get("component", {})
@@ -227,7 +225,6 @@ def get_summary(sbom_id: str):
         "timestamp": sbom.get("uploaded_at")
     }
 
-
 @router.get("/compliance/{sbom_id}")
 def get_compliance(sbom_id: str):
 
@@ -252,23 +249,132 @@ def get_compliance(sbom_id: str):
         )
     )
 
+    total_dependencies = db.dependency_edges.count_documents(
+        {"sbom_id": sbom_id}
+    )
+
+    metadata = sbom.get("metadata", {})
+    timestamp_present = bool(metadata.get("timestamp"))
+    authors = metadata.get("authors") or []
+    author_declared = len(authors) > 0
+    author_name = (
+        authors[0].get("name")
+        if author_declared and isinstance(authors[0], dict)
+        else (authors[0] if author_declared else None)
+    )
+
+    all_have_supplier = all(c.get("supplier") for c in components) if components else False
+    all_named = all(c.get("name") for c in components) if components else False
+
+    def is_pinned(version):
+        if not version:
+            return False
+        return not any(ch in version for ch in ["^", "~", ">", "<", "*", "x"])
+
+    all_versions_pinned = all(is_pinned(c.get("version")) for c in components) if components else False
+    all_purls_present = all(c.get("purl") for c in components) if components else False
+    dependency_graph_exists = total_dependencies > 0
+
+    checks = [
+        {
+            "id": "timestamp",
+            "label": "Timestamp present",
+            "field": "metadata.timestamp",
+            "ntiaElement": 7,
+            "passCondition": "ISO 8601 with timezone",
+            "passed": timestamp_present,
+        },
+        {
+            "id": "author",
+            "label": "Author declared",
+            "field": "metadata.authors",
+            "ntiaElement": 6,
+            "passCondition": "At least one entry",
+            "passed": author_declared,
+        },
+        {
+            "id": "supplier",
+            "label": "All components have supplier",
+            "field": "components[*].supplier",
+            "ntiaElement": 1,
+            "passCondition": "Present or NOASSERTION",
+            "passed": all_have_supplier,
+        },
+        {
+            "id": "named",
+            "label": "All components named",
+            "field": "components[*].name",
+            "ntiaElement": 2,
+            "passCondition": "Non-empty string",
+            "passed": all_named,
+        },
+        {
+            "id": "versions_pinned",
+            "label": "All versions pinned",
+            "field": "components[*].version",
+            "ntiaElement": 3,
+            "passCondition": "Exact version, no ranges",
+            "passed": all_versions_pinned,
+        },
+        {
+            "id": "purls",
+            "label": "All PURLs present",
+            "field": "components[*].purl",
+            "ntiaElement": 4,
+            "passCondition": "Valid PURL format",
+            "passed": all_purls_present,
+        },
+        {
+            "id": "dependency_graph",
+            "label": "Dependency graph exists",
+            "field": "dependencies",
+            "ntiaElement": 5,
+            "passCondition": "Non-empty, root component present",
+            "passed": dependency_graph_exists,
+        },
+        {
+            "id": "machine_readable",
+            "label": "Machine-readable format",
+            "field": "file format",
+            "ntiaElement": "Operational",
+            "passCondition": "JSON or XML, not PDF",
+            "passed": True,
+        },
+    ]
+
+    total_checks = len(checks)
+    passed_checks = sum(1 for c in checks if c["passed"])
+    compliance_percentage = (
+        round((passed_checks / total_checks) * 100) if total_checks else 0
+    )
+
+    components_out = []
+    for c in components:
+        is_pass = bool(
+            c.get("name") and c.get("version") and c.get("purl") and c.get("supplier")
+        )
+        components_out.append({
+            **c,
+            "status": "pass" if is_pass else "review",
+        })
+
     return {
         "projectMeta": {
             "projectName": sbom.get("project"),
-            "author": "depSCAN Team",
-            "timestamp": sbom.get("uploaded_at"),
-            "complianceScore": 88,
-            "compliancePercentage": 88,
+            "author": author_name or "Not declared",
+            "timestamp": metadata.get("timestamp") or sbom.get("uploaded_at"),
+            "complianceScore": compliance_percentage,
+            "compliancePercentage": compliance_percentage,
             "totalComponents": len(components),
-            "totalDependencies": 0,
-            "totalVulnerabilities": len(vulns)
+            "totalDependencies": total_dependencies,
+            "totalVulnerabilities": len(vulns),
+            "totalChecks": total_checks,
+            "passedChecks": passed_checks,
         },
-        "components": components,
-        "dependencies": []
+        "checks": checks,
+        "components": components_out,
+        "dependencies": [],
     }
-
-
-
 
 @router.post("/vulns/add")
 def add_vuln(data: dict):

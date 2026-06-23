@@ -1,0 +1,181 @@
+{
+  "project_name": "tmp00zy0ckf",
+  "detected_ecosystems": [
+    "node",
+    "docker"
+  ],
+  "frontend": "Unknown",
+  "backend": "Express.js",
+  "database": "MySQL",
+  "component_count": 21,
+  "components": [
+    {
+      "name": "bcrypt",
+      "version": "1.0.3",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/bcrypt@1.0.3",
+      "license": "NOASSERTION",
+      "hash": "sha256:707117d06eb8e0bcdab808930d8c02fc8e2d470d9755fefe7da436bf63bf1e4a"
+    },
+    {
+      "name": "csurf",
+      "version": "1.9.0",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/csurf@1.9.0",
+      "license": "NOASSERTION",
+      "hash": "sha256:ae4e45119fe044cbfe0a2c4bf32156a86369d8fb28b515beb19bfe079014f3b5"
+    },
+    {
+      "name": "ejs",
+      "version": "2.5.7",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/ejs@2.5.7",
+      "license": "NOASSERTION",
+      "hash": "sha256:079211456f21dbfa49478a20314647cf95e6552b28b9460380bbfc8dbb93dead"
+    },
+    {
+      "name": "express",
+      "version": "4.16.2",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/express@4.16.2",
+      "license": "NOASSERTION",
+      "hash": "sha256:4da65d2fcc063d76242e571810293d06977b2ba4621f35d26f0f08c0078c22b1"
+    },
+    {
+      "name": "express-fileupload",
+      "version": "0.4.0",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/express-fileupload@0.4.0",
+      "license": "NOASSERTION",
+      "hash": "sha256:6a3404f5d8d295cb433a21a241e65517985ed91fd2274f87ec3f6384db30c61d"
+    },
+    {
+      "name": "express-flash",
+      "version": "0.0.2",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/express-flash@0.0.2",
+      "license": "NOASSERTION",
+      "hash": "sha256:92e1d186bde0c234707925e6d4315ba66364fae4a3cd047a79dbceabe435b766"
+    },
+    {
+      "name": "express-session",
+      "version": "1.15.6",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/express-session@1.15.6",
+      "license": "NOASSERTION",
+      "hash": "sha256:717220f8774a3bf3a1fde0111e47f710a7855338d6d05487b30ca3df3f70beed"
+    },
+    {
+      "name": "flash",
+      "version": "1.1.0",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/flash@1.1.0",
+      "license": "NOASSERTION",
+      "hash": "sha256:06f7d270ee61a9e3e2b62d5704246edc50abaa935cf3ef0a26f665751c819a5c"
+    },
+    {
+      "name": "libxmljs",
+      "version": "0.19.1",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/libxmljs@0.19.1",
+      "license": "NOASSERTION",
+      "hash": "sha256:0d0c20240b5e6c4a780673d15abc9f2d1dce830ae7100b63e240958b08547c04"
+    },
+    {
+      "name": "mathjs",
+      "version": "3.10.1",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/mathjs@3.10.1",
+      "license": "NOASSERTION",
+      "hash": "sha256:69af677c7710f310a4bdb732f2f4d768903e41bf76b82525d233051614c33300"
+    },
+    {
+      "name": "md5",
+      "version": "2.2.1",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/md5@2.2.1",
+      "license": "NOASSERTION",
+      "hash": "sha256:ce1b25b9f1df907c07fb1a889dddec9785ca40602fd268d91eb6539999221883"
+    },
+    {
+      "name": "morgan",
+      "version": "1.9.0",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/morgan@1.9.0",
+      "license": "NOASSERTION",
+      "hash": "sha256:bb3efb1c200b5ce1466c312a34c94c460035dfb2db4d1f90b6f49f46d4efd0d0"
+    },
+    {
+      "name": "mysql2",
+      "version": "1.4.2",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/mysql2@1.4.2",
+      "license": "NOASSERTION",
+      "hash": "sha256:8eb8779630f6902d29ce529a37653e18e262abbf96d594da53686f04695ddc7e"
+    },
+    {
+      "name": "node-serialize",
+      "version": "0.0.4",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/node-serialize@0.0.4",
+      "license": "NOASSERTION",
+      "hash": "sha256:a441b81f614e83f3720a34c46fde12e85161d0c3360da6191c1ad0ed4f784310"
+    },
+    {
+      "name": "passport",
+      "version": "0.4.0",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/passport@0.4.0",
+      "license": "NOASSERTION",
+      "hash": "sha256:75f700c31a14f38dcb2b4aeea0d476267a249ac35c7a6962702f8e1fef91ab09"
+    },
+    {
+      "name": "passport-local",
+      "version": "1.0.0",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/passport-local@1.0.0",
+      "license": "NOASSERTION",
+      "hash": "sha256:0fcebaff5b591b3ea21a01f6ab8a4127b3b4d19dadf6854fb3d4622a3cebf4c6"
+    },
+    {
+      "name": "sequelize",
+      "version": "4.13.10",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/sequelize@4.13.10",
+      "license": "NOASSERTION",
+      "hash": "sha256:c12e2912b07df766a1325e162b5a59a7e0bf5ba9325acfcf75d8701f24d46b6f"
+    },
+    {
+      "name": "winston",
+      "version": "3.0.0",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/winston@3.0.0",
+      "license": "NOASSERTION",
+      "hash": "sha256:6fd7360bc67753363e1ab819c03c9cd86713ef9a006b29bafde7c810dd57a04d"
+    },
+    {
+      "name": "x-xss-protection",
+      "version": "1.1.0",
+      "ecosystem": "npm",
+      "purl": "pkg:npm/x-xss-protection@1.1.0",
+      "license": "NOASSERTION",
+      "hash": "sha256:e368dde29152145a7ddf25f1ca1b1c8ca009f3d77bea2ab7d8801263a01c5fd5"
+    },
+    {
+      "name": "node",
+      "version": "carbon",
+      "ecosystem": "docker",
+      "purl": "pkg:docker/node@carbon",
+      "license": "NOASSERTION",
+      "hash": "sha256:67b0e8817213b169d9e96d054fe1abe58ec2be607986f3f1b15560f5acaf3fc5"
+    },
+    {
+      "name": "mysql",
+      "version": "5.7",
+      "ecosystem": "docker",
+      "purl": "pkg:docker/mysql@5.7",
+      "license": "NOASSERTION",
+      "hash": "sha256:3b7bf75b1f5f37c4f0a094314938507c2ed787e5421ee610b8e83fece83a433b"
+    }
+  ]
+}

@@ -31,7 +31,7 @@ def get_nvd_details(cve_id):
         "cveId": cve_id
     }
 
-    retries = 2
+    retries = 1
 
     for attempt in range(retries):
 
@@ -44,7 +44,7 @@ def get_nvd_details(cve_id):
                 BASE_URL,
                 headers=headers,
                 params=params,
-                timeout=10
+                timeout=5
             )
 
             # Success

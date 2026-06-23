@@ -165,7 +165,7 @@ console.log("DEPENDENCIES", depData);
         </>
       )}
       {activeTab === "compliance" && (
-        <ComplianceDashboard components={components} security={sbom} />
+        <ComplianceDashboard sbomId={id} components={components} />
       )}
       {activeTab === "dependencies" && (
         <DependencyGraph edges={edges} components={components} vulns={vulns} projectName={projectName} />

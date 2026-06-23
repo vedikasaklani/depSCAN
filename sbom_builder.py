@@ -342,7 +342,7 @@ if __name__ == "__main__":
     with open(args.input, "r") as f:
         scan_data = json.load(f)
 
-    project_name = scan_data.get("project_name", args.project)
+    project_name = args.project or scan_data.get("project_name", "demo-project")
     components_data = scan_data["components"]
 
     build_and_output_sbom(

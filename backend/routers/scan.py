@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 from backend.database import db
-from datetime import datetime
+from datetime import datetime, timezone
 
 import tempfile
 import subprocess
@@ -24,7 +24,7 @@ def start_scan(data: dict):
         "project_name": project_name,
         "repo_url": repo_url,
         "status": "queued",
-        "created_at": datetime.utcnow().isoformat()
+        "created_at": datetime.now(timezone.utc).isoformat()
     }
 
     result = db.scan_jobs.insert_one(scan_job)
@@ -53,9 +53,9 @@ def start_scan(data: dict):
             }
         )
 
-        # File paths
-        scanner_output = BASE_DIR / "parsed_components.json"
-        sbom_output = BASE_DIR / "sbom.cdx.json"
+        # File paths — unique per scan so concurrent/repeated scans don't clobber each other
+        scanner_output = BASE_DIR / f"parsed_components_{scan_id}.json"
+        sbom_output = BASE_DIR / f"sbom_{scan_id}.cdx.json"
 
         # Run scanner
         subprocess.run(
@@ -111,21 +111,65 @@ def start_scan(data: dict):
         response.raise_for_status()
 
         upload_result = response.json()
+        sbom_id = upload_result["id"]
 
         db.scan_jobs.update_one(
             {"_id": result.inserted_id},
             {
                 "$set": {
-                    "status": "completed",
-                    "sbom_id": upload_result["id"]
+                    "status": "uploaded",
+                    "sbom_id": sbom_id
                 }
             }
         )
 
+        # ---------------------------------------------------------
+        # Vulnerability enrichment (OSV + NVD)
+        # ---------------------------------------------------------
+        print("\nStarting vulnerability enrichment...")
+
+        enrichment_root = str(BASE_DIR / "vuln-enrichment")
+        if enrichment_root not in sys.path:
+            sys.path.insert(0, enrichment_root)
+
+        from services.enricher import enrich_component
+
+        components = list(db.components.find({"sbom_id": sbom_id}, {"_id": 0}))
+        db.vulns.delete_many({"sbom_id": sbom_id})
+
+        vuln_count = 0
+        for component in components:
+            if not component.get("purl"):
+                print(f"Skipping {component.get('name')}: missing purl")
+                continue
+
+            enriched = enrich_component(component, sbom_id)
+
+            for vuln in enriched.get("vulnerabilities", []):
+                db.vulns.insert_one({
+                    "sbom_id": sbom_id,
+                    "component_name": component.get("name"),
+                    "component_version": component.get("version"),
+                    "purl": component.get("purl"),
+                    "cve_id": vuln.get("cve_id"),
+                    "severity": vuln.get("severity"),
+                    "cvss_score": vuln.get("cvss_score"),
+                    "summary": vuln.get("summary"),
+                })
+                vuln_count += 1
+
+        print(f"\nEnrichment completed. Stored {vuln_count} vulnerabilities.")
+
+        db.scan_jobs.update_one(
+            {"_id": result.inserted_id},
+            {"$set": {"status": "completed"}}
+        )
+
         return {
             "scan_id": scan_id,
-            "sbom_id": upload_result["id"],
-            "status": "completed"
+            "sbom_id": sbom_id,
+            "status": "completed",
+            "vulnerabilities_found": vuln_count
         }
 
     except Exception as e:
