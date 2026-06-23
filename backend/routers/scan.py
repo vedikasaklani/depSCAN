@@ -7,6 +7,7 @@ import subprocess
 import requests
 import json
 import sys
+import shutil
 
 from pathlib import Path
 
@@ -53,9 +54,10 @@ def start_scan(data: dict):
             }
         )
 
-        # File paths — unique per scan so concurrent/repeated scans don't clobber each other
-        scanner_output = BASE_DIR / f"parsed_components_{scan_id}.json"
-        sbom_output = BASE_DIR / f"sbom_{scan_id}.cdx.json"
+        # Create temp directory for intermediate scan outputs (auto-cleanup)
+        work_dir = tempfile.mkdtemp()
+        scanner_output = Path(work_dir) / "parsed_components.json"
+        sbom_output = Path(work_dir) / "sbom.cdx.json"
 
         # Run scanner
         subprocess.run(
@@ -165,6 +167,10 @@ def start_scan(data: dict):
             {"$set": {"status": "completed"}}
         )
 
+        # Cleanup temporary directories
+        shutil.rmtree(temp_dir, ignore_errors=True)
+        shutil.rmtree(work_dir, ignore_errors=True)
+
         return {
             "scan_id": scan_id,
             "sbom_id": sbom_id,
@@ -183,5 +189,10 @@ def start_scan(data: dict):
                 }
             }
         )
+
+        # Cleanup temporary directories on error
+        shutil.rmtree(temp_dir, ignore_errors=True)
+        if 'work_dir' in locals():
+            shutil.rmtree(work_dir, ignore_errors=True)
 
         raise e
