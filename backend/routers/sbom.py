@@ -1,6 +1,7 @@
 from fastapi import APIRouter
 from backend.database import db
 from datetime import datetime, timezone
+from packageurl import PackageURL
 
 router = APIRouter(prefix="/sbom", tags=["SBOM"])
 
@@ -37,24 +38,34 @@ def upload_sbom(data: dict):
     components = data.get("components", [])
 
     for comp in components:
+        # try to parse PURL to infer ecosystem (type)
+        purl_str = comp.get("purl")
+        ecosystem = None
+        if purl_str:
+            try:
+                parsed = PackageURL.from_string(purl_str)
+                ecosystem = parsed.type
+            except Exception:
+                ecosystem = None
 
-            db.components.insert_one({
-                "sbom_id": scan_id,
-                "name": comp.get("name"),
-                "version": comp.get("version"),
-                "purl": comp.get("purl"),
-                "supplier": (
-                    comp.get("supplier", {})
-                    .get("name")
-                ),
-                "license": (
-                    comp["licenses"][0]
-                    .get("license", {})
-                    .get("id")
-                    if comp.get("licenses")
-                    else None
-                )
-            })
+        db.components.insert_one({
+            "sbom_id": scan_id,
+            "name": comp.get("name"),
+            "version": comp.get("version"),
+            "purl": purl_str,
+            "ecosystem": ecosystem,
+            "supplier": (
+                comp.get("supplier", {})
+                .get("name")
+            ),
+            "license": (
+                comp["licenses"][0]
+                .get("license", {})
+                .get("id")
+                if comp.get("licenses")
+                else None
+            )
+        })
 
     #added today
     dependencies = data.get("dependencies", [])

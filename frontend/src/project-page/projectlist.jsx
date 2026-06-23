@@ -7,7 +7,7 @@ import VulnTable from "./VulnTable.jsx";
 import StatsBar from "./StatsBar.jsx";
 import NewScanModal from "./NewScanModal.jsx";
 import NtiaOverview from "./NtiaOverview.jsx";
-import { fetchAllScans, fetchComponents, fetchVulns, fetchProjectHistory, uploadSBOM } from "../api/api.js";
+import { fetchAllScans, fetchComponents, fetchVulns, fetchProjectHistory } from "../api/api.js";
 async function normalizeScans(history, projectId) {
 
     return Promise.all(
@@ -26,22 +26,82 @@ async function normalizeScans(history, projectId) {
                 low: 0,
             };
 
+            // map component purl/name -> ecosystem
+            const compByPurl = new Map();
+            const compByName = new Map();
+            components.forEach(c => {
+                const eco = c.ecosystem || c.ecosystem || "unknown";
+                if (c.purl) compByPurl.set(c.purl, eco);
+                if (c.name) compByName.set(c.name, eco);
+            });
+
+            // ecosystems aggregation: { ecosystem: { critical, high, medium, low, none, components } }
+            const ecosystems = {};
+
+            // initialize ecosystems from components
+            components.forEach(c => {
+                const eco = c.ecosystem || c.ecosystem || "unknown";
+                if (!ecosystems[eco]) ecosystems[eco] = { critical: 0, high: 0, medium: 0, low: 0, none: 0, components: 0 };
+                ecosystems[eco].components++;
+            });
+
+            // count vulnerabilities per ecosystem
             vulns.forEach(v => {
-                switch ((v.severity || "").toUpperCase()) {
+                const sev = (v.severity || "").toUpperCase();
+                let eco = null;
+                if (v.purl && compByPurl.has(v.purl)) eco = compByPurl.get(v.purl);
+                else if (v.component_name && compByName.has(v.component_name)) eco = compByName.get(v.component_name);
+                else eco = "unknown";
+
+                if (!ecosystems[eco]) ecosystems[eco] = { critical: 0, high: 0, medium: 0, low: 0, none: 0, components: 0 };
+
+                switch (sev) {
                     case "CRITICAL":
+                        ecosystems[eco].critical++;
                         severityCounts.critical++;
                         break;
                     case "HIGH":
+                        ecosystems[eco].high++;
                         severityCounts.high++;
                         break;
                     case "MEDIUM":
+                        ecosystems[eco].medium++;
                         severityCounts.medium++;
                         break;
                     case "LOW":
+                        ecosystems[eco].low++;
                         severityCounts.low++;
+                        break;
+                    default:
                         break;
                 }
             });
+
+            // compute 'none' (components with no vulns) per ecosystem
+            // build map of component purl/name -> vuln count
+            const vulnCountsByComp = new Map();
+            vulns.forEach(v => {
+                const key = v.purl || v.component_name || JSON.stringify({ id: v.id });
+                vulnCountsByComp.set(key, (vulnCountsByComp.get(key) || 0) + 1);
+            });
+
+            components.forEach(c => {
+                const key = c.purl || c.name;
+                const eco = c.ecosystem || c.ecosystem || "unknown";
+                if (!ecosystems[eco]) ecosystems[eco] = { critical: 0, high: 0, medium: 0, low: 0, none: 0, components: 0 };
+                if (!vulnCountsByComp.get(key)) ecosystems[eco].none++;
+            });
+
+            // convert ecosystems object into array suitable for chart
+            const ecosystemsArray = Object.keys(ecosystems).map(k => ({
+                ecosystem: k,
+                critical: ecosystems[k].critical,
+                high: ecosystems[k].high,
+                medium: ecosystems[k].medium,
+                low: ecosystems[k].low,
+                none: ecosystems[k].none,
+                components: ecosystems[k].components,
+            }));
 
             return {
                 id: scan.sbom_id,
@@ -57,7 +117,7 @@ async function normalizeScans(history, projectId) {
 
                 progress: "Complete",
 
-                ecosystems: []
+                ecosystems: ecosystemsArray
             };
         })
     );
@@ -124,22 +184,8 @@ function Projectpage() {
 
     const handleScanSubmit = async (scanConfig) => {
         try {
-            const sbomPayload = {
-                bomFormat: "CycloneDX",
-                specVersion: "1.4",
-                metadata: {
-                    timestamp: new Date().toISOString(),
-                    component: { name: scanConfig.projectName },
-                },
-                properties: [
-                    { name: "source", value: scanConfig.source },
-                    { name: "branch", value: scanConfig.branch },
-                    { name: "scanType", value: scanConfig.scanType },
-                ],
-                components: [],
-            };
-            await uploadSBOM(sbomPayload);
-
+            // The scan was already executed and uploaded by NewScanModal's startScan()
+            // Just refresh the project history to show the new scan
             const history = await fetchProjectHistory(
                 selectedProject.name
             );
@@ -150,7 +196,7 @@ function Projectpage() {
 
             setProjectScans(scans);
         } catch (err) {
-            console.error("Upload failed:", err.message);
+            console.error("Failed to refresh scans:", err.message);
         }
     };
 
