@@ -284,6 +284,7 @@ body::after{
     border-radius: 0px;
     font-size: 13px;
     z-index: 0;
+    gap:0;
 }
 .remedy-item:hover, .vulnerability-card:hover{
     background-color: rgba(0, 255, 179, 0.06);
@@ -292,29 +293,37 @@ body::after{
 }
 .status-badge-new{
     font-family:"JetBrains Mono", monospace;
-    font-size: 12px;
+    font-size: 10px;
     font-weight:600;
     letter-spacing:0.05em;
     text-transform: uppercase;
     border-radius: 0px;
-    padding:0.1em 0.5em;
+    padding:0.3em 0.5em;
     background:transparent;
     border:1px solid var(--low);
     color:var(--low);
+    white-space: nowrap;
+    display: inline-block;
+    height: fit-content;
+    line-height: 1.2;
 }
 .status-badge-new::before{ content:"[ "; }
 .status-badge-new::after{ content:" ]"; }
 .status-badge-unfixed{
     font-family:"JetBrains Mono", monospace;
-    font-size: 12px;
+    font-size: 10px;
     font-weight:600;
     letter-spacing:0.05em;
     text-transform: uppercase;
     border-radius: 0px;
-    padding:0.1em 0.5em;
+    padding:0.3em 0.5em;
     background:rgba(255,59,92,0.08);
     border:1px solid var(--crit);
     color:var(--crit);
+    white-space: nowrap;
+    display: inline-block;
+    height: fit-content;
+    line-height: 1.2;
 }
 .status-badge-unfixed::before{ content:"[ "; }
 .status-badge-unfixed::after{ content:" ]"; }
