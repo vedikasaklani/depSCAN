@@ -69,10 +69,9 @@ async function normalizeScans(history, projectId) {
                         severityCounts.medium++;
                         break;
                     case "LOW":
+                    default:
                         ecosystems[eco].low++;
                         severityCounts.low++;
-                        break;
-                    default:
                         break;
                 }
             });
