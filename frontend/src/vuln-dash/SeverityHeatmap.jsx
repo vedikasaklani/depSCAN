@@ -12,7 +12,7 @@ export default function SeverityHeatmap({ groupedVulns }) {
     const componentMap = {};
     SEVERITIES.forEach((level) => {
         (groupedVulns[level] || []).forEach((vuln) => {
-            const name = vuln.component ?? vuln.package ?? "Unknown";
+            const name = vuln.component_name ?? "Unknown";
             if (!componentMap[name])
                 componentMap[name] = { critical: 0, high: 0, medium: 0, low: 0 };
             componentMap[name][level] += 1;
