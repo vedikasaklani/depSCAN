@@ -28,7 +28,7 @@ export default function SeverityHeatmap({ groupedVulns }) {
 
     if (components.length === 0) {
         return (
-            <section className="cardvuln heatmap" style={{ padding: "0.6rem" }}>
+            <section className="cardvuln app-surface heatmap" style={{ padding: "0.6rem" }}>
                 <h3 className="header-card">Severity Heatmap</h3>
                 <p style={{ color: "rgba(255,255,255,0.35)", fontSize: "0.88em", marginTop: "0.5em" }}>
                     No vulnerability data to display.
@@ -38,7 +38,7 @@ export default function SeverityHeatmap({ groupedVulns }) {
     }
 
     return (
-        <section className="cardvuln heatmap" style={{ padding: "0.6rem" }}>
+        <section className="cardvuln app-surface heatmap" style={{ padding: "0.6rem" }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                 <h3 className="header-card">Severity Heatmap</h3>
                 <span className="stat-label">Components: {components.length}</span>

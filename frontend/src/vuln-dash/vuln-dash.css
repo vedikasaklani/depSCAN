@@ -14,7 +14,7 @@
     padding:0;
     margin:0;
     box-sizing: border-box;
-    color:var(--textlight);
+    color:var(--app-text);
     font-family: "JetBrains Mono", monospace;
 }
 body{
@@ -878,4 +878,866 @@ body::after{
 .severity-low,
 .severity-unknown{
     color:var(--low);
+}
+
+/* Order list inspired dashboard skin, layered over the existing severity palette. */
+.vuln-dashboard {
+    --teal: var(--app-accent);
+    --textlight: var(--app-text);
+    --critical: var(--app-critical);
+    --crit: var(--app-critical);
+    --high: var(--app-high);
+    --medium: var(--app-medium);
+    --med: var(--app-medium);
+    --low: var(--app-low);
+    --dash-bg: var(--app-bg);
+    --dash-panel: var(--app-surface);
+    --dash-panel-raised: var(--app-surface-raised);
+    --dash-line: var(--app-line);
+    --dash-muted: var(--app-muted);
+    --dash-accent: var(--app-accent);
+    --dash-accent-wash: var(--app-accent-soft);
+    width: min(1440px, 100%);
+    min-height: 100vh;
+    margin: 0 auto;
+    padding: 1.5rem clamp(1rem, 3vw, 2.5rem) 3rem;
+    gap: 1.25rem;
+    color: var(--app-text);
+    font-family: var(--app-font);
+}
+
+.vuln-dashboard, .vuln-dashboard * {
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+body:has(.vuln-dashboard), body:has(.tab-loading) {
+    background-color: #111116;
+    background-image: none;
+}
+body:has(.vuln-dashboard)::after, body:has(.tab-loading)::after { content: none; }
+.tab-loading {
+    min-height: 100vh;
+    color: var(--app-muted);
+    font-family: var(--app-font);
+}
+
+.vuln-dashboard .icon {
+    position: static;
+    align-self: flex-start;
+    border: 1px solid var(--dash-line);
+    border-radius: 12px;
+    background: var(--dash-panel);
+    box-shadow: none;
+    padding: .55rem;
+    cursor: pointer;
+}
+.vuln-dashboard .icon svg { width: 1.2em; height: 1.2em; }
+
+.vuln-dashboard .dashboard-header {
+    width: 100%;
+    height: auto;
+    min-height: 82px;
+    align-self: stretch;
+    padding: 1.1rem 1.35rem;
+    border: 1px solid var(--dash-line);
+    border-radius: 18px;
+    background: var(--dash-panel);
+    gap: 1.5rem;
+}
+.vuln-dashboard .dashboard-header h1 {
+    color: var(--app-text-strong);
+    font-family: var(--app-font);
+    font-size: 1.35rem;
+    font-weight: 650;
+    letter-spacing: -.03em;
+    text-transform: none;
+}
+.vuln-dashboard .dashboard-header h1::after { content: none; }
+.vuln-dashboard .dashboard-header .header-meta {
+    flex-wrap: wrap;
+    gap: .4rem 1.1rem;
+    color: var(--dash-muted);
+    font-size: .78rem;
+    text-transform: none;
+    letter-spacing: 0;
+}
+.vuln-dashboard .dashboard-header .header-meta span {
+    color: #d8d5e5;
+    font-family: var(--app-font);
+    font-weight: 500;
+    letter-spacing: 0;
+}
+.vuln-dashboard .security-card {
+    width: auto;
+    gap: .55rem;
+}
+.vuln-dashboard .download-btn {
+    width: auto;
+    height: 38px;
+    margin: 0;
+    padding: 0 .8rem;
+    justify-content: center;
+    gap: .4rem;
+    color: #bce8e1;
+    border: 1px solid var(--dash-line);
+    border-radius: 11px;
+    background: var(--dash-panel-raised);
+}
+.vuln-dashboard .download-btn svg { fill: var(--dash-accent); }
+.vuln-dashboard .download-btn > p {
+    font-family: var(--app-font);
+    font-size: .75rem;
+    text-transform: none;
+    letter-spacing: 0;
+}
+.vuln-dashboard .download-btn:hover {
+    background: var(--dash-accent-wash);
+    border-color: rgba(67,185,173,.55);
+    color: white;
+}
+.vuln-dashboard .download-btn:hover * { color: white; }
+
+.vuln-dashboard .dash-tabs {
+    display: flex;
+    width: 100%;
+    align-self: stretch;
+    align-items: flex-end;
+    gap: .4rem;
+    padding: .35rem .5rem 0;
+    border: 0;
+    border-bottom: 1px solid var(--dash-line);
+    border-radius: 0;
+    background: transparent;
+}
+.vuln-dashboard .dash-tab {
+    bottom: -1px;
+    padding: .65rem 1rem;
+    border: 1px solid var(--dash-line);
+    border-bottom: 0;
+    border-radius: 10px 10px 0 0;
+    background: var(--dash-panel-raised);
+    color: var(--dash-muted);
+    font-size: .82rem;
+    text-transform: none;
+    letter-spacing: 0;
+}
+.vuln-dashboard .dash-tab:hover { color: var(--app-text-strong); background: var(--app-surface-inset); }
+.vuln-dashboard .dash-tab.active {
+    border-color: var(--app-accent);
+    background: var(--app-accent);
+    color: #10201e;
+    box-shadow: none;
+    text-shadow: none;
+}
+
+.vuln-dashboard .summary-section {
+    width: 100%;
+    grid-template-columns: minmax(230px, .9fr) minmax(300px, 1.4fr) minmax(250px, 1fr);
+    gap: 1rem;
+    padding: 0;
+}
+.vuln-dashboard .cardvuln {
+    border: 1px solid var(--dash-line);
+    border-radius: 16px;
+    background: var(--dash-panel);
+    box-shadow: none;
+    transition: border-color .18s ease, background .18s ease;
+}
+.vuln-dashboard .cardvuln:hover {
+    border-color: rgba(67,185,173,.42);
+    box-shadow: 0 8px 25px rgba(0,0,0,.16);
+}
+.vuln-dashboard .cardvuln h2 {
+    color: #f1eff8;
+    font-family: inherit;
+    font-size: .95rem;
+    font-weight: 600;
+    letter-spacing: -.01em;
+    text-transform: none;
+}
+.vuln-dashboard .summary-card { min-height: 220px; padding: 1.15rem; }
+.vuln-dashboard .summary-card .metric {
+    margin: 0;
+    padding: .52rem 0;
+    border-bottom: 1px solid rgba(255,255,255,.055);
+    color: var(--dash-muted);
+    font-size: .78rem;
+    text-transform: none;
+    letter-spacing: 0;
+}
+.vuln-dashboard .summary-card .metric:first-of-type { margin-top: .5rem; }
+.vuln-dashboard .summary-card .metric span:last-child { color: #f4f2fa; font-weight: 600; }
+.vuln-dashboard .remedy-card { min-height: 220px; padding: 1.1rem; }
+.vuln-dashboard .remedy-card .header-card { min-height: 0; position: static; }
+.vuln-dashboard .remedy-card .header-card::before { content: none; }
+.vuln-dashboard .filter-btns { gap: .45rem; flex-wrap: wrap; }
+.vuln-dashboard .filter-btn, .vuln-dashboard .filter-btn-active {
+    margin: 0 0 .65rem;
+    padding: .4rem .7rem;
+    border: 1px solid var(--dash-line);
+    border-radius: 999px;
+    background: var(--dash-panel-raised);
+    color: #c5c2d0;
+    font-size: .72rem;
+    text-transform: none;
+    letter-spacing: 0;
+}
+.vuln-dashboard .filter-btn:hover, .vuln-dashboard .filter-btn-active {
+    border-color: rgba(67,185,173,.5);
+    background: var(--dash-accent-wash);
+    color: #bce8e1;
+}
+.vuln-dashboard .remedy-item {
+    align-items: center;
+    padding: .58rem .35rem;
+    border-bottom: 1px solid rgba(255,255,255,.06);
+    border-left: 0;
+    border-radius: 9px;
+    gap: .75rem;
+}
+.vuln-dashboard .remedy-item:hover {
+    border-left: 0;
+    background: rgba(255,255,255,.045);
+}
+.vuln-dashboard .component-name { color: #f2effa; font-size: .78rem; font-weight: 600; }
+.vuln-dashboard .component-sub { color: var(--dash-muted); font-size: .7rem; }
+.vuln-dashboard .status-badge-new, .vuln-dashboard .status-badge-unfixed {
+    border-radius: 999px;
+    padding: .25rem .55rem;
+    font-size: .63rem;
+    letter-spacing: 0;
+}
+.vuln-dashboard .status-badge-new::before, .vuln-dashboard .status-badge-new::after,
+.vuln-dashboard .status-badge-unfixed::before, .vuln-dashboard .status-badge-unfixed::after { content: none; }
+
+.vuln-dashboard .severity-grid { gap: .85rem; height: min(68vh, 760px); }
+.vuln-dashboard .severity-column .cardvuln {
+    border-top-width: 3px;
+    border-radius: 14px;
+    background: #1b1b22;
+}
+.vuln-dashboard .severity-column .header-card { padding: .7rem .85rem; }
+.vuln-dashboard .severity-column .header-card::before { content: none; }
+.vuln-dashboard .heatmap .header-card::before {
+    content: none;
+    background: none;
+    box-shadow: none;
+}
+.vuln-dashboard .vuln-section { width: 100%; }
+.vuln-dashboard .section-header { margin: .25rem 0 .8rem; }
+.vuln-dashboard .section-header h2 { font-size: 1rem; font-weight: 600; }
+
+.vuln-dashboard .compliance-panel, .vuln-dashboard .dep-panel {
+    width: 100%;
+    padding: 0;
+    gap: 1rem;
+}
+.vuln-dashboard .compliance-stat-card, .vuln-dashboard .compliance-meta-bar,
+.vuln-dashboard .compliance-table-card, .vuln-dashboard .dep-subheader,
+.vuln-dashboard .dep-left, .vuln-dashboard .dep-detail-card {
+    border-radius: 15px;
+    border-color: var(--dash-line);
+    background: var(--dash-panel);
+}
+.vuln-dashboard .compliance-table th { color: var(--dash-muted); }
+.vuln-dashboard .compliance-table td { border-color: rgba(255,255,255,.06); }
+.vuln-dashboard .compliance-row:hover, .vuln-dashboard .dep-tree-label:hover { background: rgba(67,185,173,.1); }
+.vuln-dashboard .dep-search-input:focus { border-bottom-color: var(--dash-accent); }
+.vuln-dashboard .dep-tree-active > .dep-tree-label { color: var(--dash-accent); background: var(--dash-accent-wash); }
+.vuln-dashboard .vuln-modal {
+    border: 1px solid var(--dash-line);
+    border-radius: 18px;
+    background: #202028;
+    box-shadow: 0 25px 60px rgba(0,0,0,.5);
+}
+.vuln-dashboard .vuln-modal h3 { font-family: inherit; text-transform: none; letter-spacing: 0; }
+.vuln-dashboard .vuln-modal-close { border-radius: 8px; }
+
+/* Shared project rail: its 56px collapsed width stays reserved beside this page. */
+.vuln-page-layout {
+    min-height: 100vh;
+    background: var(--app-bg);
+    color: var(--app-text);
+}
+.vuln-page-content {
+    width: calc(100% - 56px);
+    min-width: 0;
+    min-height: 100vh;
+    margin-left: 56px;
+}
+.vuln-page-content > .vuln-dashboard {
+    width: min(1440px, 100%);
+    max-width: 100%;
+    margin: 0 auto;
+}
+body:has(.vuln-page-layout), html:has(.vuln-page-layout) {
+    background: var(--app-bg);
+}
+body:has(.vuln-page-layout) { overflow-x: hidden; }
+.vuln-page-layout .project-sidebar { background: #191920; }
+.vuln-page-layout .project-sidebar.is-open { width: 220px; }
+.vuln-page-layout .project-sidebar.is-collapsed { width: 56px; }
+.vuln-page-layout .project-sidebar > ul li.active-project {
+    border: 1px solid #3e776f;
+    background: #28534e;
+    color: #e1f2ee;
+}
+.vuln-dashboard .tab-loading { min-height: calc(100vh - 4rem); height: auto; }
+
+/* Match the styling guide: solid states and shared surfaces, without glass or glow. */
+.vuln-dashboard .dash-tab:hover { background: var(--dash-panel-raised); }
+.vuln-dashboard .dash-tab.active {
+    color: #10201e;
+    background: var(--dash-accent);
+    box-shadow: none;
+}
+.vuln-dashboard .filter-btn:hover,
+.vuln-dashboard .filter-btn-active {
+    border-color: var(--dash-accent);
+    background: var(--dash-accent);
+    color: #10201e;
+}
+.vuln-dashboard .severity-column .cardvuln { background: var(--dash-panel); }
+.vuln-dashboard .status-badge-new {
+    border-color: var(--app-low);
+    background: #23483b;
+    color: #bde4cf;
+}
+.vuln-dashboard .status-badge-unfixed {
+    border-color: var(--app-critical);
+    background: #492a2a;
+    color: #f0b1a4;
+}
+.vuln-dashboard .dep-tree-active > .dep-tree-label {
+    background: #28534e;
+    color: #e1f2ee;
+}
+.vuln-dashboard .vuln-modal-backdrop { backdrop-filter: none; }
+.vuln-dashboard .vuln-modal {
+    border-color: var(--app-line);
+    background: var(--app-surface);
+    box-shadow: 0 20px 48px rgba(0,0,0,.35);
+}
+
+/* Compliance and dependency subviews follow the same palette and solid surfaces. */
+.vuln-dashboard .compliance-dashboard-shell,
+.vuln-dashboard .dependency-graph-shell {
+    min-height: 0;
+    padding: 0;
+    background: transparent;
+    color: var(--app-text);
+}
+.vuln-dashboard .dashboard-label,
+.vuln-dashboard .graph-label { color: var(--app-accent); }
+.vuln-dashboard .dashboard-subtitle,
+.vuln-dashboard .graph-dashboard-header p { color: var(--app-muted); }
+.vuln-dashboard .dashboard-meta-card,
+.vuln-dashboard .dashboard-card,
+.vuln-dashboard .graph-pane,
+.vuln-dashboard .tree-view,
+.vuln-dashboard .graph-view-panel,
+.vuln-dashboard .detail-card {
+    border: 1px solid var(--app-line);
+    border-radius: var(--app-radius);
+    background: var(--app-surface);
+    color: var(--app-text);
+    box-shadow: none;
+}
+.vuln-dashboard .dashboard-card p,
+.vuln-dashboard .detail-row span,
+.vuln-dashboard .dashboard-meta-card span { color: var(--app-muted); }
+.vuln-dashboard .dashboard-card strong,
+.vuln-dashboard .detail-row strong,
+.vuln-dashboard .dashboard-meta-card strong,
+.vuln-dashboard .graph-dashboard-header h2 { color: var(--app-text-strong); }
+.vuln-dashboard .dashboard-score-good {
+    background: var(--app-low);
+    color: #13221b;
+}
+.vuln-dashboard .dashboard-score-warning {
+    background: var(--app-high);
+    color: #24170d;
+}
+.vuln-dashboard .dashboard-table-wrapper { border-color: var(--app-line); border-radius: 12px; }
+.vuln-dashboard .compliance-table th { color: var(--app-muted); }
+.vuln-dashboard .compliance-table td { color: var(--app-text); }
+.vuln-dashboard .compliance-table tbody tr:hover { background: #25252e; }
+.vuln-dashboard .status-pass { background: #23483b; color: #bde4cf; }
+.vuln-dashboard .status-fail { background: #492a2a; color: #f0b1a4; }
+.vuln-dashboard .graph-toggle-group {
+    border-color: var(--app-line);
+    border-radius: 12px;
+    background: var(--app-surface-raised);
+}
+.vuln-dashboard .graph-toggle-group button { color: var(--app-text); }
+.vuln-dashboard .graph-toggle-group button:hover { background: #303139; }
+.vuln-dashboard .toggle-active {
+    background: var(--app-accent);
+    color: #10201e;
+}
+.vuln-dashboard .graph-toggle-group button.toggle-active { color: #10201e; }
+.vuln-dashboard .graph-search-bar {
+    border: 1px solid var(--app-line);
+    border-radius: 12px;
+    background: var(--app-surface-raised);
+}
+.vuln-dashboard .graph-search-bar input { color: var(--app-text-strong); }
+.vuln-dashboard .graph-search-bar span,
+.vuln-dashboard .tree-label small,
+.vuln-dashboard .empty-state { color: var(--app-muted); }
+.vuln-dashboard .tree-view,
+.vuln-dashboard .graph-view-panel { background: var(--app-surface-raised); }
+.vuln-dashboard .tree-label { color: var(--app-text); }
+.vuln-dashboard .tree-label:hover { background: #303139; }
+.vuln-dashboard .tree-active .tree-label {
+    background: #28534e;
+    color: #e1f2ee;
+}
+.vuln-dashboard .detail-group ul { color: var(--app-text); }
+
+@media (max-width: 900px) {
+    .vuln-page-layout { --sidebar-open-width: 180px; }
+    .vuln-page-layout .project-sidebar.is-open { width: 180px; }
+}
+@media (max-width: 600px) {
+    .vuln-page-layout { --sidebar-open-width: 160px; }
+    .vuln-page-layout .project-sidebar.is-open { width: 160px; }
+}
+
+/* Keep the vulnerability route's type and nested card treatment consistent with Projects. */
+.vuln-page-layout,
+.vuln-page-layout * { font-family: var(--app-font); }
+.vuln-dashboard .cardvuln {
+    border-color: #30313b;
+    background: var(--app-surface);
+    box-shadow: 0 3px 8px rgba(0,0,0,.2);
+}
+.vuln-dashboard .cardvuln:hover {
+    border-color: #3a5c57;
+    box-shadow: 0 5px 12px rgba(0,0,0,.24);
+}
+.vuln-dashboard .summary-card .metric {
+    margin: .42rem 0 0;
+    padding: .62rem .72rem;
+    border: 1px solid #34353e;
+    border-bottom: 1px solid #34353e;
+    border-radius: 10px;
+    background: var(--app-surface-raised);
+    box-shadow: 0 2px 4px rgba(0,0,0,.2);
+}
+.vuln-dashboard .summary-card .metric:first-of-type { margin-top: .65rem; }
+.vuln-dashboard .summary-card .metric.critical { border-left: 3px solid var(--app-critical); }
+.vuln-dashboard .summary-card .metric.high { border-left: 3px solid var(--app-high); }
+.vuln-dashboard .summary-card .metric.medium { border-left: 3px solid var(--app-medium); }
+.vuln-dashboard .summary-card .metric.low { border-left: 3px solid var(--app-low); }
+.vuln-dashboard .remedy-item,
+.vuln-dashboard .vulnerability-card {
+    border: 1px solid #34353e;
+    border-radius: 10px;
+    background: var(--app-surface-raised);
+    box-shadow: 0 2px 4px rgba(0,0,0,.2);
+}
+.vuln-dashboard .remedy-item {
+    margin: .42rem 0 0;
+    padding: .65rem .7rem;
+}
+.vuln-dashboard .remedy-item.critical { border-left: 3px solid var(--app-critical); }
+.vuln-dashboard .remedy-item.high { border-left: 3px solid var(--app-high); }
+.vuln-dashboard .remedy-item.medium { border-left: 3px solid var(--app-medium); }
+.vuln-dashboard .remedy-item.low { border-left: 3px solid var(--app-low); }
+.vuln-dashboard .remedy-item:hover,
+.vuln-dashboard .vulnerability-card:hover {
+    border-color: #3a5c57;
+    background: var(--app-surface-inset);
+    box-shadow: 0 3px 7px rgba(0,0,0,.25);
+}
+.vuln-dashboard .severity-column.cardvuln {
+    padding: .8rem;
+    border-radius: 16px;
+}
+.vuln-dashboard .severity-column.critical { border-top: 3px solid var(--app-critical); }
+.vuln-dashboard .severity-column.high { border-top: 3px solid var(--app-high); }
+.vuln-dashboard .severity-column.medium { border-top: 3px solid var(--app-medium); }
+.vuln-dashboard .severity-column.low { border-top: 3px solid var(--app-low); }
+.vuln-dashboard .vulnerability-card {
+    margin: .45rem 0;
+    padding: .7rem;
+    border-left-width: 3px;
+    cursor: pointer;
+}
+.vuln-dashboard .vulnerability-card.critical { border-left-color: var(--app-critical); }
+.vuln-dashboard .vulnerability-card.high { border-left-color: var(--app-high); }
+.vuln-dashboard .vulnerability-card.medium { border-left-color: var(--app-medium); }
+.vuln-dashboard .vulnerability-card.low { border-left-color: var(--app-low); }
+.vuln-dashboard .vuln-row { margin: .2rem 0; }
+.vuln-dashboard .vuln-row h4 { color: var(--app-text-strong); font-size: .78rem; }
+.vuln-dashboard .vuln-row p { color: var(--app-text); font-size: .74rem; }
+.vuln-dashboard .vuln-row span { font-size: .7rem; font-weight: 650; }
+.vuln-dashboard .vulnerability-card:focus-visible {
+    outline: 2px solid var(--app-accent);
+    outline-offset: 2px;
+}
+.vuln-page-layout.is-home-transitioning .project-sidebar {
+    pointer-events: none;
+}
+.vuln-page-layout.is-scan-entering .vuln-page-content {
+    animation: vuln-page-enter-up 270ms cubic-bezier(.22, .75, .25, 1) both;
+}
+@keyframes vuln-page-enter-up {
+    from { transform: translateY(20px); opacity: .7; }
+    to { transform: translateY(0); opacity: 1; }
+}
+.vuln-dashboard .overview-totals {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: .5rem;
+}
+.vuln-dashboard .overview-total {
+    display: flex;
+    min-width: 0;
+    align-items: center;
+    justify-content: space-between;
+    gap: .4rem;
+    min-height: 32px;
+    padding: .35rem .65rem;
+    border: 1px solid #3e776f;
+    border-radius: 999px;
+    background: #28534e;
+    box-shadow: none;
+}
+.vuln-dashboard .overview-total span {
+    color: #c0ded8;
+    font-size: .68rem;
+}
+.vuln-dashboard .overview-total strong {
+    color: #f2f0f8;
+    font-size: .95rem;
+    font-variant-numeric: tabular-nums;
+}
+.vuln-dashboard .remedy-card .filter-btn,
+.vuln-dashboard .remedy-card .filter-btn-active {
+    margin: 0;
+    padding: .42rem .75rem;
+    border: 1px solid #41424b;
+    border-radius: 999px;
+    background: #303139;
+    color: #d8d4cb;
+    font: 550 .72rem/1.2 var(--app-font);
+    text-transform: none;
+    letter-spacing: 0;
+}
+.vuln-dashboard .remedy-card .filter-btn:hover {
+    border-color: #4c4e58;
+    background: #3a3b44;
+    color: var(--app-text-strong);
+}
+.vuln-dashboard .remedy-card .filter-btn-active {
+    border-color: var(--app-accent);
+    background: var(--app-accent);
+    color: #10201e;
+}
+.vuln-dashboard .severity-summary-list {
+    display: grid;
+    gap: .3rem;
+    padding-top: .5rem;
+}
+.vuln-dashboard .severity-summary-list .metric {
+    min-height: 28px;
+    margin: 0;
+    padding: .28rem .6rem;
+}
+.vuln-dashboard .dash-tabs { overflow: visible; }
+.vuln-dashboard .dash-tab { position: relative; }
+.vuln-dashboard .dash-tab.active { z-index: 1; }
+.vuln-dashboard .heatmap .header-card::before { content: none; }
+.vuln-dashboard .summary-card { padding: .9rem; }
+.vuln-dashboard .dashboard-card-header .filter-btns {
+    display: flex;
+    width: 100%;
+    min-height: 36px;
+    height: auto;
+    flex: 0 0 auto;
+    justify-content: flex-start;
+    gap: .45rem;
+    flex-wrap: wrap;
+    margin: 0;
+}
+.vuln-dashboard .vuln-pill {
+    min-height: 36px;
+    border: 1px solid #41424b;
+    border-radius: 999px;
+}
+.vuln-dashboard .vuln-pill-filled {
+    border-color: var(--app-accent);
+    background: var(--app-accent);
+    color: #10201e;
+}
+.vuln-dashboard .vuln-pill-filled span { color: #193432; }
+.vuln-dashboard .vuln-pill-filled strong { color: #10201e; }
+.vuln-dashboard .summary-card,
+.vuln-dashboard .remedy-card { padding: 1rem; }
+.vuln-dashboard .dashboard-card-header {
+    display: grid;
+    gap: .4rem;
+    margin: 0 0 .65rem;
+}
+.vuln-dashboard .dashboard-card-header h2 {
+    margin: 0;
+    color: var(--app-text-strong);
+    font-size: .95rem;
+    font-weight: 600;
+    letter-spacing: -.01em;
+}
+.vuln-dashboard .dashboard-card-header-content {
+    display: flex;
+    width: 100%;
+    min-height: 36px;
+    align-items: center;
+}
+.vuln-dashboard .dashboard-card-header-divider {
+    width: 100%;
+    height: 1px;
+    background: #3a3b44;
+}
+.vuln-dashboard .cardvuln:hover {
+    border-color: #30313b;
+    box-shadow: 0 3px 8px rgba(0,0,0,.2);
+}
+.vuln-dashboard .dash-tabs {
+    display: flex;
+    width: 100%;
+    align-items: flex-end;
+    gap: .4rem;
+    padding: .35rem .5rem 0;
+    border: 0;
+    border-bottom: 1px solid var(--dash-line);
+    background: transparent;
+}
+.vuln-dashboard .dash-tab {
+    position: relative;
+    bottom: -1px;
+    padding: .65rem 1rem;
+    border: 1px solid var(--dash-line);
+    border-bottom: 0;
+    border-radius: 10px 10px 0 0;
+    background: var(--dash-panel-raised);
+    color: var(--dash-muted);
+    font-size: .82rem;
+    text-transform: none;
+    letter-spacing: 0;
+}
+.vuln-dashboard .dash-tab:hover { color: var(--app-text-strong); background: var(--app-surface-inset); }
+.vuln-dashboard .dash-tab.active {
+    border-color: var(--app-accent);
+    background: var(--dash-accent);
+    color: #10201e;
+    box-shadow: none;
+    text-shadow: none;
+}
+.vuln-dashboard .dashboard-content {
+    display: grid;
+    min-width: 0;
+}
+.vuln-dashboard .content-header {
+    min-width: 0;
+}
+.vuln-dashboard .content-sections {
+    position: relative;
+    isolation: isolate;
+    display: grid;
+    min-width: 0;
+    min-height: 0;
+    height: auto;
+    gap: 1rem;
+    padding: 1rem;
+    overflow: clip;
+    border: 1px solid #34353e;
+    border-top: 0;
+    border-radius: 0 0 16px 16px;
+    background: #22232a;
+}
+.vuln-dashboard .vuln-section {
+    flex: none;
+    height: auto;
+    min-height: 0;
+    overflow: visible;
+}
+.vuln-dashboard .severity-grid {
+    flex: none;
+    height: auto;
+    min-height: 0;
+    align-items: stretch;
+}
+.vuln-dashboard .severity-grid.is-empty {
+    display: none;
+}
+.vuln-dashboard .severity-grid.has-vulnerabilities .severity-column.cardvuln {
+    height: 420px;
+    min-height: 420px;
+    overflow-y: auto;
+    scrollbar-gutter: stable;
+}
+.vuln-dashboard .content-sections::before {
+    position: absolute;
+    z-index: 2;
+    inset: 0;
+    background: #22232a;
+    content: "";
+    transform: scaleX(0);
+    transform-origin: left center;
+    pointer-events: none;
+    animation: content-section-wipe .36s cubic-bezier(.25, .8, .25, 1) both;
+}
+@keyframes content-section-wipe {
+    0% { transform: scaleX(0); opacity: 1; }
+    90% { transform: scaleX(1); opacity: 1; }
+    100% { transform: scaleX(1); opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .vuln-dashboard .content-sections::before { animation-duration: .01ms; }
+}
+
+@media (max-width: 900px) {
+    .vuln-dashboard .dashboard-header { align-items: flex-start; flex-direction: column; }
+    .vuln-dashboard .security-card { flex-wrap: wrap; }
+    .vuln-dashboard .summary-section { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .vuln-dashboard .severity-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); height: auto; }
+    .vuln-dashboard .severity-column .cardvuln { height: 360px; }
+}
+@media (max-width: 560px) {
+    .vuln-dashboard { padding: 1rem .8rem 2rem; }
+    .vuln-dashboard .dashboard-header { padding: 1rem; }
+    .vuln-dashboard .summary-section, .vuln-dashboard .severity-grid,
+    .vuln-dashboard .compliance-stats-row { grid-template-columns: 1fr; }
+    .vuln-dashboard .dash-tabs { overflow-x: auto; }
+    .vuln-dashboard .dash-tab { white-space: nowrap; padding-inline: .75rem; }
+    .vuln-dashboard .severity-column .cardvuln { height: 320px; }
+}
+
+/* Keep compliance sections content-driven; only long row lists scroll internally. */
+.vuln-dashboard .compliance-stat-card {
+    height: auto !important;
+    min-height: 126px !important;
+    overflow: visible;
+}
+.vuln-dashboard .compliance-meta-bar,
+.vuln-dashboard .compliance-scorecard,
+.vuln-dashboard .compliance-table-card {
+    height: auto !important;
+    overflow: visible !important;
+}
+.vuln-dashboard .ntia-check-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    align-items: stretch;
+    gap: .5rem;
+    max-height: none;
+    overflow: visible;
+    padding: .2rem .15rem .2rem 0;
+}
+.vuln-dashboard .ntia-check-row {
+    min-width: 0;
+    min-height: 150px;
+    padding: .8rem;
+    border: 1px solid #34353e;
+    border-radius: 10px;
+    background: var(--app-surface-raised);
+    box-shadow: 0 2px 4px rgba(0,0,0,.2);
+}
+.vuln-dashboard .ntia-check-row.is-failed { border-color: #784641; }
+.vuln-dashboard .ntia-check-content { display: grid; height: 100%; align-content: start; gap: .7rem; }
+.vuln-dashboard .ntia-check-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: .5rem; }
+.vuln-dashboard .ntia-check-title {
+    color: var(--app-text-strong);
+    font-size: .78rem;
+    font-weight: 600;
+    line-height: 1.4;
+}
+.vuln-dashboard .compliance-check-pill {
+    flex: 0 0 auto;
+    padding: .22rem .55rem;
+    border-radius: 999px;
+    font-size: .66rem;
+    font-weight: 700;
+    line-height: 1.25;
+}
+.vuln-dashboard .compliance-check-pill.is-passed { background: #76c5a0; color: #14251e; }
+.vuln-dashboard .compliance-check-pill.is-failed { background: #e97867; color: #2a1512; }
+.vuln-dashboard .ntia-check-meta {
+    display: grid;
+    gap: .35rem;
+    font-size: .68rem;
+    line-height: 1.4;
+}
+.vuln-dashboard .ntia-check-meta span {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: .35rem;
+    color: var(--app-text);
+    overflow-wrap: anywhere;
+}
+.vuln-dashboard .ntia-check-meta strong {
+    color: var(--app-muted);
+    font-weight: 600;
+}
+.vuln-dashboard .compliance-table-scroll {
+    max-height: 220px;
+    overflow: auto;
+    scrollbar-gutter: stable;
+}
+.vuln-dashboard .compliance-table thead th {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background: var(--app-surface);
+}
+.vuln-dashboard .compliance-stat-card {
+    min-height: 140px !important;
+    align-self: stretch;
+}
+.vuln-dashboard .compliance-stat-card .stat-value {
+    margin: 0;
+    color: var(--app-text-strong);
+    font-size: 1.55rem !important;
+    line-height: 1.2;
+}
+.vuln-dashboard .compliance-stat-card .compliance-score-value { font-size: 1.55rem !important; }
+.vuln-dashboard .compliance-stat-card .stat-sub { color: var(--app-muted); }
+.vuln-dashboard .compliance-table-header {
+    position: static !important;
+    z-index: auto !important;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    width: 100%;
+    min-height: 0 !important;
+    height: auto !important;
+    padding: 0 0 .75rem;
+    border: 0;
+    border-bottom: 1px solid var(--app-line);
+    border-radius: 0;
+    background: transparent;
+}
+.vuln-dashboard .compliance-table-header::before { content: none !important; }
+.vuln-dashboard .compliance-table-header h2 {
+    color: var(--app-text-strong);
+    font-family: var(--app-font);
+    font-size: .95rem;
+    font-weight: 600;
+    text-transform: none;
+    letter-spacing: 0;
+}
+.vuln-dashboard .compliance-check-count {
+    margin: 0 !important;
+    color: var(--app-accent) !important;
+    font-size: 1.4rem !important;
+}
+@media (max-width: 960px) {
+    .vuln-dashboard .compliance-stats-row,
+    .vuln-dashboard .ntia-check-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 560px) {
+    .vuln-dashboard .compliance-stats-row,
+    .vuln-dashboard .ntia-check-grid { grid-template-columns: 1fr; }
 }

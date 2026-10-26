@@ -1,11 +1,12 @@
 import "./vuln-dash.css";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { fetchAllScans, fetchSbom, fetchComponents, fetchVulns, fetchDependencies } from "../api/api.js";
 import Vulnsection from "./vuln-section";
 import SummaryCard from "./summarycard";
 import ComplianceDashboard from "./ComplianceDashboard";
 import DependencyGraph from "./DependencyGraph";
+import ProjectSidebar from "../project-page/ProjectSidebar.jsx";
 
 function downloadBlob(blob, filename) {
   const link = document.createElement('a');
@@ -35,13 +36,49 @@ function groupVulnsBySeverity(vulnList = []) {
 function VulnerabilityDashboard() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
+  const cameFromScanHistory = location.state?.scanEntryTransition === true;
   const [activeTab, setActiveTab] = useState("vulnerabilities");
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [homeTransitioning, setHomeTransitioning] = useState(false);
+  const [scanEntryTransition, setScanEntryTransition] = useState(cameFromScanHistory);
+  const [projects, setProjects] = useState([]);
   const [sbom, setSbom] = useState(null);
   const [components, setComponents] = useState([]);
   const [vulns, setVulns] = useState([]);
   const [edges, setEdges] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  useEffect(() => {
+    if (!cameFromScanHistory) return;
+    navigate(location.pathname, { replace: true, state: null });
+  }, []);
+
+  const handleHomeNavigation = () => {
+    if (homeTransitioning) return;
+    setHomeTransitioning(true);
+    window.setTimeout(() => {
+      navigate("/projects", { state: { sidebarExpandOnEntry: true } });
+    }, 160);
+  };
+
+  useEffect(() => {
+    fetchAllScans()
+      .then(scans => {
+        const latestByProject = new Map();
+        [...(scans ?? [])]
+          .filter(scan => scan.project && scan.sbom_id)
+          .sort((a, b) => new Date(b.uploaded_at) - new Date(a.uploaded_at))
+          .forEach(scan => {
+            if (!latestByProject.has(scan.project)) {
+              latestByProject.set(scan.project, { id: scan.sbom_id, name: scan.project });
+            }
+          });
+        setProjects([...latestByProject.values()]);
+      })
+      .catch(err => console.error("Failed to load projects for sidebar:", err.message));
+  }, []);
 
   useEffect(() => {
     if (!id) return;
@@ -67,9 +104,44 @@ console.log("DEPENDENCIES", depData);
       .finally(() => setLoading(false));
   }, [id]);
 
-  if (loading) return <div className="tab-loading">Loading scan data...</div>;
-  if (error) return <div className="tab-loading" style={{ color: 'var(--critical)' }}>Error: {error}</div>;
-  if (!sbom) return <div className="tab-loading">Scan not found.</div>;
+  const renderPage = content => (
+    <div
+      className={`vuln-page-layout${homeTransitioning ? " is-home-transitioning" : ""}${scanEntryTransition ? " is-scan-entering" : ""}`}
+      style={{
+        "--project-sidebar-width": sidebarOpen ? "var(--sidebar-open-width, 220px)" : "56px",
+      }}
+      onClick={() => { if (sidebarOpen) setSidebarOpen(false); }}
+    >
+      <ProjectSidebar
+        projects={projects}
+        activeProjectId={projects.find(project => project.name === sbom?.project)?.id ?? id}
+        open={sidebarOpen}
+        leaving={homeTransitioning}
+        onToggle={() => setSidebarOpen(open => !open)}
+        showHome
+        onHomeClick={handleHomeNavigation}
+        onSelectProject={project => {
+          setSidebarOpen(false);
+          navigate(`/projects/${encodeURIComponent(project.name)}/scans/${project.id}`);
+        }}
+      />
+      <main className="vuln-page-content">{content}</main>
+      {homeTransitioning && <div className="project-switch-wipe is-cover" aria-hidden="true" />}
+      {scanEntryTransition && (
+        <div
+          className="project-route-wipe is-reveal-up"
+          aria-hidden="true"
+          onAnimationEnd={event => {
+            if (event.target === event.currentTarget) setScanEntryTransition(false);
+          }}
+        />
+      )}
+    </div>
+  );
+
+  if (loading) return renderPage(<div className="vuln-dashboard"><div className="tab-loading">Loading scan data...</div></div>);
+  if (error) return renderPage(<div className="vuln-dashboard"><div className="tab-loading" style={{ color: 'var(--critical)' }}>Error: {error}</div></div>);
+  if (!sbom) return renderPage(<div className="vuln-dashboard"><div className="tab-loading">Scan not found.</div></div>);
 
   const projectName = sbom.project ?? sbom.sbom_id ?? id;
   const scanDate = sbom.uploaded_at
@@ -107,14 +179,8 @@ console.log("DEPENDENCIES", depData);
     );
   };
 
-  return (
+  return renderPage(
     <div className="vuln-dashboard">
-      <div className="icon" onClick={() => navigate("/projects")}>
-        <svg xmlns="http://www.w3.org/2000/svg" height="28px" viewBox="0 -960 960 960" width="28px" fill="var(--textlight)">
-          <path d="M156-114v-487l324-242.77L804-601v487H566.15v-293.69h-172.3V-114H156Z" />
-        </svg>
-      </div>
-
       <header className="dashboard-header">
         <div>
           <h1>Vulnerability Dashboard</h1>
@@ -146,30 +212,36 @@ console.log("DEPENDENCIES", depData);
         </div>
       </header>
 
-      <div className="dash-tabs">
-        {TABS.map(tab => (
-          <button
-            key={tab.id}
-            className={`dash-tab${activeTab === tab.id ? " active" : ""}`}
-            onClick={() => setActiveTab(tab.id)}
-          >
-            {tab.label}
-          </button>
-        ))}
-      </div>
+      <section className="dashboard-content">
+        <div className="content-header">
+          <div className="dash-tabs">
+            {TABS.map(tab => (
+              <button
+                key={tab.id}
+                className={`dash-tab${activeTab === tab.id ? " active" : ""}`}
+                onClick={() => setActiveTab(tab.id)}
+              >
+                {tab.label}
+              </button>
+            ))}
+          </div>
+        </div>
 
-      {activeTab === "vulnerabilities" && (
-        <>
-          <SummaryCard groupedVulns={groupedVulns} totalComponents={components.length} />
-          <Vulnsection groupedVulns={groupedVulns} />
-        </>
-      )}
-      {activeTab === "compliance" && (
-        <ComplianceDashboard sbomId={id} components={components} />
-      )}
-      {activeTab === "dependencies" && (
-        <DependencyGraph edges={edges} components={components} vulns={vulns} projectName={projectName} />
-      )}
+        <div className="content-sections" key={activeTab}>
+          {activeTab === "vulnerabilities" && (
+            <>
+              <SummaryCard groupedVulns={groupedVulns} totalComponents={components.length} />
+              <Vulnsection groupedVulns={groupedVulns} />
+            </>
+          )}
+          {activeTab === "compliance" && (
+            <ComplianceDashboard sbomId={id} components={components} />
+          )}
+          {activeTab === "dependencies" && (
+            <DependencyGraph edges={edges} components={components} vulns={vulns} projectName={projectName} />
+          )}
+        </div>
+      </section>
     </div>
   );
 }

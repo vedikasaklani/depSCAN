@@ -48,27 +48,27 @@ export default function ComplianceDashboard({ sbomId, components: initialCompone
   return (
     <div className="compliance-panel">
       <div className="compliance-stats-row">
-        <div className="cardvuln compliance-stat-card">
+        <div className="cardvuln app-surface compliance-stat-card">
           <p className="stat-label">Compliance Score</p>
-          <p className="stat-value" style={{ color: scoreColor, fontSize: '2rem' }}>
+          <p className="stat-value compliance-score-value" style={{ color: scoreColor }}>
             {compliancePercent}%
           </p>
           <span className="stat-sub">NTIA minimum elements plus machine-readable format</span>
         </div>
 
-        <div className="cardvuln compliance-stat-card">
+        <div className="cardvuln app-surface compliance-stat-card">
           <p className="stat-label">Components</p>
           <p className="stat-value">{components.length}</p>
           <span className="stat-sub">{verifiedComponents} verified, {reviewComponents} need review</span>
         </div>
 
-        <div className="cardvuln compliance-stat-card">
+        <div className="cardvuln app-surface compliance-stat-card">
           <p className="stat-label">Dependency Links</p>
           <p className="stat-value">{meta.totalDependencies ?? 0}</p>
           <span className="stat-sub">CycloneDX dependsOn relationships</span>
         </div>
 
-        <div className="cardvuln compliance-stat-card">
+        <div className="cardvuln app-surface compliance-stat-card">
           <p className="stat-label">Checklist</p>
           <p className="stat-value">
             <span style={{ color: 'var(--low)' }}>{passedElements}</span>
@@ -79,18 +79,18 @@ export default function ComplianceDashboard({ sbomId, components: initialCompone
         </div>
       </div>
 
-      <div className="compliance-meta-bar cardvuln">
+      <div className="compliance-meta-bar cardvuln app-surface">
         <span className="stat-label">Authors</span>
         <strong>{meta.author || 'Not declared'}</strong>
         <span className="stat-label" style={{ marginLeft: '2em' }}>Timestamp</span>
         <strong>{formatTimestamp(meta.timestamp)}</strong>
       </div>
 
-      <div className="cardvuln compliance-scorecard">
+      <div className="cardvuln app-surface compliance-scorecard">
         <div className="compliance-scorecard-header">
           <div>
             <p className="stat-label">NTIA Scorecard</p>
-            <p className="stat-value" style={{ color: 'var(--teal)', fontSize: '1.75rem', margin: 0 }}>
+            <p className="stat-value compliance-check-count">
               {passedElements} / {totalElements} checks passing
             </p>
           </div>
@@ -98,23 +98,30 @@ export default function ComplianceDashboard({ sbomId, components: initialCompone
 
         <div className="ntia-check-grid">
           {checks.map((check) => (
-            <div key={check.id ?? check.label} className="ntia-check-row">
-              <div>
-                <div className="ntia-check-title">{check.label}</div>
+            <div
+              key={check.id ?? check.label}
+              className={`ntia-check-row ${check.passed ? 'is-passed' : 'is-failed'}`}
+            >
+              <div className="ntia-check-content">
+                <div className="ntia-check-heading">
+                  <div className="ntia-check-title">{check.label}</div>
+                  <span className={`compliance-check-pill ${check.passed ? 'is-passed' : 'is-failed'}`}>
+                    {check.passed ? 'Pass' : 'Fail'}
+                  </span>
+                </div>
                 <div className="ntia-check-meta">
-                  {check.field} | NTIA {check.ntiaElement} | {check.passCondition}
+                  <span><strong>Field</strong>{check.field || 'Not specified'}</span>
+                  <span><strong>NTIA</strong>{check.ntiaElement || 'Not specified'}</span>
+                  <span><strong>Pass condition</strong>{check.passCondition || 'Not specified'}</span>
                 </div>
               </div>
-              <span className={check.passed ? 'status-badge-new' : 'status-badge-unfixed'}>
-                {check.passed ? 'Pass' : 'Fail'}
-              </span>
             </div>
           ))}
         </div>
       </div>
 
-      <div className="cardvuln compliance-table-card">
-        <div className="header-card" style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+      <div className="cardvuln app-surface compliance-table-card">
+        <div className="header-card compliance-table-header">
           <h2>Component Compliance Summary</h2>
           <span className="stat-label">Supplier, version and PURL audit</span>
         </div>

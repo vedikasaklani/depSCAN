@@ -329,7 +329,7 @@ export default function DependencyGraph({ edges = [], components = [], vulns = [
 
   return (
     <div className="dep-panel">
-      <div className="dep-subheader cardvuln">
+      <div className="dep-subheader cardvuln app-surface">
         <div style={{ display: 'flex', alignItems: 'center', gap: '1em', flex: 1 }}>
           <input
             type="search"
@@ -347,7 +347,7 @@ export default function DependencyGraph({ edges = [], components = [], vulns = [
       </div>
 
       <div className="dep-layout">
-        <div className="cardvuln dep-left">
+        <div className="cardvuln app-surface dep-left">
           {view === 'tree' ? (
             filteredTree.length
               ? filteredTree.map((node) => renderTree(node, expanded, handleToggle, search, setSelectedPackage))
@@ -375,7 +375,7 @@ export default function DependencyGraph({ edges = [], components = [], vulns = [
           )}
         </div>
 
-        <aside className="cardvuln dep-detail-card">
+        <aside className="cardvuln app-surface dep-detail-card">
           <h2 style={{ paddingBottom: '0.75em' }}>Package Details</h2>
           {effectiveSelected ? (
             <>

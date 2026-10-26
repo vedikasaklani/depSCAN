@@ -156,6 +156,7 @@ function Vulnsection({ groupedVulns }) {
                 level
             }))
         );
+    const hasVulnerabilities = allVulns.length > 0;
 
     const filteredVulns =
         activeFilter
@@ -179,7 +180,7 @@ function Vulnsection({ groupedVulns }) {
         }
     };
     return (
-        <section className="vuln-section cardvuln">
+        <section className="vuln-section cardvuln app-surface">
 
             <div className="section-header">
 
@@ -198,12 +199,12 @@ function Vulnsection({ groupedVulns }) {
 
             </div>
 
-            <div className="severity-grid">
+            <div className={`severity-grid${hasVulnerabilities ? " has-vulnerabilities" : " is-empty"}`}>
 
                 {severityLevels.map(level => (
                     <div
                         key={level}
-                        className={`cardvuln severity-column ${level}`}
+                        className={`cardvuln app-surface severity-column ${level}`}
                     >
                         <h3 className="header-card">
                             {level.toUpperCase()}
@@ -221,7 +222,7 @@ function Vulnsection({ groupedVulns }) {
                             .map((vuln, i) => (
                                 <div
                                     key={vuln.cve_id ?? i}
-                                    className="vulnerability-card"
+                                    className={`vulnerability-card ${level}`}
                                     role="button"
                                     tabIndex={0}
                                     onClick={() =>
