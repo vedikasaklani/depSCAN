@@ -1,4 +1,7 @@
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+
+const PAGE_SIZE = 4;
 
 function severityRank(scan) {
   if (scan.critical > 0) return "critical";
@@ -16,24 +19,30 @@ function StatusChip({ progress }) {
   return (
     <span className={`status-chip status-chip-${tone}`}>
       <span className="status-dot" />
-      {(progress ?? "unknown").toUpperCase()}
+      {progress ?? "Unknown"}
     </span>
   );
 }
 
-function VulnTable({ selectedProject, projectScans }) {
-  const navigate = useNavigate();
+function VulnTable({ selectedProject, projectScans, onViewScan }) {
+  const [page, setPage] = useState(0);
+
+  useEffect(() => {
+    setPage(0);
+  }, [selectedProject?.id, projectScans.length]);
+
+  const pageCount = Math.max(1, Math.ceil(projectScans.length / PAGE_SIZE));
+  const pageScans = projectScans.slice(page * PAGE_SIZE, (page + 1) * PAGE_SIZE);
+  const firstVisible = projectScans.length ? page * PAGE_SIZE + 1 : 0;
+  const lastVisible = Math.min((page + 1) * PAGE_SIZE, projectScans.length);
 
   return (
     <div id="vuln-log-panel">
       <div className="vuln-log-bar">
-        <span className="vuln-log-prompt">
-          <span className="vuln-log-prompt-sigil">scan_history.log</span>
-          <span className="blinking-cursor">_</span>
-        </span>
+        <h2 className="vuln-log-title">Scan history</h2>
         <span className="vuln-log-live">
           <span className="live-dot" />
-          {projectScans.length} {projectScans.length === 1 ? "ENTRY" : "ENTRIES"}
+          {projectScans.length} {projectScans.length === 1 ? "entry" : "entries"}
         </span>
       </div>
 
@@ -43,9 +52,9 @@ function VulnTable({ selectedProject, projectScans }) {
             <th className="col-id">ID</th>
             <th>Timestamp</th>
             <th>Components</th>
-            <th>Crit</th>
+            <th>Critical</th>
             <th>High</th>
-            <th>Med</th>
+            <th>Medium</th>
             <th>Low</th>
             <th>Status</th>
             <th>Action</th>
@@ -54,15 +63,15 @@ function VulnTable({ selectedProject, projectScans }) {
         <tbody>
           {projectScans.length === 0 && (
             <tr>
-              <td colSpan={9} style={{ textAlign: "center", color: "rgba(255,255,255,0.25)", padding: "1.5em" }}>
-                No scans yet — run one to populate the log.
+              <td colSpan={9} style={{ textAlign: "center", color: "var(--project-muted)", padding: "1.5em" }}>
+                No scans yet. Run a scan to see its history here.
               </td>
             </tr>
           )}
-          {projectScans.map((scan, i) => (
+          {pageScans.map((scan, i) => (
             <tr key={scan.id} data-severity={severityRank(scan)}>
-              <td className="col-id mono-cell">0x{(i + 1).toString(16).padStart(2, "0").toUpperCase()}</td>
-              <td className="mono-cell">
+              <td className="col-id">{String(page * PAGE_SIZE + i + 1).padStart(2, "0")}</td>
+              <td>
                 {new Date(scan.date).toLocaleString("en-IN", {
                   day: "2-digit",
                   month: "short",
@@ -71,24 +80,54 @@ function VulnTable({ selectedProject, projectScans }) {
                   minute: "2-digit",
                 })}
               </td>
-              <td className="mono-cell">{scan.components}</td>
-              <td className="mono-cell" style={{ color: "var(--critical)" }}>{scan.critical}</td>
-              <td className="mono-cell" style={{ color: "var(--high)" }}>{scan.high}</td>
-              <td className="mono-cell" style={{ color: "var(--medium)" }}>{scan.medium}</td>
-              <td className="mono-cell" style={{ color: "var(--low)" }}>{scan.low}</td>
+              <td>{scan.components}</td>
+              <td className="severity-count" style={{ color: "var(--critical)" }}>{scan.critical}</td>
+              <td className="severity-count" style={{ color: "var(--high)" }}>{scan.high}</td>
+              <td className="severity-count" style={{ color: "var(--medium)" }}>{scan.medium}</td>
+              <td className="severity-count" style={{ color: "var(--low)" }}>{scan.low}</td>
               <td><StatusChip progress={scan.progress} /></td>
               <td>
                 <button
                   className="view-btn"
-                  onClick={() => navigate(`/projects/${selectedProject.name}/scans/${scan.id}`)}
+                  onClick={event => {
+                    event.stopPropagation();
+                    onViewScan(scan, selectedProject);
+                  }}
                 >
-                  [ view ]
+                  View
                 </button>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
+
+      <div className="table-pagination" aria-label="Scan history pages">
+        <span className="table-pagination-range" aria-live="polite">
+          {projectScans.length ? `Showing ${firstVisible}–${lastVisible} of ${projectScans.length}` : "No scans"}
+        </span>
+        <div className="table-pagination-controls">
+          <button
+            type="button"
+            className="table-page-btn"
+            aria-label="Previous four scans"
+            onClick={() => setPage(current => Math.max(0, current - 1))}
+            disabled={page === 0}
+          >
+            <ChevronLeft size={16} />
+          </button>
+          <span className="table-pagination-page">{page + 1} / {pageCount}</span>
+          <button
+            type="button"
+            className="table-page-btn"
+            aria-label="Next four scans"
+            onClick={() => setPage(current => Math.min(pageCount - 1, current + 1))}
+            disabled={page >= pageCount - 1}
+          >
+            <ChevronRight size={16} />
+          </button>
+        </div>
+      </div>
     </div>
   );
 }

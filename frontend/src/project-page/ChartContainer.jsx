@@ -1,13 +1,12 @@
 import InventoryChart from "./InventoryChart"
-import { Dot } from "lucide-react";
 function ChartContainer({ projectScans, latestScan }) {
     return (
         <div id="chart-container" className="card">
             <div id="legend"><ul>
-                <li><Dot color="var(--critical)"></Dot>Critical</li>
-                <li><Dot color="var(--high)"></Dot>High</li>
-                <li><Dot color="var(--medium)"></Dot>Medium</li>
-                <li><Dot color="var(--low)"></Dot>Low</li>
+                <li className="legend-pill legend-pill-critical">Critical</li>
+                <li className="legend-pill legend-pill-high">High</li>
+                <li className="legend-pill legend-pill-medium">Medium</li>
+                <li className="legend-pill legend-pill-low">Low</li>
             </ul></div>
             <div id="donut">
                 {projectScans.length === 0 ? (

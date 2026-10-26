@@ -52,6 +52,24 @@ export function buildNtiaChecks(meta, components) {
   ];
 }
 
+function NtiaCard({ score, scoreLevel = "empty", scoreColor, summary, children }) {
+  return (
+    <div className="card" id="ntia-score">
+      <div className="ntia-header">
+        <p className="ntia-title-bar">NTIA Score</p>
+        <p className="ntia-sub">{summary}</p>
+        <div
+          className={`ntia-score-badge severity-${scoreLevel}`}
+          style={scoreColor ? { "--ntia-score-fill": scoreColor } : undefined}
+        >
+          {score == null ? "—" : `${score}%`}
+        </div>
+      </div>
+      <div className="ntia-content">{children}</div>
+    </div>
+  );
+}
+
 function NtiaOverview({ sbomId }) {
   const [compliance, setCompliance] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -74,37 +92,27 @@ function NtiaOverview({ sbomId }) {
 
   if (!sbomId) {
     return (
-      <div className="card" id="ntia-score">
-        <p className="stat-label">NTIA Score</p>
-        <p className="ntia-sub" style={{ marginTop: "0.4em" }}>
-          No scan selected
-        </p>
-      </div>
+      <NtiaCard summary="No scan selected">
+        <p className="ntia-placeholder">No compliance data to display yet.</p>
+      </NtiaCard>
     );
   }
 
   if (loading) {
     return (
-      <div className="card" id="ntia-score">
-        <p className="stat-label">NTIA Score</p>
-        <p className="ntia-sub" style={{ marginTop: "0.4em" }}>
-          Loading...
-        </p>
-      </div>
+      <NtiaCard summary="Checking minimum elements">
+        <p className="ntia-placeholder">Loading compliance details…</p>
+      </NtiaCard>
     );
   }
 
   if (error || !compliance) {
     return (
-      <div className="card" id="ntia-score">
-        <p className="stat-label">NTIA Score</p>
-        <p
-          className="ntia-sub"
-          style={{ marginTop: "0.4em", color: "var(--critical)" }}
-        >
-          {error || "Unavailable"}
+      <NtiaCard summary="Compliance unavailable">
+        <p className="ntia-placeholder ntia-placeholder-error">
+          {error || "Unable to load compliance details."}
         </p>
-      </div>
+      </NtiaCard>
     );
   }
 
@@ -112,23 +120,21 @@ function NtiaOverview({ sbomId }) {
   const checks = buildNtiaChecks(projectMeta, components);
   const passed = checks.filter((c) => c.passed).length;
   const total = checks.length;
-  const scoreColor =
-    projectMeta.compliancePercentage >= 80 ? "var(--low)" : "var(--critical)";
+  const score = projectMeta.compliancePercentage;
+  const scoreLevel = score >= 80 ? "low"
+    : score >= 60 ? "medium"
+      : score >= 40 ? "high"
+        : "critical";
+  const scoreColor = scoreLevel === "low" ? "var(--low)"
+    : scoreLevel === "medium" ? "var(--medium)"
+      : scoreLevel === "high" ? "var(--high)"
+        : "var(--critical)";
 
   return (
-    <div className="card" id="ntia-score">
-      <div className="ntia-header">
-        <p className="stat-label">NTIA Score</p>
-        <p className="ntia-score-value" style={{ color: scoreColor }}>
-          {projectMeta.compliancePercentage}%
-        </p>
-      </div>
-      <p className="ntia-sub">
-        {passed} / {total} minimum elements passing
-      </p>
+    <NtiaCard score={score} scoreLevel={scoreLevel} scoreColor={scoreColor} summary={`${passed} / ${total} minimum elements passing`}>
       <ul className="ntia-checklist">
         {checks.map((check) => (
-          <li key={check.label} className="ntia-check-row">
+          <li key={check.label} className={`ntia-check-row ${check.passed ? "is-passed" : "is-failed"}`}>
             <span className="ntia-check-label">{check.label}</span>
             <span className="ntia-check-icon">
               {check.passed ? <CheckIcon /> : <CrossIcon />}
@@ -136,7 +142,7 @@ function NtiaOverview({ sbomId }) {
           </li>
         ))}
       </ul>
-    </div>
+    </NtiaCard>
   );
 }
 
