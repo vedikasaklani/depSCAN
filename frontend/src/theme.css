@@ -1,0 +1,46 @@
+:root {
+  --app-bg: #111116;
+  --app-surface: #1d1d24;
+  --app-surface-raised: #25252e;
+  --app-surface-inset: #303139;
+  --app-line: rgba(235, 233, 255, .1);
+  --app-text: #d8d4cb;
+  --app-text-strong: #f2f0f8;
+  --app-muted: #9795a5;
+  --app-accent: #43b9ad;
+  --app-accent-soft: rgba(67, 185, 173, .15);
+  --app-critical: #e87762;
+  --app-high: #e39a5d;
+  --app-medium: #e0c66f;
+  --app-low: #78c5a0;
+  --app-radius: 16px;
+  --app-font: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+.app-surface {
+  border: 1px solid var(--app-line);
+  border-radius: var(--app-radius);
+  background: var(--app-surface);
+  color: var(--app-text);
+}
+
+.app-surface-raised {
+  border: 1px solid var(--app-line);
+  border-radius: 12px;
+  background: var(--app-surface-raised);
+  color: var(--app-text);
+}
+
+.app-control {
+  border: 1px solid var(--app-line);
+  border-radius: 10px;
+  background: var(--app-surface-raised);
+  color: var(--app-text);
+  font: inherit;
+  transition: border-color .16s ease, background-color .16s ease, color .16s ease;
+}
+
+.app-control:focus-visible {
+  outline: 2px solid var(--app-accent);
+  outline-offset: 2px;
+}

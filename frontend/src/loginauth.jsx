@@ -17,7 +17,7 @@ function LoginPage(){
             alignItems:"center"
             }}>
         <div><h1 style={{fontFamily: "Anta"}}>Login</h1></div>
-        <img src="/public/logo.png"></img>
+        <img src="/logo-latest.png" alt="depSCAN logo" />
         <button className="loginbutton">Continue with Github</button>
         <button  className="loginbutton">Continue with Google</button>
         <button  className="loginbutton" onClick= {() =>navigate("/projects")}>Dev skip login</button>
