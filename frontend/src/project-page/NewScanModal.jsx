@@ -88,7 +88,7 @@ export default function NewScanModal({ onClose, onSubmit }) {
 
     return (
         <div className="modal-overlay" onClick={onClose}>
-            <div className="modal" onClick={stopProp} role="dialog" aria-modal="true" aria-labelledby="modal-title">
+            <div className="modal app-surface" onClick={stopProp} role="dialog" aria-modal="true" aria-labelledby="modal-title">
 
                 <div className="modal-header">
                     <span className="modal-title" id="modal-title">New Project</span>
@@ -158,8 +158,7 @@ export default function NewScanModal({ onClose, onSubmit }) {
 
                             {tab === "github" && (
                                 <div className="field-group">
-                                    <label className="field-label">Select Repository</label>
-                                    <div className="repo-list">
+                                    <div className="repo-list app-surface-raised">
                                         <div className="repo-search">
                                             <Search size={13} />
                                             <input
@@ -198,7 +197,7 @@ export default function NewScanModal({ onClose, onSubmit }) {
                                 <div className="field-group">
                                     <label className="field-label">Repository URL</label>
                                     <input
-                                        className="field-input"
+                                            className="field-input app-control"
                                         placeholder="https://github.com/org/repo"
                                         value={publicUrl}
                                         onChange={handlePublicUrlChange}
@@ -221,7 +220,7 @@ export default function NewScanModal({ onClose, onSubmit }) {
                             <div className="field-group">
                                 <label className="field-label">Project Name</label>
                                 <input
-                                    className="field-input"
+                                className="field-input app-control"
                                     placeholder="e.g. my-api"
                                     value={projectName}
                                     onChange={e => setProjectName(e.target.value)}
