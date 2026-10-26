@@ -2,11 +2,12 @@ import "./ProjectPage.css";
 import { useState, useEffect } from "react";
 import { Plus } from "lucide-react";
 import ChartContainer from "./ChartContainer.jsx";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import VulnTable from "./VulnTable.jsx";
 import StatsBar from "./StatsBar.jsx";
 import NewScanModal from "./NewScanModal.jsx";
-import NtiaOverview from "./NtiaOverview.jsx";
+import NtiaOverview from "./Ntiaoverview.jsx";
+import ProjectSidebar from "./ProjectSidebar.jsx";
 import { fetchAllScans, fetchComponents, fetchVulns, fetchProjectHistory } from "../api/api.js";
 async function normalizeScans(history, projectId) {
 
@@ -124,12 +125,25 @@ async function normalizeScans(history, projectId) {
 
 function Projectpage() {
     const navigate = useNavigate();
+    const location = useLocation();
+    const sidebarExpandOnEntry = location.state?.sidebarExpandOnEntry === true;
     const [uniqueProjects, setProjects] = useState([]);
     const [selectedProject, setSelectedProject] = useState(null);
     const [showNewScan, setShowNewScan] = useState(false);
+    const [projectSidebarOpen, setProjectSidebarOpen] = useState(!sidebarExpandOnEntry);
+    const [homeEntryTransition, setHomeEntryTransition] = useState(sidebarExpandOnEntry);
     const [projectScans, setProjectScans] = useState([]);
+    const [projectWipePhase, setProjectWipePhase] = useState(null);
+    const [scanRouteTransition, setScanRouteTransition] = useState(false);
+    const [pendingProject, setPendingProject] = useState(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+    useEffect(() => {
+        if (!sidebarExpandOnEntry) return;
+        const frame = requestAnimationFrame(() => setProjectSidebarOpen(true));
+        navigate(location.pathname, { replace: true, state: null });
+        return () => cancelAnimationFrame(frame);
+    }, []);
     useEffect(() => {
         fetchAllScans()
             .then((scans) => {
@@ -156,10 +170,11 @@ function Projectpage() {
             .catch((err) => setError(err.message));
     }, []);
     useEffect(() => {
+        if (!selectedProject) return;
+        let cancelled = false;
         setLoading(true);
         setError(null);
-
-        if (!selectedProject) return;
+        setProjectScans([]);
 
         fetchProjectHistory(selectedProject.name)
             .then(async (history) => {
@@ -168,14 +183,52 @@ function Projectpage() {
                     selectedProject.id
                 );
 
-                setProjectScans(scans);
-                setLoading(false);
+                if (!cancelled) {
+                    setProjectScans(scans);
+                    setLoading(false);
+                }
             })
             .catch(err => {
-                setError(err.message);
-                setLoading(false);
+                if (!cancelled) {
+                    setError(err.message);
+                    setLoading(false);
+                }
+            })
+            .finally(() => {
+                if (!cancelled) {
+                    setProjectWipePhase(current => current === "loading" ? "reveal" : current);
+                }
             });
+
+        return () => { cancelled = true; };
     }, [selectedProject]);
+
+    const handleProjectSelect = (project) => {
+        if (projectWipePhase || selectedProject?.id === project.id) return;
+        setPendingProject(project);
+        setProjectWipePhase("cover");
+    };
+
+    const handleViewScan = (scan, project) => {
+        if (scanRouteTransition) return;
+        setScanRouteTransition(true);
+        window.setTimeout(() => {
+            navigate(`/projects/${encodeURIComponent(project.name)}/scans/${scan.id}`, {
+                state: { scanEntryTransition: true },
+            });
+        }, 220);
+    };
+
+    const handleProjectWipeEnd = (event) => {
+        if (event.target !== event.currentTarget) return;
+        if (projectWipePhase === "cover" && pendingProject) {
+            setSelectedProject(pendingProject);
+            setProjectWipePhase("loading");
+        } else if (projectWipePhase === "reveal") {
+            setProjectWipePhase(null);
+            setPendingProject(null);
+        }
+    };
 
     const sortedScans = [...projectScans].sort((a, b) => new Date(b.date) - new Date(a.date));
     const latestScan = sortedScans[0];
@@ -200,31 +253,25 @@ function Projectpage() {
     };
 
     return (
-        <div id="parent-container">
-            <header className="project-header">
-                <img className="logo" src="/logo.png" alt="logo" />
-                <div className="profile-circle">
-                    <svg id="user-profile" width="20px" height="20px" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M8 7C9.65685 7 11 5.65685 11 4C11 2.34315 9.65685 1 8 1C6.34315 1 5 2.34315 5 4C5 5.65685 6.34315 7 8 7Z" fill="var(--textlight)" />
-                        <path d="M14 12C14 10.3431 12.6569 9 11 9H5C3.34315 9 2 10.3431 2 12V15H14V12Z" fill="var(--textlight)" />
-                    </svg>
-                </div>
-            </header>
+        <div
+            id="parent-container"
+            className={`${projectSidebarOpen ? "" : "project-sidebar-collapsed"}${homeEntryTransition ? " project-home-entry" : ""}${scanRouteTransition ? " project-scan-exiting" : ""}`}
+        >
+            <div className={`project-container${projectSidebarOpen ? "" : " sidebar-collapsed"}`}>
+                <ProjectSidebar
+                    projects={uniqueProjects}
+                    activeProjectId={selectedProject?.id}
+                    open={projectSidebarOpen}
+                    onToggle={() => setProjectSidebarOpen(open => !open)}
+                    onSelectProject={handleProjectSelect}
+                />
 
-            <div className="project-container">
-                <ul id="project-list">
-                    {uniqueProjects.map(project => (
-                        <li
-                            key={project.id}
-                            onClick={() => setSelectedProject(project)}
-                            className={selectedProject?.id === project.id ? "active-project" : "idle-project"}
-                        >
-                            {project.name}
-                        </li>
-                    ))}
-                </ul>
-
-                <div id="content">
+                <div
+                    id="content"
+                    onClick={() => {
+                        if (projectSidebarOpen) setProjectSidebarOpen(false);
+                    }}
+                >
                     <div id="header-content">
                         <p id="project-name">{selectedProject?.name}</p>
                         <button id="add-btn" onClick={() => setShowNewScan(true)}>
@@ -245,7 +292,7 @@ function Projectpage() {
                     )}
 
                     <ChartContainer projectScans={projectScans} latestScan={latestScan} />
-                    <VulnTable selectedProject={selectedProject} projectScans={projectScans} />
+                    <VulnTable selectedProject={selectedProject} projectScans={projectScans} onViewScan={handleViewScan} />
                     <StatsBar
                         selectedProject={selectedProject}
                         previousScan={previousScan}
@@ -262,6 +309,25 @@ function Projectpage() {
                     onSubmit={handleScanSubmit}
                 />
             )}
+
+            {projectWipePhase && (
+                <div
+                    className={`project-switch-wipe is-${projectWipePhase}`}
+                    aria-hidden="true"
+                    onAnimationEnd={handleProjectWipeEnd}
+                />
+            )}
+            {homeEntryTransition && (
+                <div
+                    className="project-switch-wipe is-reveal"
+                    style={{ "--project-sidebar-width": "56px" }}
+                    aria-hidden="true"
+                    onAnimationEnd={event => {
+                        if (event.target === event.currentTarget) setHomeEntryTransition(false);
+                    }}
+                />
+            )}
+            {scanRouteTransition && <div className="project-route-wipe is-cover-up" aria-hidden="true" />}
         </div>
     );
 }

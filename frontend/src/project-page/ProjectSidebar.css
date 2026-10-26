@@ -1,0 +1,160 @@
+.project-sidebar {
+    position: fixed;
+    z-index: 30;
+    inset: 0 auto 0 0;
+    display: flex;
+    width: 220px;
+    height: 100vh;
+    height: 100dvh;
+    flex-direction: column;
+    overflow: hidden;
+    border-right: 1px solid var(--app-line);
+    background: #191920;
+    transition: width .22s ease;
+}
+.project-sidebar.is-collapsed { width: 56px; }
+.project-sidebar.is-open { width: 220px; }
+.project-sidebar.is-leaving {
+    transform: translateX(-100%);
+    transition: transform 160ms cubic-bezier(.72, 0, .25, 1);
+    pointer-events: none;
+}
+.project-sidebar-top {
+    display: flex;
+    flex: 0 0 56px;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 .65rem;
+}
+.project-sidebar-title {
+    color: var(--app-muted);
+    font-size: .72rem;
+    font-weight: 700;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+}
+.project-sidebar-toggle {
+    display: grid;
+    flex: 0 0 56px;
+    width: 56px;
+    height: 56px;
+    place-items: center;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    color: var(--app-text);
+    cursor: pointer;
+}
+.project-sidebar-toggle:hover { color: var(--app-accent); }
+.project-sidebar-toggle:focus-visible {
+    outline: 2px solid var(--app-accent);
+    outline-offset: -3px;
+}
+.project-sidebar.is-collapsed .project-sidebar-top {
+    flex-basis: 56px;
+    justify-content: center;
+    padding: 0;
+}
+.project-sidebar.is-collapsed .project-sidebar-title { display: none; }
+.project-sidebar-home-row {
+    flex: 0 0 48px;
+    padding: 0 .55rem;
+}
+.project-sidebar-home {
+    display: flex;
+    width: 100%;
+    height: 40px;
+    align-items: center;
+    justify-content: flex-start;
+    gap: .7rem;
+    padding: 0 .7rem;
+    border: 1px solid transparent;
+    border-radius: 10px;
+    background: transparent;
+    color: var(--app-text);
+    font: inherit;
+    cursor: pointer;
+}
+.project-sidebar-home:hover { background: #25252e; color: var(--app-accent); }
+.project-sidebar.is-collapsed .project-sidebar-home-row { padding: 0; }
+.project-sidebar.is-collapsed .project-sidebar-home {
+    width: 56px;
+    height: 48px;
+    justify-content: center;
+    padding: 0;
+}
+.project-sidebar.is-collapsed .project-sidebar-home span { display: none; }
+.project-sidebar > ul {
+    display: flex;
+    width: 100%;
+    min-height: 0;
+    flex: 1 1 auto;
+    flex-direction: column;
+    gap: .35rem;
+    overflow-x: hidden;
+    overflow-y: auto;
+    margin: 0;
+    padding: 1rem .75rem;
+    list-style: none;
+}
+.project-sidebar > ul::-webkit-scrollbar { width: 4px; }
+.project-sidebar > ul::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background: #315e58;
+}
+.project-sidebar > ul li {
+    min-height: 40px;
+    padding: .55rem .7rem;
+    border: 1px solid transparent;
+    border-radius: 10px;
+    color: #c7c4d1;
+    font-size: .82rem;
+    cursor: pointer;
+    transition: background .16s ease, color .16s ease;
+}
+.project-sidebar > ul li:hover { background: #25252e; }
+.project-sidebar > ul li.active-project {
+    border-color: #3e776f;
+    background: #28534e;
+    color: #e1f2ee;
+}
+.project-sidebar.is-collapsed > ul li {
+    overflow: hidden;
+    padding-inline: 0;
+    opacity: 0;
+    pointer-events: none;
+    white-space: nowrap;
+}
+.project-sidebar-bottom {
+    display: flex;
+    flex: 0 0 56px;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 0;
+    border-top: 1px solid var(--app-line);
+}
+.project-sidebar.is-collapsed .project-sidebar-bottom { justify-content: center; }
+.project-sidebar .profile-circle {
+    display: grid;
+    width: 56px;
+    height: 56px;
+    flex: 0 0 56px;
+    place-items: center;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+}
+
+@media (max-width: 900px) {
+    .project-sidebar.is-open { width: 180px; }
+}
+@media (max-width: 600px) {
+    .project-sidebar.is-open { width: 160px; }
+    .project-sidebar > ul { padding: .8rem .4rem; }
+    .project-sidebar > ul li { padding: .5rem; font-size: .7rem; white-space: nowrap; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .project-sidebar { transition: none; }
+}
