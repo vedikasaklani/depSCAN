@@ -1,0 +1,82 @@
+.app-data-table-card {
+  min-width: 0;
+  padding: .8rem;
+  border: 1px solid var(--app-line);
+  border-radius: 18px;
+  background: var(--app-surface);
+  color: var(--app-text);
+  box-shadow: none;
+}
+
+.app-data-table-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: .3rem .3rem .85rem;
+}
+
+.app-data-table-title {
+  margin: 0;
+  color: var(--app-text-strong);
+  font: 650 1rem/1.35 var(--app-font);
+  letter-spacing: -.02em;
+}
+
+.app-data-table-meta {
+  color: var(--app-muted);
+  font: 550 .75rem/1.4 var(--app-font);
+}
+
+.app-data-table-scroll {
+  width: 100%;
+  min-width: 0;
+  overflow-x: auto;
+}
+
+.app-data-table-card .app-data-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 .4rem;
+  color: var(--app-text);
+  font-family: var(--app-font);
+}
+
+.app-data-table-card .app-data-table th {
+  padding: .75rem .7rem;
+  border: 0;
+  background: #292a31;
+  color: var(--app-muted);
+  font: 650 .7rem/1.4 var(--app-font);
+  letter-spacing: 0;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.app-data-table-card .app-data-table th:first-child { border-radius: 10px 0 0 10px; }
+.app-data-table-card .app-data-table th:last-child { border-radius: 0 10px 10px 0; }
+
+.app-data-table-card .app-data-table td {
+  padding: .8rem .7rem;
+  border: 0;
+  background: #23232b;
+  color: var(--app-text);
+  font: 400 .8rem/1.45 var(--app-font);
+  font-variant-numeric: tabular-nums;
+}
+
+.app-data-table-card .app-data-table tbody tr { transition: background-color .16s ease; }
+.app-data-table-card .app-data-table tbody tr:hover td { background: #303139; }
+.app-data-table-card .app-data-table tbody td:first-child { border-radius: 10px 0 0 10px; }
+.app-data-table-card .app-data-table tbody td:last-child { border-radius: 0 10px 10px 0; }
+.app-data-table-card .app-data-table tbody tr.app-data-table-empty td {
+  padding: 1.5rem;
+  color: var(--app-muted);
+  text-align: center;
+}
+
+.app-data-table-footer { min-width: 0; }
+
+@media (max-width: 600px) {
+  .app-data-table-header { align-items: flex-start; flex-direction: column; }
+}

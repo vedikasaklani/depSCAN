@@ -1029,8 +1029,11 @@ body:has(#parent-container)::after { content: none; }
     animation: project-wipe-out 200ms cubic-bezier(.55, 0, .25, 1) forwards;
 }
 #parent-container.project-scan-exiting #content {
-    animation: project-content-exit-up 220ms cubic-bezier(.55, 0, .25, 1) forwards;
+    animation: project-content-exit-right 220ms cubic-bezier(.55, 0, .25, 1) forwards;
     pointer-events: none;
+}
+#parent-container #content.project-content-enter {
+    animation: project-content-enter-right 260ms cubic-bezier(.2, .75, .25, 1) both;
 }
 .project-route-wipe {
     position: fixed;
@@ -1051,9 +1054,13 @@ body:has(#parent-container)::after { content: none; }
 #parent-container.project-home-entry .project-sidebar {
     z-index: 1600;
 }
-@keyframes project-content-exit-up {
-    from { transform: translateY(0); opacity: 1; }
-    to { transform: translateY(-18px); opacity: .55; }
+@keyframes project-content-exit-right {
+    from { transform: translateX(0); opacity: 1; }
+    to { transform: translateX(14px); opacity: .55; }
+}
+@keyframes project-content-enter-right {
+    from { transform: translateX(-12px); opacity: .68; }
+    to { transform: translateX(0); opacity: 1; }
 }
 @keyframes project-route-cover-up {
     from { transform: scaleY(0); }
@@ -1078,6 +1085,7 @@ body:has(#parent-container)::after { content: none; }
     .project-switch-wipe.is-reveal { animation-duration: 1ms; }
     .project-route-wipe { animation-duration: 1ms !important; }
     #parent-container.project-scan-exiting #content { animation-duration: 1ms; }
+    #parent-container #content.project-content-enter { animation-duration: 1ms; }
 }
 @media (max-width: 900px) {
     #parent-container { --project-sidebar-width: 180px; }
@@ -1443,4 +1451,116 @@ body:has(#parent-container)::after { content: none; }
 #parent-container .table-page-btn:disabled {
     opacity: .4;
     cursor: default;
+}
+
+#parent-container .ntia-checklist {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-auto-rows: minmax(68px, auto);
+    gap: .55rem;
+    align-content: start;
+    overflow: visible;
+    padding: .2rem .45rem .2rem .2rem;
+}
+#parent-container .ntia-check-row {
+    position: relative;
+    display: grid;
+    min-width: 0;
+    min-height: 68px;
+    place-items: center;
+    padding: .6rem .55rem;
+    border: 1px solid #3b3c45;
+    border-radius: 11px;
+    background: #303139;
+    color: #e0ddd5;
+    text-align: center;
+}
+#parent-container .ntia-check-row.is-passed {
+    border-color: #3b4545;
+    background: #303139;
+}
+#parent-container .ntia-check-row.is-failed {
+    border-color: #70463f;
+    background: #303139;
+}
+#parent-container .ntia-check-label {
+    padding: .15rem .35rem;
+    color: inherit;
+    font-size: .68rem;
+    font-weight: 550;
+    line-height: 1.35;
+    text-transform: none;
+    letter-spacing: 0;
+}
+#parent-container .ntia-check-icon {
+    position: absolute;
+    z-index: 1;
+    top: -.45rem;
+    right: -.4rem;
+    display: grid;
+    width: 23px;
+    height: 23px;
+    place-items: center;
+    border: 2px solid #292a31;
+    border-radius: 50%;
+    background: var(--low);
+    color: #173523;
+}
+#parent-container .ntia-check-row.is-failed .ntia-check-icon {
+    background: var(--critical);
+    color: #351b16;
+}
+#parent-container .ntia-check-icon .status-icon {
+    width: 11px;
+    height: 11px;
+    color: inherit;
+    filter: none;
+}
+@media (max-width: 600px) {
+    #parent-container .ntia-checklist { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+/* Give the NTIA mini scorecard enough room to show both check rows without an inner scrollbar. */
+#parent-container #content {
+    grid-template-rows: 58px auto minmax(300px, auto) auto;
+}
+#parent-container #ntia-score,
+#parent-container #chart-container { min-height: 300px; }
+#parent-container .ntia-content {
+    flex: 1 0 auto;
+    min-height: auto;
+    overflow: visible;
+    scrollbar-width: auto;
+    scrollbar-color: auto;
+}
+#parent-container .ntia-content::-webkit-scrollbar { display: none; }
+#parent-container .ntia-checklist {
+    grid-template-rows: minmax(68px, auto) minmax(92px, auto);
+    grid-auto-rows: minmax(68px, auto);
+}
+#parent-container #ntia-score {
+    background: var(--project-panel);
+}
+#parent-container .ntia-content {
+    border-color: #303139;
+    background: #17181e;
+}
+#parent-container .ntia-check-row,
+#parent-container .ntia-check-row.is-passed,
+#parent-container .ntia-check-row.is-failed {
+    background: #23242b;
+}
+#parent-container .ntia-check-icon,
+#parent-container .ntia-check-row.is-failed .ntia-check-icon {
+    color: #17151f;
+}
+#parent-container .ntia-check-icon .status-icon,
+#parent-container .ntia-check-icon .status-icon path {
+    color: #17151f !important;
+    fill: #17151f !important;
+    filter: none !important;
+}
+@media (max-width: 600px) {
+    #parent-container #content { grid-template-rows: auto; }
+    #parent-container .ntia-checklist { grid-template-rows: none; }
 }

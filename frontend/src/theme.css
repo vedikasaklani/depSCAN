@@ -44,3 +44,24 @@
   outline: 2px solid var(--app-accent);
   outline-offset: 2px;
 }
+
+/* Shared thin teal scrollbar treatment across pages and scrollable panels. */
+html,
+body,
+* {
+  scrollbar-width: thin !important;
+  scrollbar-color: rgba(67, 185, 173, .45) transparent !important;
+}
+
+*::-webkit-scrollbar {
+  width: 5px !important;
+  height: 5px !important;
+}
+
+*::-webkit-scrollbar-track { background: transparent !important; }
+*::-webkit-scrollbar-thumb {
+  border: 0 !important;
+  border-radius: 8px !important;
+  background: rgba(67, 185, 173, .45) !important;
+}
+*::-webkit-scrollbar-thumb:hover { background: rgba(67, 185, 173, .62) !important; }

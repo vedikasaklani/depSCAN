@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import DataTableCard from "../components/DataTableCard.jsx";
 
 const PAGE_SIZE = 4;
 
@@ -37,16 +38,47 @@ function VulnTable({ selectedProject, projectScans, onViewScan }) {
   const lastVisible = Math.min((page + 1) * PAGE_SIZE, projectScans.length);
 
   return (
-    <div id="vuln-log-panel">
-      <div className="vuln-log-bar">
-        <h2 className="vuln-log-title">Scan history</h2>
+    <DataTableCard
+      id="vuln-log-panel"
+      title="Scan history"
+      headerClassName="vuln-log-bar"
+      titleClassName="vuln-log-title"
+      tableId="vuln-table"
+      meta={(
         <span className="vuln-log-live">
           <span className="live-dot" />
           {projectScans.length} {projectScans.length === 1 ? "entry" : "entries"}
         </span>
-      </div>
-
-      <table id="vuln-table">
+      )}
+      footer={(
+        <div className="table-pagination" aria-label="Scan history pages">
+          <span className="table-pagination-range" aria-live="polite">
+            {projectScans.length ? `Showing ${firstVisible}–${lastVisible} of ${projectScans.length}` : "No scans"}
+          </span>
+          <div className="table-pagination-controls">
+            <button
+              type="button"
+              className="table-page-btn"
+              aria-label="Previous four scans"
+              onClick={() => setPage(current => Math.max(0, current - 1))}
+              disabled={page === 0}
+            >
+              <ChevronLeft size={16} />
+            </button>
+            <span className="table-pagination-page">{page + 1} / {pageCount}</span>
+            <button
+              type="button"
+              className="table-page-btn"
+              aria-label="Next four scans"
+              onClick={() => setPage(current => Math.min(pageCount - 1, current + 1))}
+              disabled={page >= pageCount - 1}
+            >
+              <ChevronRight size={16} />
+            </button>
+          </div>
+        </div>
+      )}
+    >
         <thead>
           <tr>
             <th className="col-id">ID</th>
@@ -62,8 +94,8 @@ function VulnTable({ selectedProject, projectScans, onViewScan }) {
         </thead>
         <tbody>
           {projectScans.length === 0 && (
-            <tr>
-              <td colSpan={9} style={{ textAlign: "center", color: "var(--project-muted)", padding: "1.5em" }}>
+            <tr className="app-data-table-empty">
+              <td colSpan={9}>
                 No scans yet. Run a scan to see its history here.
               </td>
             </tr>
@@ -100,35 +132,7 @@ function VulnTable({ selectedProject, projectScans, onViewScan }) {
             </tr>
           ))}
         </tbody>
-      </table>
-
-      <div className="table-pagination" aria-label="Scan history pages">
-        <span className="table-pagination-range" aria-live="polite">
-          {projectScans.length ? `Showing ${firstVisible}–${lastVisible} of ${projectScans.length}` : "No scans"}
-        </span>
-        <div className="table-pagination-controls">
-          <button
-            type="button"
-            className="table-page-btn"
-            aria-label="Previous four scans"
-            onClick={() => setPage(current => Math.max(0, current - 1))}
-            disabled={page === 0}
-          >
-            <ChevronLeft size={16} />
-          </button>
-          <span className="table-pagination-page">{page + 1} / {pageCount}</span>
-          <button
-            type="button"
-            className="table-page-btn"
-            aria-label="Next four scans"
-            onClick={() => setPage(current => Math.min(pageCount - 1, current + 1))}
-            disabled={page >= pageCount - 1}
-          >
-            <ChevronRight size={16} />
-          </button>
-        </div>
-      </div>
-    </div>
+    </DataTableCard>
   );
 }
 

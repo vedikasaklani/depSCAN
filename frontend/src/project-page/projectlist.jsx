@@ -268,6 +268,7 @@ function Projectpage() {
 
                 <div
                     id="content"
+                    className={projectWipePhase === "reveal" ? "project-content-enter" : ""}
                     onClick={() => {
                         if (projectSidebarOpen) setProjectSidebarOpen(false);
                     }}
