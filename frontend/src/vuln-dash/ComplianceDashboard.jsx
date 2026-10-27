@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { fetchCompliance } from '../api/api.js';
+import DataTableCard from '../components/DataTableCard.jsx';
 
 function formatTimestamp(value) {
   if (!value) return 'Not present';
@@ -80,10 +81,14 @@ export default function ComplianceDashboard({ sbomId, components: initialCompone
       </div>
 
       <div className="compliance-meta-bar cardvuln app-surface">
-        <span className="stat-label">Authors</span>
-        <strong>{meta.author || 'Not declared'}</strong>
-        <span className="stat-label" style={{ marginLeft: '2em' }}>Timestamp</span>
-        <strong>{formatTimestamp(meta.timestamp)}</strong>
+        <div className="compliance-meta-item">
+          <span className="stat-label">Authors</span>
+          <strong>{meta.author || 'Not declared'}</strong>
+        </div>
+        <div className="compliance-meta-item">
+          <span className="stat-label">Timestamp</span>
+          <strong>{formatTimestamp(meta.timestamp)}</strong>
+        </div>
       </div>
 
       <div className="cardvuln app-surface compliance-scorecard">
@@ -120,14 +125,14 @@ export default function ComplianceDashboard({ sbomId, components: initialCompone
         </div>
       </div>
 
-      <div className="cardvuln app-surface compliance-table-card">
-        <div className="header-card compliance-table-header">
-          <h2>Component Compliance Summary</h2>
-          <span className="stat-label">Supplier, version and PURL audit</span>
-        </div>
-
-        <div className="compliance-table-scroll">
-          <table className="compliance-table">
+      <DataTableCard
+        title="Component Compliance Summary"
+        meta={<span className="compliance-table-meta">Supplier, version and PURL audit</span>}
+        className="cardvuln app-surface compliance-table-card"
+        headerClassName="compliance-table-header"
+        titleClassName="compliance-table-title"
+        scrollClassName="compliance-table-scroll"
+      >
             <thead>
               <tr>
                 <th>Supplier</th>
@@ -140,8 +145,8 @@ export default function ComplianceDashboard({ sbomId, components: initialCompone
             </thead>
             <tbody>
               {components.length === 0 && (
-                <tr>
-                  <td colSpan={6} style={{ textAlign: 'center', color: 'rgba(255,255,255,0.35)' }}>
+                <tr className="app-data-table-empty">
+                  <td colSpan={6}>
                     No components found for this SBOM.
                   </td>
                 </tr>
@@ -151,12 +156,12 @@ export default function ComplianceDashboard({ sbomId, components: initialCompone
                 return (
                   <tr key={component.purl || component.name || index} className="compliance-row">
                     <td>{supplierName(component)}</td>
-                    <td style={{ color: 'var(--teal)', fontFamily: 'Anta' }}>{component.name || 'Missing'}</td>
+                    <td className="compliance-component-name">{component.name || 'Missing'}</td>
                     <td style={{ color: 'rgba(255,255,255,0.6)' }}>{component.version || 'Missing'}</td>
                     <td className="mono-cell">{component.purl || 'Missing'}</td>
                     <td>{component.license || 'Unknown'}</td>
                     <td>
-                      <span className={isPass ? 'status-badge-new' : 'status-badge-unfixed'}>
+                      <span className={`compliance-status-pill ${isPass ? 'is-verified' : 'is-review'}`}>
                         {isPass ? 'Verified' : 'Review'}
                       </span>
                     </td>
@@ -164,9 +169,7 @@ export default function ComplianceDashboard({ sbomId, components: initialCompone
                 );
               })}
             </tbody>
-          </table>
-        </div>
-      </div>
+      </DataTableCard>
     </div>
   );
 }

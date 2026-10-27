@@ -144,7 +144,7 @@ function renderTree(node, expandedSet, toggleNode, searchTerm, onSelect) {
       <button type="button" className="dep-tree-label" onClick={() => { toggleNode(node.treeId); onSelect(node); }}>
         {hasChildren && <span className="dep-tree-arrow">{expandedSet.has(node.treeId) ? 'v' : '>'}</span>}
         <span>{node.name}</span>
-        <small style={{ marginLeft: 'auto', color: 'rgba(255,255,255,0.4)', fontSize: '0.8em' }}>{node.version}</small>
+        <small className="dep-tree-version">{node.version}</small>
       </button>
       {hasChildren && expandedSet.has(node.treeId) && (
         <div className="dep-tree-children">
@@ -222,9 +222,9 @@ function D3ForceGraph({ purls, edges, nodeCache, onSelect }) {
       .text((datum) => datum.name)
       .attr('x', 14)
       .attr('y', 4)
-      .attr('fill', 'var(--textlight)')
+      .attr('fill', 'var(--app-text-strong)')
       .attr('font-size', 11)
-      .attr('font-family', 'Share Tech Mono, monospace')
+      .attr('font-family', 'Inter, sans-serif')
       .attr('paint-order', 'stroke')
       .attr('stroke', 'rgba(7,10,16,0.9)')
       .attr('stroke-width', 4);
@@ -352,7 +352,7 @@ export default function DependencyGraph({ edges = [], components = [], vulns = [
             filteredTree.length
               ? filteredTree.map((node) => renderTree(node, expanded, handleToggle, search, setSelectedPackage))
               : (
-                <p style={{ color: 'rgba(255,255,255,0.35)' }}>
+                <p className="dep-empty-state">
                   {search.trim() ? 'No package matches that search term.' : 'No dependency data available.'}
                 </p>
               )
@@ -365,10 +365,10 @@ export default function DependencyGraph({ edges = [], components = [], vulns = [
                 onSelect={setSelectedPackage}
               />
             ) : (
-              <div style={{ height: '100%', display: 'grid', placeItems: 'center', color: 'rgba(255,255,255,0.4)', padding: '2rem' }}>
-                <div style={{ textAlign: 'center' }}>
-                  <p style={{ margin: 0, fontSize: '1rem' }}>No dependency graph available yet.</p>
-                  <p style={{ margin: '0.75rem 0 0', maxWidth: 320 }}>Upload an SBOM with dependency relationships to view the graph.</p>
+              <div className="dep-empty-state dep-graph-empty">
+                <div>
+                  <p>No dependency graph available yet.</p>
+                  <p>Upload an SBOM with dependency relationships to view the graph.</p>
                 </div>
               </div>
             )
@@ -376,7 +376,7 @@ export default function DependencyGraph({ edges = [], components = [], vulns = [
         </div>
 
         <aside className="cardvuln app-surface dep-detail-card">
-          <h2 style={{ paddingBottom: '0.75em' }}>Package Details</h2>
+          <h2>Package Details</h2>
           {effectiveSelected ? (
             <>
               {[
@@ -392,9 +392,9 @@ export default function DependencyGraph({ edges = [], components = [], vulns = [
                 <div className="dep-detail-row" key={label}>
                   <span className="stat-label">{label}</span>
                   <strong
-                    className={label === 'PURL' ? 'mono-cell' : ''}
+                    className={`${label === 'PURL' ? 'mono-cell ' : ''}${label === 'Name' ? 'dep-detail-value-name' : ''}`}
                     style={label === 'Severity' ? { color: severityColors[value] ?? 'var(--teal)' }
-                      : label === 'Name' ? { color: 'var(--teal)', fontFamily: 'Anta' }
+                      : label === 'Name' ? { color: 'var(--app-accent)' }
                         : {}}
                   >
                     {String(value)}
@@ -414,7 +414,7 @@ export default function DependencyGraph({ edges = [], components = [], vulns = [
                     </div>
                   ))
                 ) : (
-                  <p style={{ color: 'rgba(255,255,255,0.35)', fontSize: '0.88em' }}>No active CVEs for this package.</p>
+                  <p className="dep-empty-state">No active CVEs for this package.</p>
                 )}
               </div>
             </>
