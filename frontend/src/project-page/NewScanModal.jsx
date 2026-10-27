@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
-import { X, GitCommit, Link2, Search, GitBranch, Shield, FileCode2, Package } from "lucide-react";
+import { X, Link2, Search, GitBranch, Shield, FileCode2, Package } from "lucide-react";
 import { startScan } from "../api/api.js";
+import repoIcon from "../assets/aqua-keycap-icon.png";
 import "./NewScanModal.css";
 
 const MOCK_REPOS = [
@@ -140,16 +141,18 @@ export default function NewScanModal({ onClose, onSubmit }) {
                                 className={`modal-tab${tab === "github" ? " active" : ""}`}
                                 onClick={() => setTab("github")}
                             >
-                                <span style={{ display: "flex", alignItems: "center", gap: "0.4em" }}>
-                                    <GitCommit size={13} /> GitHub Repo
+                                <span className="modal-tab-content">
+                                    <span className="modal-tab-icon"><img className="repo-image-icon" src={repoIcon} alt="" aria-hidden="true" /></span>
+                                    <span className="modal-tab-title">GitHub Repo</span>
                                 </span>
                             </button>
                             <button
                                 className={`modal-tab${tab === "url" ? " active" : ""}`}
                                 onClick={() => setTab("url")}
                             >
-                                <span style={{ display: "flex", alignItems: "center", gap: "0.4em" }}>
-                                    <Link2 size={13} /> Public URL
+                                <span className="modal-tab-content">
+                                    <span className="modal-tab-icon"><Link2 size={18} /></span>
+                                    <span className="modal-tab-title">Public URL</span>
                                 </span>
                             </button>
                         </div>
@@ -174,7 +177,7 @@ export default function NewScanModal({ onClose, onSubmit }) {
                                                 className={`repo-item${selectedRepo?.id === repo.id ? " selected" : ""}`}
                                                 onClick={() => setSelectedRepo(repo)}
                                             >
-                                                <span className="repo-icon"><GitCommit size={14} /></span>
+                                                <span className="repo-icon"><img className="repo-image-icon" src={repoIcon} alt="" aria-hidden="true" /></span>
                                                 <div className="repo-info">
                                                     <div className="repo-name">{repo.full_name}</div>
                                                     <div className="repo-meta">{repo.updated_at} · {repo.private ? "Private" : "Public"}</div>
